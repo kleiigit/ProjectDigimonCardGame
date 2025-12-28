@@ -1,26 +1,96 @@
-## Arquivos e pastas do Visual Studio
+# ===============================
+# Unity generated folders
+# ===============================
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Mm]emoryCaptures/
+
+# ===============================
+# Asset meta data cache
+# ===============================
+[Dd]erivedDataCache/
+
+# ===============================
+# Visual Studio / Rider / VSCode
+# ===============================
 .vs/
-*.user
-*.suo
-*.userosscache
-*.sln.docstates
-
-## Pastas de compilação
-bin/
-obj/
-Debug/
-Release/
-Simulations/
-
-## Cache e temporários
-*.log
-*.tmp
-*.bak
-*.txt
-
-## Outras pastas geradas automaticamente
-TestResults/
-.idea/
 .vscode/
+.idea/
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# ===============================
+# Unity3D generated files
+# ===============================
+*.pidb.meta
+*.pdb.meta
+*.mdb.meta
+
+# ===============================
+# Build outputs
+# ===============================
+*.apk
+*.aab
+*.unitypackage
+*.app
+*.exe
+*.dll
+*.so
+*.dylib
+
+# ===============================
+# Crash reports
+# ===============================
+sysinfo.txt
+
+# ===============================
+# OS generated files
+# ===============================
+.DS_Store
+.DS_Store?
+Thumbs.db
+ehthumbs.db
+Icon?
+
+# ===============================
+# JetBrains Rider plugin
+# ===============================
+Assets/Plugins/Editor/JetBrains*
+
+# ===============================
+# Addressables cache
+# ===============================
+Assets/AddressableAssetsData/*/*.bin*
+
+# ===============================
+# IL2CPP cache
+# ===============================
+il2cpp_cache/
+
+# ===============================
+# User-specific settings
+# ===============================
+UserSettings/
+
+# ===============================
+# Exclude auto-generated StreamingAssets (se aplicável)
+# ===============================
+Assets/StreamingAssets/*.manifest
+Assets/StreamingAssets/*.meta
 
 ~$*
