@@ -1,0 +1,429 @@
+fileFormatVersion: 2
+guid: b436a2a4deed1ea489cd17517918c646
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 4067541511352975367
+    second: crests_0
+  - first:
+      213: -7860044586138231638
+    second: crests_1
+  - first:
+      213: -3208488122047951133
+    second: crests_2
+  - first:
+      213: -2166230015363736814
+    second: crests_3
+  - first:
+      213: 1576446486815957583
+    second: crests_4
+  - first:
+      213: -4022359750475484976
+    second: crests_5
+  - first:
+      213: -8308598459556091889
+    second: crests_6
+  - first:
+      213: 4034474456373572563
+    second: crests_7
+  - first:
+      213: -6694382489221194680
+    second: crests_8
+  - first:
+      213: 5350570362598774565
+    second: crests_9
+  - first:
+      213: -7544206041037505454
+    second: crests_10
+  - first:
+      213: -3716548905114172894
+    second: crests_11
+  - first:
+      213: 2099563088982045873
+    second: crests_12
+  - first:
+      213: 3144745861936108563
+    second: crests_13
+  - first:
+      213: -3095858983950574908
+    second: crests_14
+  - first:
+      213: 1096091301851699361
+    second: crests_15
+  - first:
+      213: -4071532433320666337
+    second: crests_16
+  - first:
+      213: 395214795738655535
+    second: crests_17
+  - first:
+      213: -4352304380984241256
+    second: crests_18
+  - first:
+      213: -4034542887123163640
+    second: crests_19
+  - first:
+      213: -6300726925723351203
+    second: crests_20
+  - first:
+      213: 2638727144885374576
+    second: crests_21
+  - first:
+      213: 5489074748780504452
+    second: crests_22
+  - first:
+      213: 4292762625127811669
+    second: crests_23
+  - first:
+      213: -5422864491363426221
+    second: crests_24
+  - first:
+      213: 7431058259414793549
+    second: crests_25
+  - first:
+      213: -4501291373510049593
+    second: crests_26
+  - first:
+      213: 7020517112722482103
+    second: crests_27
+  - first:
+      213: -7415369824282525239
+    second: crests_28
+  - first:
+      213: 1165308629580591521
+    second: crests_29
+  - first:
+      213: -3874937724976450443
+    second: crests_30
+  - first:
+      213: 8086439265161771819
+    second: crests_31
+  - first:
+      213: 4896685154459184049
+    second: crests_32
+  - first:
+      213: -5862140957877432044
+    second: crests_33
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 256
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: crests_1
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 219
+        width: 224
+        height: 225
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aac9f7cd7138be290800000000000000
+      internalID: -7860044586138231638
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: crests_4
+      rect:
+        serializedVersion: 2
+        x: 232
+        y: 269
+        width: 226
+        height: 124
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f42e3163ab9a0e510800000000000000
+      internalID: 1576446486815957583
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: crests_5
+      rect:
+        serializedVersion: 2
+        x: 464
+        y: 237
+        width: 222
+        height: 190
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0d0741a4e15bd28c0800000000000000
+      internalID: -4022359750475484976
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: crests_6
+      rect:
+        serializedVersion: 2
+        x: 695
+        y: 271
+        width: 224
+        height: 121
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f082dccc8bde1bc80800000000000000
+      internalID: -8308598459556091889
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: crests_12
+      rect:
+        serializedVersion: 2
+        x: 52
+        y: 15
+        width: 132
+        height: 195
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1b4fb466185232d10800000000000000
+      internalID: 2099563088982045873
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: crests_14
+      rect:
+        serializedVersion: 2
+        x: 279
+        y: 6
+        width: 131
+        height: 212
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4ca9cea18ac4905d0800000000000000
+      internalID: -3095858983950574908
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: crests_25
+      rect:
+        serializedVersion: 2
+        x: 514
+        y: 17
+        width: 122
+        height: 193
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d4db6a19d1c602760800000000000000
+      internalID: 7431058259414793549
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: crests_28
+      rect:
+        serializedVersion: 2
+        x: 714
+        y: 19
+        width: 186
+        height: 187
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9c14d71ee60571990800000000000000
+      internalID: -7415369824282525239
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: f568e5d0b3e23e14eb841e71e9af31ad
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      crests_0: 4067541511352975367
+      crests_1: -7860044586138231638
+      crests_10: -7544206041037505454
+      crests_11: -3716548905114172894
+      crests_12: 2099563088982045873
+      crests_13: 3144745861936108563
+      crests_14: -3095858983950574908
+      crests_15: 1096091301851699361
+      crests_16: -4071532433320666337
+      crests_17: 395214795738655535
+      crests_18: -4352304380984241256
+      crests_19: -4034542887123163640
+      crests_2: -3208488122047951133
+      crests_20: -6300726925723351203
+      crests_21: 2638727144885374576
+      crests_22: 5489074748780504452
+      crests_23: 4292762625127811669
+      crests_24: -5422864491363426221
+      crests_25: 7431058259414793549
+      crests_26: -4501291373510049593
+      crests_27: 7020517112722482103
+      crests_28: -7415369824282525239
+      crests_29: 1165308629580591521
+      crests_3: -2166230015363736814
+      crests_30: -3874937724976450443
+      crests_31: 8086439265161771819
+      crests_32: 4896685154459184049
+      crests_33: -5862140957877432044
+      crests_4: 1576446486815957583
+      crests_5: -4022359750475484976
+      crests_6: -8308598459556091889
+      crests_7: 4034474456373572563
+      crests_8: -6694382489221194680
+      crests_9: 5350570362598774565
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

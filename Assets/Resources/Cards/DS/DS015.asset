@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 588da05b334f5eb40b779673d8811cbd, type: 3}
+  m_Name: DS015
+  m_EditorClassIdentifier: 
+  cardType: 1
+  cardID: DS015
+  cardName: rajada uivante
+  cardRarity: 0
+  cardColor: 02000000
+  costColor: 02000000
+  cost: 01000000
+  limitDeck: 
+  sprite: {fileID: -7351659254895256204, guid: 7712679d570bdd8428ee4cf114985c07, type: 3}
+  effects:
+  - trigger: 0
+    restriction: 0
+    conditions:
+    - type: 3
+      condTrigger: 0
+      intCond: 1
+      localCond: 1
+      requiredCondition: []
+      side: 1
+    effects:
+    - targetEffect: 4
+      typeEffect: 3
+      especialCondition: 0
+      QuantityEffect: 1
+      requiredEffect: []
+      localEffect: 1
+      durationEffect: 0
+    DescriptionEffect: "Escolha 1 carta na m\xE3o do seu oponente sem olhar, descarte-a."
+  skillTimeActivation: 0
+  programSpritePosition: {x: -0.02, y: 0.69}
+  programSpriteScale: 2.222

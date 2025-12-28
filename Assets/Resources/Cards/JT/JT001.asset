@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93b231708be3a8d47951cfdfaf267acb, type: 3}
+  m_Name: JT001
+  m_EditorClassIdentifier: 
+  cardType: 0
+  cardID: JT001
+  cardName: tentomon
+  cardRarity: 1
+  cardColor: 01000000
+  costColor: 
+  cost: 
+  limitDeck: 
+  sprite: {fileID: -2171827016537899040, guid: c4f81cfdea024994e899638446bfcc3a, type: 3}
+  effects:
+  - trigger: 1
+    promptEffect: 
+    DescriptionEffect: "Se voc\xEA tiver outro Digimon Inseto em jogo, este Digimon
+      ganha +300 DP at\xE9 o final do seu turno."
+  level: 1
+  power: 200
+  leaderMemory: 0
+  attribute: 0
+  stage: 1
+  type: 11
+  fieldDigimon: 9
+  isProtection: 0
+  digimonSpritePosition: {x: -0.16, y: 0.57}
+  digimonSpriteScale: 1.6

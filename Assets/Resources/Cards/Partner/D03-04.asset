@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93b231708be3a8d47951cfdfaf267acb, type: 3}
+  m_Name: D03-04
+  m_EditorClassIdentifier: 
+  cardType: 2
+  cardID: D03-04
+  cardName: Holyangemon
+  cardRarity: 2
+  cardColor: 03000000
+  costColor: 03000000
+  cost: 02000000
+  limitDeck: 06000000
+  sprite: {fileID: 0}
+  effects:
+  - trigger: 1
+    promptEffect: 
+    DescriptionEffect: "<yellow>: Procure em seu baralho 1 Digimon de n\xEDvel 2
+      ou menos, revele-o e adicione \xE0 sua m\xE3o."
+  level: 3
+  power: 500
+  leaderMemory: 7
+  attribute: 0
+  stage: 3
+  type: 18
+  fieldDigimon: 7
+  isProtection: 0
+  digimonSpritePosition: {x: 0, y: 0.55}
+  digimonSpriteScale: 1.6

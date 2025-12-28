@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 588da05b334f5eb40b779673d8811cbd, type: 3}
+  m_Name: D01-09
+  m_EditorClassIdentifier: 
+  cardType: 3
+  cardID: D01-09
+  cardName: Sombra Alada
+  cardRarity: 1
+  cardColor: 00000000
+  costColor: 00000000
+  cost: 01000000
+  limitDeck: 
+  sprite: {fileID: 3544181037381507288, guid: 131b9a939a1e3b747b92c6eab7e2ffbd, type: 3}
+  effects:
+  - trigger: 0
+    promptEffect: 'CE,1;digi,DR;play,field;down
+
+      TE,1,digi,power,CE;opo,field;destroy'
+    DescriptionEffect: Vire um Digimon <dr> no seu campo. Se fizer isso, destrua
+      1 Digimon no campo do seu oponente com DP igual ou menor que o Digimon virado
+      por esse efeito.
+  skillTimeActivation: 3
+  programSpritePosition: {x: 0, y: 0.69}
+  programSpriteScale: 2.222

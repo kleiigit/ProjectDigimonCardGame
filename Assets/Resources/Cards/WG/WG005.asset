@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93b231708be3a8d47951cfdfaf267acb, type: 3}
+  m_Name: WG005
+  m_EditorClassIdentifier: 
+  cardType: 0
+  cardID: WG005
+  cardName: togemon
+  cardRarity: 1
+  cardColor: 01000000
+  costColor: 
+  cost: 
+  limitDeck: 
+  sprite: {fileID: 0}
+  effects:
+  - trigger: 1
+    promptEffect: 
+    DescriptionEffect: ": Retorne 1 Digimon Planta da sua pilha de Dados para sua
+      m\xE3o."
+  level: 2
+  power: 400
+  leaderMemory: 0
+  attribute: 1
+  stage: 2
+  type: 14
+  fieldDigimon: 3
+  isProtection: 0
+  digimonSpritePosition: {x: 0, y: 0.55}
+  digimonSpriteScale: 1.6

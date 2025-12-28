@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93b231708be3a8d47951cfdfaf267acb, type: 3}
+  m_Name: NSP008
+  m_EditorClassIdentifier: 
+  cardType: 0
+  cardID: NSP008
+  cardName: ShogunGekomon
+  cardRarity: 0
+  cardColor: 02000000
+  costColor: 
+  cost: 
+  limitDeck: 
+  sprite: {fileID: -7260107656158332512, guid: d55101c6e234ef64898811faa217f9ae, type: 3}
+  effects: []
+  level: 3
+  power: 1000
+  leaderMemory: 0
+  attribute: 2
+  stage: 3
+  type: 32
+  fieldDigimon: 0
+  isProtection: 0
+  digimonSpritePosition: {x: 0, y: 0.65}
+  digimonSpriteScale: 2.02

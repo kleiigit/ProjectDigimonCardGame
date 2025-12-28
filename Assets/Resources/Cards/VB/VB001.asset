@@ -1,0 +1,96 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93b231708be3a8d47951cfdfaf267acb, type: 3}
+  m_Name: VB001
+  m_EditorClassIdentifier: 
+  cardType: 0
+  cardID: 
+  cardName: Angemon
+  cardRarity: 1
+  cardColor: 03000000
+  costColor: 
+  cost: 
+  limitDeck: 
+  sprite: {fileID: 3574391438258352709, guid: e93f2ac3c80f7874e96a7a15d469799b, type: 3}
+  effects:
+  - trigger: 1
+    restriction: 0
+    conditions:
+    - type: 1
+      condTrigger: 0
+      intCond: 1
+      localCond: 1
+      requiredCondition: []
+      side: 0
+    - type: 0
+      condTrigger: 0
+      intCond: 1
+      localCond: 0
+      requiredCondition:
+      - typeCard: 0
+        colorCard: 7
+        fieldDigimon: 9
+        attriDigimon: 6
+        nameCard: 
+        typeDigimon: 
+        levelDigimon: 2
+        PowerDigimon: 0
+        IDOfCard: 
+        valueVar: 1
+      side: 1
+    effects:
+    - targetEffect: 0
+      typeEffect: 16
+      QuantityEffect: 0
+      requiredEffect: []
+      localEffect: 1
+      durationEffect: 0
+    DescriptionEffect: "Descarte 1 carta da sua m\xE3o: Retorne para a m\xE3o do
+      seu oponente 1 Digimon de atributo V\xEDrus de n\xEDvel 2 ou menor. "
+  - trigger: 5
+    restriction: 0
+    conditions:
+    - type: 3
+      condTrigger: 0
+      intCond: 1
+      localCond: 4
+      requiredCondition: []
+      side: 0
+    effects:
+    - targetEffect: 3
+      typeEffect: 10
+      QuantityEffect: 1
+      requiredEffect:
+      - typeCard: 0
+        colorCard: 3
+        fieldDigimon: 9
+        attriDigimon: 6
+        nameCard: 
+        typeDigimon: 
+        levelDigimon: 1
+        PowerDigimon: 0
+        IDOfCard: 
+        valueVar: 0
+      localEffect: 1
+      durationEffect: 0
+    DescriptionEffect: "Procure em seu baralho 1 Digimon <yellow> de n\xEDvel 1 e
+      adicione \xE0 sua m\xE3o."
+  Level: 2
+  power: 300
+  leaderMemory: 0
+  Attribute: 0
+  Stage: 2
+  Type: Anjo
+  fieldDigimon: 7
+  isProtection: 0
+  digimonSpritePosition: {x: 0.15, y: 0.55}
+  digimonSpriteScale: 2.4

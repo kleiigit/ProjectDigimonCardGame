@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 588da05b334f5eb40b779673d8811cbd, type: 3}
+  m_Name: D01-08
+  m_EditorClassIdentifier: 
+  cardType: 3
+  cardID: D01-08
+  cardName: giga tempestade
+  cardRarity: 1
+  cardColor: 00000000
+  costColor: 0000000006000000
+  cost: 0100000001000000
+  limitDeck: 
+  sprite: {fileID: 7082704387453068688, guid: a5247875840f7cd4e82087c5e6dbf8ae, type: 3}
+  effects:
+  - trigger: 0
+    promptEffect: TE,all;digi,700,less;opo,field;destroy
+    DescriptionEffect: Destrua todos os Digimon no campo do seu oponente com 700
+      DP ou menos.
+  skillTimeActivation: 0
+  programSpritePosition: {x: 0, y: 0.69}
+  programSpriteScale: 2.222

@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 588da05b334f5eb40b779673d8811cbd, type: 3}
+  m_Name: D03-07
+  m_EditorClassIdentifier: 
+  cardType: 3
+  cardID: D03-07
+  cardName: raios santos
+  cardRarity: 2
+  cardColor: 03000000
+  costColor: 03000000
+  cost: 03000000
+  limitDeck: 
+  sprite: {fileID: 6299577774325687909, guid: 48ddb85a399cd43419d46f60930f40e9, type: 3}
+  effects:
+  - trigger: 0
+    restriction: 0
+    conditions: []
+    effects:
+    - targetEffect: 3
+      typeEffect: 10
+      especialCondition: 0
+      AddEffect: 0
+      QuantityEffect: 2
+      requiredEffect:
+      - typeCard: 0
+        colorCard: 3
+        fieldDigimon: 9
+        attriDigimon: 6
+        nameCard: 
+        typeDigimon: 
+        levelDigimon: 0
+        PowerDigimon: 0
+        IDOfCard: 
+        valueVar: 0
+      localEffect: 4
+      durationEffect: 0
+    DescriptionEffect: "Procure por at\xE9 2 Digimon [Amarelo] no seu baralho, revele-os
+      e adicione \xE0 sua m\xE3o. Em seguida, embaralhe o seu baralho."
+  skillTimeActivation: 0
+  programSpritePosition: {x: 0, y: 0.69}
+  programSpriteScale: 2.222

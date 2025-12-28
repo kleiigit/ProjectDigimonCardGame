@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 588da05b334f5eb40b779673d8811cbd, type: 3}
+  m_Name: JT016
+  m_EditorClassIdentifier: 
+  cardType: 1
+  cardID: JT016
+  cardName: eletro choque
+  cardRarity: 1
+  cardColor: 01000000
+  costColor: 01000000
+  cost: 01000000
+  limitDeck: 
+  sprite: {fileID: 8427389364345805676, guid: b3b88952ddceaee4bba9b03e85187b09, type: 3}
+  effects:
+  - trigger: 0
+    restriction: 0
+    conditions:
+    - type: 1
+      condTrigger: 1
+      intCond: 1
+      localCond: 0
+      requiredCondition: []
+      side: 0
+    - type: 0
+      condTrigger: 0
+      intCond: 1
+      localCond: 0
+      requiredCondition: []
+      side: 1
+    effects:
+    - targetEffect: 1
+      typeEffect: 7
+      especialCondition: 0
+      QuantityEffect: 0
+      requiredEffect: []
+      localEffect: 0
+      durationEffect: 0
+    DescriptionEffect: "Vire um Digimon no seu campo, destrua 1 Digimon no campo
+      do seu oponente com DP inferior ao Digimon que voc\xEA virou."
+  skillTimeActivation: 0
+  programSpritePosition: {x: -0.02, y: 0.69}
+  programSpriteScale: 2.222

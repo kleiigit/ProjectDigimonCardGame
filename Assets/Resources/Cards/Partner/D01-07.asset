@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 588da05b334f5eb40b779673d8811cbd, type: 3}
+  m_Name: D01-07
+  m_EditorClassIdentifier: 
+  cardType: 3
+  cardID: D01-07
+  cardName: "for\xE7a terra"
+  cardRarity: 2
+  cardColor: 00000000
+  costColor: 00000000
+  cost: 03000000
+  limitDeck: 00000000
+  sprite: {fileID: -140230665916967667, guid: 0b573b4072ebc3841b6273166abb192d, type: 3}
+  effects:
+  - trigger: 0
+    promptEffect: 'TE,all;digi;both,field;destroy
+
+      CE,3;card;play,hand;discard'
+    DescriptionEffect: Descarte 3 cartas. Se fizer, destrua todos os Digimon no campo
+      de ambos jogadores em jogo.
+  skillTimeActivation: 0
+  programSpritePosition: {x: 0, y: 0.69}
+  programSpriteScale: 2.222

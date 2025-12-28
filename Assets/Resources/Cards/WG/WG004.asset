@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93b231708be3a8d47951cfdfaf267acb, type: 3}
+  m_Name: WG004
+  m_EditorClassIdentifier: 
+  cardType: 0
+  cardID: WG004
+  cardName: palmon
+  cardRarity: 1
+  cardColor: 01000000
+  costColor: 
+  cost: 
+  limitDeck: 
+  sprite: {fileID: 3574391438258352709, guid: e93f2ac3c80f7874e96a7a15d469799b, type: 3}
+  effects:
+  - trigger: 1
+    promptEffect: 
+    DescriptionEffect: ": Descarte 1 carta da sua m\xE3o: Ative <sprite=11>."
+  - trigger: 5
+    promptEffect: 
+    DescriptionEffect: Compre 1 carta.
+  level: 1
+  power: 100
+  leaderMemory: 0
+  attribute: 0
+  stage: 1
+  type: 14
+  fieldDigimon: 3
+  isProtection: 0
+  digimonSpritePosition: {x: 0, y: 0.55}
+  digimonSpriteScale: 1.6

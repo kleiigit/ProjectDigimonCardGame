@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93b231708be3a8d47951cfdfaf267acb, type: 3}
+  m_Name: DS001
+  m_EditorClassIdentifier: 
+  cardType: 0
+  cardID: DS001
+  cardName: gomamon
+  cardRarity: 1
+  cardColor: 02000000
+  costColor: 
+  cost: 
+  limitDeck: 
+  sprite: {fileID: 21300000, guid: d13b7af988113fe47a366fcbaba343ce, type: 3}
+  effects:
+  - trigger: 3
+    promptEffect: 
+    DescriptionEffect: "<down> e descarte 1 carta da sua m\xE3o: compre 1 carta."
+  - trigger: 5
+    promptEffect: 
+    DescriptionEffect: Compre 1 carta.
+  level: 1
+  power: 100
+  leaderMemory: 0
+  attribute: 0
+  stage: 1
+  type: 12
+  fieldDigimon: 1
+  isProtection: 0
+  digimonSpritePosition: {x: 0, y: 0}
+  digimonSpriteScale: 3

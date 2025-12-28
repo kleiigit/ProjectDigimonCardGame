@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 588da05b334f5eb40b779673d8811cbd, type: 3}
+  m_Name: DB103
+  m_EditorClassIdentifier: 
+  cardType: 1
+  cardID: DB103
+  cardName: Digivice
+  cardRarity: 0
+  cardColor: 06000000
+  costColor: 06000000
+  cost: 00000000
+  limitDeck: 
+  sprite: {fileID: -345107347, guid: 7d97757d885e69a4b8c06540120d76c1, type: 3}
+  effects:
+  - trigger: 0
+    promptEffect: Draw,1
+    DescriptionEffect: Compre 1 carta.
+  - trigger: 5
+    promptEffect: 
+    DescriptionEffect: <cache>
+  skillTimeActivation: 0
+  programSpritePosition: {x: 0, y: 0.66}
+  programSpriteScale: 2.222

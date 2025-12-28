@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93b231708be3a8d47951cfdfaf267acb, type: 3}
+  m_Name: DS002
+  m_EditorClassIdentifier: 
+  cardType: 0
+  cardID: DS002
+  cardName: ikkakumon
+  cardRarity: 1
+  cardColor: 02000000
+  costColor: 
+  cost: 
+  limitDeck: 
+  sprite: {fileID: 21300000, guid: 339a31d446660cc408711c8be5aa8030, type: 3}
+  effects:
+  - trigger: 3
+    promptEffect: 
+    DescriptionEffect: '<down>: Compre 1 carta.'
+  - trigger: 5
+    promptEffect: 
+    DescriptionEffect: Vire 1 Digimon no campo do seu oponente.
+  level: 2
+  power: 400
+  leaderMemory: 0
+  attribute: 0
+  stage: 2
+  type: 12
+  fieldDigimon: 1
+  isProtection: 0
+  digimonSpritePosition: {x: 0.12, y: 0.34}
+  digimonSpriteScale: 2.5

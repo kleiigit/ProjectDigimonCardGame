@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93b231708be3a8d47951cfdfaf267acb, type: 3}
+  m_Name: NSO001
+  m_EditorClassIdentifier: 
+  cardType: 0
+  cardID: NSO001
+  cardName: picodevimon
+  cardRarity: 0
+  cardColor: 04000000
+  costColor: 
+  cost: 
+  limitDeck: 
+  sprite: {fileID: 0}
+  effects:
+  - trigger: 4
+    promptEffect: 
+    DescriptionEffect: "Quando esta carta for enviada do baralho para a lixeira,
+      voc\xEA pode coloc\xE1-la em seu campo."
+  - trigger: 5
+    promptEffect: 
+    DescriptionEffect: Compre 1 carta.
+  level: 1
+  power: 100
+  leaderMemory: 0
+  attribute: 2
+  stage: 1
+  type: 40
+  fieldDigimon: 2
+  isProtection: 0
+  digimonSpritePosition: {x: 0, y: 0.55}
+  digimonSpriteScale: 1.6
