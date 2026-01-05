@@ -479,14 +479,14 @@ public class CardDisplay : MonoBehaviour
                 { "<purple>", "<sprite name=purple>" },
                 { "<colorless>", "<sprite name=colorless>" },
                 { "<down>", "<sprite=15>" },
-                { "<cache>", "<sprite=11>"},
+                { "<cache>", "<sprite=11>" },
 
             };
         for (int i = 0; i < cardData.effects.Count; i++)
         {
             CardEffects effectCard = cardData.effects[i]; // Obtém a carta de efeito, se houver
             string effectDescription = cardData.effects[i].DescriptionEffect;
-            //Trigger Effects
+            //Trigger Keyword
             if (effectCard.trigger == Trigger.Security)
             {
                 securityImage.gameObject.SetActive(true); // Mostra a imagem de segurança

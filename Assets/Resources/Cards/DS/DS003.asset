@@ -27,7 +27,7 @@ MonoBehaviour:
     DescriptionEffect: "Descarte 1 Digimon <DS> da sua m\xE3o: congele 1 Digimon
       no campo do seu oponente. Se fizer isso, compre 1 carta."
   - trigger: 5
-    promptEffect: 
+    promptEffect: Cache
     DescriptionEffect: <sprite=11>(Envie 1 carta do topo do seu baralho para a pilha
       de Data.)
   level: 3

@@ -1,5 +1,6 @@
 using ProjectScript.Enums;
 using SinuousProductions;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -12,15 +13,10 @@ public class MenuCardManager : MonoBehaviour
     public PlayerSide handOwner;
 
     // --- Referências de managers ---
-    private DataPileManager dataPileManager;
-    private EffectManager effectManager;
-    private CardDisplay cardDisplay;
-    private HandManager handManager;
     private FieldCard fieldCard;
     private CardPlaySelector cardPlaySelector;
-    private PartnerPileManager partnerPileManager;
     private ControlBattleField control;
-
+    Card _cardData;
     private PlayerSetup setup;
 
     public GridCell currentCell;
@@ -28,20 +24,15 @@ public class MenuCardManager : MonoBehaviour
 
     private void Awake()
     {
-        dataPileManager = FindFirstObjectByType<DataPileManager>();
-        handManager = FindFirstObjectByType<HandManager>();
-        partnerPileManager = FindFirstObjectByType<PartnerPileManager>();
         control = FindFirstObjectByType<ControlBattleField>();
-        effectManager = FindFirstObjectByType<EffectManager>();
-
         fieldCard = GetComponent<FieldCard>();
-        cardDisplay = GetComponent<CardDisplay>();
         cardPlaySelector = GetComponent<CardPlaySelector>();
         
     }
     private void Start()
     {
-        if(handOwner == PlayerSide.PlayerBlue)
+        _cardData = GetComponent<CardDisplay>().cardData;
+        if (handOwner == PlayerSide.PlayerBlue)
         {
             setup = GameSetupStart.playerBlue;
         }
@@ -53,65 +44,167 @@ public class MenuCardManager : MonoBehaviour
 
     public void ButtonInteractive()
     {
-        // Deck edit não abre menu
+        // Deck Edit
         if (GameManager.isInDeckEditScreen)
         {
-            // Add and Remove cards from deck
             EditDeckFunc();
             return;
         }
 
-        // Bloqueios
+        // Bloqueios gerais
         if (GetComponentInParent<GridLayoutGroup>() != null) return;
-        if (gameObject.layer == LayerMask.NameToLayer("Data")) return;
-
-        // Sempre fecha menu anterior
+        if (gameObject.layer == 12) return;
+        if (gameObject.layer == 17)
+        {
+            setup.discard.ListDiscardCardsButton();
+            return;
+        }
+        Card _cardData = GetComponent<CardDisplay>().cardData;
         CardContextMenu globalMenu = FindFirstObjectByType<CardContextMenu>();
         if (globalMenu == null) return;
 
-        List<CardContextMenu.MenuOption> options = new List<CardContextMenu.MenuOption>();
+        List<CardContextMenu.MenuOption> options = new();
 
-        // Inspecionar (sempre disponível)
-        options.Add(new CardContextMenu.MenuOption("Inspect", () =>
+        CardType cardType = _cardData.cardType;
+        Phase currentPhase = BattlePhaseManager.phase;
+        switch (currentPhase)
         {
-            Debug.Log($"Inspecionar {cardDisplay.cardName.text}");
-            // Aqui você pode abrir uma tela detalhada da carta
-        }));
-
-        // Define opções por fase
-        switch (BattlePhaseManager.phase)
-        {
-            case 0: // Setup
-                if (cardDisplay.cardData.cardType == CardType.Partner)
+            case Phase.UpPhase:
+                if (_cardData.cardType == CardType.Partner && setup.evoPile.CanEvolveCard(_cardData))
                 {
-                    options.Add(new CardContextMenu.MenuOption("Choose Partner", ButtonEvoPartner));
+                    options.Add(new CardContextMenu.MenuOption(
+                        "Evolve Partner",
+                        ButtonEvoPartner));
                 }
                 break;
 
-            case Phase.CostPhase: // Cost
-                options.Add(new CardContextMenu.MenuOption("Send to Data", ButtonCostPhaseConfirm));
+            case Phase.CostPhase:
+                if (gameObject.layer == 16 || gameObject.layer == 7)
+                {
+                    options.Add(new CardContextMenu.MenuOption(
+                        "Send to Data",
+                        ButtonCostPhaseConfirm
+                    ));
+                }
                 break;
 
-            case Phase.EvolutionPhase: // Evolution
-                options.Add(new CardContextMenu.MenuOption("Evolve Partner", ButtonEvoPartner));
+            case Phase.EvolutionPhase:
+                if (setup.evoPile.CanEvolveCard(_cardData))
+                {
+                    options.Add(new CardContextMenu.MenuOption(
+                        "Evolve Partner",
+                        ButtonEvoPartner
+                    ));
+                }
                 break;
 
-            case Phase.MainPhase: // Main
-                options.Add(new CardContextMenu.MenuOption("Play Card", ButtonPlayCard));
-                options.Add(new CardContextMenu.MenuOption("Attack", ButtonAttack));
-                options.Add(new CardContextMenu.MenuOption("Activate Effect", ButtonEffectCard));
+            case Phase.MainPhase:
+                HandleMainPhase(options, cardType);
                 break;
 
-            case Phase.BattlePhase: // Battle
-            case Phase.AttackPhase: // Attack
-                options.Add(new CardContextMenu.MenuOption("Attack", ButtonAttack));
+            case Phase.PreparationPhase:
+                HandleSkillPhase(options, cardType);
+                break;
+
+            case Phase.AttackPhase:
+                if (gameObject.layer == 7 || gameObject.layer == 11)
+                {
+                    if (GetComponent<FieldCard>().downPosition == false)
+                    {
+                        options.Add(new CardContextMenu.MenuOption(
+                        "Attack",
+                        ButtonAttack));
+                    }
+                    // Keyword para configura quando houver necessidade.
+                    //if (GetComponent<CardDisplay>().cardData.effects.Count > 0)
+                    //{ options.Add(new CardContextMenu.MenuOption("Activate Effect",ButtonEffectCard));} 
+                }
                 break;
         }
-
-        // Chama o menu
-        globalMenu.ShowMenu(this.gameObject, options);
+        if (options.Count == 0) return;
+        globalMenu.ShowMenu(gameObject, options);
         buttonInteractiveCard.interactable = false;
     }
+    private void HandleMainPhase(List<CardContextMenu.MenuOption> options,CardType cardType)
+    {
+        if (gameObject.layer == 7 || gameObject.layer == 11)
+        {
+            if (BattlePhaseManager.roundCount != 1)
+            {
+                if (GetComponent<FieldCard>().downPosition == false)
+                {
+                    options.Add(new CardContextMenu.MenuOption(
+                    "Attack",
+                    ButtonAttack));
+                }
+            }
+            if (GetComponent<CardDisplay>().cardData.effects.Any(p => p.trigger == CardEffects.Trigger.Action))
+            {
+                options.Add(new CardContextMenu.MenuOption(
+                    "Activate Effect",
+                    ButtonEffectCard));
+            }
+        }
+
+        if (cardType == CardType.Skill || gameObject.layer == 10)
+        {
+            Card.SkillActivation timing =
+                (_cardData as ProgramandSkillCard).skillTimeActivation;
+
+            if (timing != Card.SkillActivation.MainPhase &&
+                timing != Card.SkillActivation.MainPhaseAndBattlePhase)
+                return;
+            if (setup.dataPile.HasSufficientDataToPlayCard(_cardData.GetColorCost()))
+            {
+
+            }
+            else
+            {
+                Debug.Log("Data insuficiente");
+                return;
+            }
+        }
+        else if (cardType == CardType.Digimon)
+        {
+            if (!(_cardData as DigimonCard).CanDigimonPlayed(setup))
+                return;
+
+            if (gameObject.layer == 7)
+                return;
+        }
+        else if (cardType == CardType.Program)
+        {
+            if(!setup.dataPile.HasSufficientDataToPlayCard(_cardData.GetColorCost()))
+            {
+                Debug.Log("Data insuficiente");
+                return;
+            }
+
+        }
+        else
+        {
+            return;
+        }
+
+        options.Add(new CardContextMenu.MenuOption(
+            "Play Card",
+            ButtonPlayCard
+        ));
+    }
+    private void HandleSkillPhase(List<CardContextMenu.MenuOption> options, CardType cardType)
+    {
+        if (cardType != CardType.Skill) return;
+
+        if ((_cardData as ProgramandSkillCard).skillTimeActivation ==
+            Card.SkillActivation.AttackPhase)
+        {
+            options.Add(new CardContextMenu.MenuOption(
+                "Play Card",
+                ButtonPlayCard
+            ));
+        }
+    }
+
 
     // EDICK DECK MENU
     public void EditDeckFunc()
@@ -132,12 +225,12 @@ public class MenuCardManager : MonoBehaviour
                 {
                     if (currentValue > 0)
                     {
-                        if (cardDisplay == null || cardDisplay.cardData == null)
+                        if (_cardData == null || _cardData == null)
                         {
-                            Debug.LogError("[ButtonPhaseCard] 'cardDisplay' ou 'cardData' está nulo. GameObject: " + gameObject.name);
+                            Debug.LogError("[ButtonPhaseCard] 'card' ou 'cardData' está nulo. GameObject: " + gameObject.name);
                             return;
                         }
-                        Card cardBase = cardDisplay.cardData;
+                        Card cardBase = _cardData;
                         bool added = editor.AddCardToEditingDeck(cardBase, ref currentValue);
 
                         if (added)
@@ -150,7 +243,7 @@ public class MenuCardManager : MonoBehaviour
             else
             {
 
-                GameObject cardT = editor.RemoveCardDeck(cardDisplay.cardData);
+                GameObject cardT = editor.RemoveCardDeck(_cardData);
 
                 if (cardT != null)
                 {
@@ -187,23 +280,25 @@ public class MenuCardManager : MonoBehaviour
 
         return;
     }
+
     // -------------------------
     // AÇÕES DO MENU
     // -------------------------
 
     public void ButtonEffectCard()
     {
-        Card cardBase = cardDisplay.cardData;
-        if (cardBase.effects.Count > 0)
+        if (_cardData.effects.Count > 0)
         {
-            effectManager.ExecuteCardEffect(cardBase.effects[0], cardBase);
+            TriggerCardManager.TriggerActivateAction(_cardData, setup);
         }
     }
     public void ButtonAttack()
     {
         currentCell = fieldCard.parentCell;
+        // teste
+        BattlePhaseManager.phase = Phase.AttackPhase;
 
-        if ((int)BattlePhaseManager.phase == 6)
+        if (BattlePhaseManager.phase == Phase.AttackPhase)
         {
             fieldCard.SetDownPosition();
             var cardData = fieldCard.digimonDisplay;
@@ -211,62 +306,36 @@ public class MenuCardManager : MonoBehaviour
             {
                 BattlePhaseManager.phase = Phase.EndPhase;
             }
-            control.GetOpponentAtFront(currentCell, handOwner, this.gameObject);
+            control.GetOpponentAtFront(currentCell, handOwner, gameObject);
+
         }
-        else if ((int)BattlePhaseManager.phase == 5 || (int)BattlePhaseManager.phase == 4)
+        else if (BattlePhaseManager.phase == Phase.MainPhase)
         {
-            BattlePhaseManager.phase++;
+            BattlePhaseManager.phase = Phase.PreparationPhase;
         }
     }
     public void ButtonEvoPartner()
     {
-        DigimonCard cardPartner = cardDisplay.cardData as DigimonCard;
+        DigimonCard cardPartner = _cardData as DigimonCard;
         if(setup == null)
         {
             Debug.LogWarning("PlayerSetup não encontrado para o lado: " + handOwner);
-            setup = control.GetPlayerSetup(handOwner);
+            setup = GameSetupStart.GetPlayerSetup(handOwner);
         }
-        DigimonCard cardActivePartner = setup.evoPile.GetActivePartner();
-        if (dataPileManager.HasSufficientDataToPlayCard(cardPartner, handOwner))
-        {
-            if (cardActivePartner == null)
-            {
-                if (cardPartner.level > 0)
-                {
-                    Debug.LogWarning("No active partner to evolve from.");
-                    return;
-                }
-                
-                if (cardPartner.level != 0)
-                {
-                    Debug.LogWarning("Cannot evolve to this partner. Level requirement not met.");
-                    return;
-                }
-            }
-            else if (!(cardActivePartner.level == cardPartner.level - 1))
-            {
-                Debug.LogWarning("Cannot evolve to this partner. Level requirement not met.");
-                return;
-            }
-            // colocar a logica de evolução em um local apropriado
-            //setup.partnerPile.ChoosePartner(this.gameObject);
-            Debug.Log($"Evolving partner to {cardPartner.cardName} - {setup.setPlayer}");
-            setup.evoPile.AddCard(cardPartner);
-            setup.partnerPile.RemoveCard(this.gameObject);
-            Destroy(gameObject);
-            partnerPileManager.HidePartnerPile();
+        // colocar a logica de evolução em um local apropriado
+        //setup.partnerPile.ChoosePartner(this.gameObject);
+        Debug.Log($"Evolving partner to {cardPartner.cardName} - {setup.setPlayer}");
+        setup.evoPile.AddCard(cardPartner);
+        setup.partnerPile.RemoveCard(this.gameObject);
+        Destroy(gameObject);
+        setup.partnerPile.HidePartnerPile();
 
-            if ((int)BattlePhaseManager.phase > 1)
-                BattlePhaseManager.phase++;
-        }
-        else
-        {
-            Debug.LogWarning("Not enough data to evolve partner.");
-        }
+        if ((int)BattlePhaseManager.phase > 1)
+            BattlePhaseManager.phase++;
     }
     public void ButtonPlayCard()
     {
-        DigimonCard cardDigimon = cardDisplay.cardData as DigimonCard;
+        DigimonCard cardDigimon = _cardData as DigimonCard;
         if (cardDigimon != null && cardDigimon.cardType == CardType.Digimon)
         {
             int topLevel = control.GetTopLevel(handOwner);
@@ -281,21 +350,37 @@ public class MenuCardManager : MonoBehaviour
                 cardPlaySelector.StartCardPlacement();
             }
         }
-        else if (cardDisplay.cardData.cardType == CardType.Program)
+        else if (_cardData.cardType == CardType.Program)
         {
-            if (dataPileManager.HasSufficientDataToPlayCard(cardDisplay.cardData, handOwner))
+            if (setup.dataPile.HasSufficientDataToPlayCard(_cardData.GetColorCost()))
             {
                 Debug.Log("Program card played.");
+                UIWindowManager.Instance.MoveToCheckZone(_cardData, setup, FieldPlace.Hand);
+                setup.hand.RemoveCard(this.gameObject);
+            }
+        }
+        else if (_cardData.cardType == CardType.Skill)
+        {
+            if (setup.dataPile.HasSufficientDataToPlayCard(_cardData.GetColorCost()))
+            {
+                Debug.Log("Skill card played.");
+                UIWindowManager.Instance.MoveToCheckZone(_cardData, setup, FieldPlace.Hand);
+                setup.hand.RemoveCard(this.gameObject);
             }
         }
     }
     public void ButtonCostPhaseConfirm()
     {
         PlayerSide sidePlay = (BattlePhaseManager.currentPlayer == PlayerSide.PlayerBlue) ? PlayerSide.PlayerBlue : PlayerSide.PlayerRed;
-        Card cardBase = cardDisplay.cardData;
+        Card cardBase = _cardData;
         if (cardBase.cardType == CardType.Digimon || cardBase.cardType == CardType.Program)
         {
-            setup.dataPile.MoveCardFromHandToDataPile(this.gameObject);
+            setup.dataPile.MoveCardFromHandToDataPile(gameObject);
+            if (gameObject.layer == 7)
+            {
+                GetComponent<FieldCard>().parentCell.cellFull = false;
+                Destroy(gameObject);
+            }
             BattlePhaseManager.phase++;
         }
     }

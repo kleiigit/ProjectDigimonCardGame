@@ -23,9 +23,9 @@ MonoBehaviour:
   sprite: {fileID: 21300000, guid: ed6af71c300498742be464dec78e13a2, type: 3}
   effects:
   - trigger: 3
-    promptEffect: 'TE,1;digi,300,less;opo,field;destroy
+    promptEffect: 'TE,1;digi,300,less;opo,BattleZone;destroy
 
-      CE,1;digi,dr;play,hand;discard
+      CE,1;digi,dr;play,Hand;discard
 
       Down'
     DescriptionEffect: '<down> e descarte 1 Digimon <dr>: Destrua 1 Digimon no campo

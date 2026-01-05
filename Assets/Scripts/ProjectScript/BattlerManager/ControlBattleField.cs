@@ -47,17 +47,8 @@ public class ControlBattleField : MonoBehaviour
 
         UpdateCurrentMemoryFromField();
     }
-    public PlayerSetup GetPlayerSetup(PlayerSide player)
-    {
-        if(setupBlue == null || setupRed == null)
-        {
-            Debug.LogWarning("setup nao encontrado");
-        }
-        if(player == PlayerSide.PlayerBlue)
-            return setupBlue;
-        else
-            return setupRed;
-    }
+    
+    // memory settings
     internal int GetTopLevel(PlayerSide playerSide)
     {
         if (setupBlue.setPlayer == playerSide)
@@ -65,7 +56,6 @@ public class ControlBattleField : MonoBehaviour
         else
             return setupRed.maxLevelPartner;
     }
-
     internal int GetTopMemory(PlayerSide playerSide)
     {
         if (setupBlue.setPlayer == playerSide)
@@ -73,7 +63,6 @@ public class ControlBattleField : MonoBehaviour
         else
             return setupRed.maxMemory;
     }
-
     internal int GetTotalLevel(PlayerSide playerSide)
     {
         if (setupBlue.setPlayer == playerSide)
@@ -81,7 +70,6 @@ public class ControlBattleField : MonoBehaviour
         else
             return setupRed.currentMemory;
     }
-
     private void UpdateCurrentMemoryFromField()
     {
         setupBlue.currentMemory = 0;
@@ -106,13 +94,14 @@ public class ControlBattleField : MonoBehaviour
                     break;
 
                 case PlayerSide.PlayerRed:
-                    setupBlue.currentMemory += digimon.level;
-                    topMemoryTextRed.color = setupBlue.currentMemory == setupBlue.maxMemory ? Color.green : Color.white;
+                    setupRed.currentMemory += digimon.level;
+                    topMemoryTextRed.color = setupRed.currentMemory == setupRed.maxMemory ? Color.green : Color.white;
                     break;
             }
         }
     }
 
+    // combat settings
     private void SetupBattlePairings()
     {
         // Designação manual dos grids que se enfrentam
@@ -124,40 +113,29 @@ public class ControlBattleField : MonoBehaviour
         battlePairings[6] = 2;
         battlePairings[7] = 3;
     }
-
-    public GameObject GetOpponentAtFront(GridCell currentCell, PlayerSide playerSide, GameObject attackerObj)
+    public void GetOpponentAtFront(GridCell currentCell, PlayerSide playerSide, GameObject attackerObj)
     {
         PlayerSide opponentSide = playerSide == PlayerSide.PlayerBlue ? PlayerSide.PlayerRed : PlayerSide.PlayerBlue;
+        PlayerSetup opponentPlayer = GameSetupStart.GetPlayerSetup(opponentSide);
+        TriggerCardManager.TriggerAttacking();
         // Se o atacante estiver na layer 11, forçar ataque direto
         if (attackerObj != null && attackerObj.layer == 11)
         {
             Debug.Log("[GetOpponentAtFront] Atacante está na layer 11, forçando ataque direto.");
-
-            SecurityPileManager securityManager = FindFirstObjectByType<SecurityPileManager>();
-            if (securityManager == null)
-            {
-                Debug.LogError("[GetOpponentAtFront] SecurityPileManager não encontrado.");
-                return null;
-            }
-
-
-            securityManager.DestroySecurity();
-
-            return null;
+            opponentPlayer.securityPile.DestroySecurity();
+            return;
         }
-
-
 
         if (currentCell == null)
         {
             Debug.LogError("[GetOpponentAtFront] currentCell está nulo.");
-            return null;
+            return;
         }
 
         if (!battlePairings.TryGetValue(currentCell.gridIndex, out int opponentGridID))
         {
             Debug.LogError($"[GetOpponentAtFront] Nenhum oponente designado para o gridIndex {currentCell.gridIndex}");
-            return null;
+            return;
         }
 
         // Busca a célula adversária baseada no gridIndex do oponente
@@ -183,22 +161,9 @@ public class ControlBattleField : MonoBehaviour
         if (opponentCell == null || !opponentCell.cellFull)
         {
             Debug.Log($"[GetOpponentAtFront] Ataque direto do lado {playerSide} porque a célula adversária {opponentGridID} está vazia.");
-
-            SecurityPileManager securityManager = FindFirstObjectByType<SecurityPileManager>();
-            if (securityManager == null)
-            {
-                Debug.LogError("[GetOpponentAtFront] SecurityPileManager não encontrado.");
-                return null;
-            }
-
-
-
-            Debug.Log($"[GetOpponentAtFront] Chamando DestroySecurity para o lado: {opponentSide}, atacante: {playerSide}");
-            securityManager.DestroySecurity();
-
-            return null;
+            opponentPlayer.securityPile.DestroySecurity();
+            return;
         }
-
         // Se a célula adversária está ocupada, procura o oponente para combate
         Debug.Log($"[GetOpponentAtFront] {playerSide} está na célula {currentCell.gridIndex}, procurando oponente na célula {opponentGridID}");
 
@@ -212,16 +177,12 @@ public class ControlBattleField : MonoBehaviour
             if (fieldCard.parentCell.gridIndex == opponentGridID)
             {
                 Debug.Log($"[GetOpponentAtFront] Oponente encontrado: '{digimon.cardName}' na célula {opponentGridID}");
-                ResolveCombat(attackerObj, digimon.gameObject, playerSide);
-                return digimon.gameObject;
+                ResolveCombat(attackerObj, digimon.gameObject);
+                return;
             }
         }
-
-        Debug.LogWarning($"[GetOpponentAtFront] Nenhum oponente encontrado na frente (grid {opponentGridID}).");
-        return null;
-        
+        Debug.LogWarning($"[GetOpponentAtFront] Nenhum oponente encontrado na frente (grid {opponentGridID}).");     
     }
-
     private bool HasAttributeAdvantage(DigimonAttribute attackerAttr, DigimonAttribute defenderAttr)
     {
         // Unknown sempre tem vantagem (exceto contra Free)
@@ -239,17 +200,29 @@ public class ControlBattleField : MonoBehaviour
 
         return false;
     }
-
-    public void ResolveCombat(GameObject attackerObj, GameObject defenderObj, PlayerSide attackerSide)
-    { }
-
-
-    public void ButtonPartnerDeck(int playerOwner)
+    public void ResolveCombat(GameObject attackerObj, GameObject defenderObj)
     {
-        PlayerSetup side = playerOwner == 0 ? setupBlue : setupRed;
-        OnClickPartnerPileZone(side);
+        DigimonDisplay digiAttacker = attackerObj.GetComponent<DigimonDisplay>();
+        DigimonDisplay digiDefender = defenderObj.GetComponent<DigimonDisplay>();
+        int attackerPower = digiAttacker.power;
+        int defenderPower = digiDefender.power;
+
+        if(HasAttributeAdvantage(digiAttacker.attribute, digiDefender.attribute))
+        {
+            attackerPower += AttributeBonus;
+        }
+
+        if(attackerPower <= defenderPower)
+        {
+            attackerObj.GetComponent<FieldCard>().DestroyFieldCard();
+        }
+        else
+        {
+            defenderObj.GetComponent<FieldCard>().DestroyFieldCard();
+        }
     }
 
+    // Deck list
     public void OnClickPartnerPileZone(PlayerSetup playerSide)
     {
         Debug.Log($"Clicou na PartnerPile {playerSide}");

@@ -1,7 +1,5 @@
-using System.Collections.Generic;
+using System;
 using UnityEngine;
-using static SinuousProductions.Card;
-using static SinuousProductions.CardEffects;
 
 namespace SinuousProductions
 {
@@ -101,14 +99,18 @@ namespace SinuousProductions
             OncePerTurn, // Apenas uma vez por turno
             TwicePerTurn, // Apenas duas vezes por turno
             OncePerGame, // Apenas uma vez por jogo
-            EndTurn, // No final do turno
+            EndTurn, // noButton final do turno
             ChooseOneEffect,
         }
 
-        public static string[] EffectTypePrompt(string effectPromp)
+        public static string[] EffectTypePrompt(string effectPrompt)
         {
-            string[] effectAction;
-            return effectAction = effectPromp.Split(new[] { "\r\n", "\n" }, System.StringSplitOptions.RemoveEmptyEntries);
+            return string.IsNullOrEmpty(effectPrompt)
+                ? Array.Empty<string>()
+                : effectPrompt.Split(
+                    new[] { "\r\n", "\n" },
+                    StringSplitOptions.RemoveEmptyEntries
+                );
         }
     }
 }

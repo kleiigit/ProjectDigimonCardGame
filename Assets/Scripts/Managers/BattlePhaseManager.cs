@@ -1,8 +1,9 @@
-﻿using System.Linq;
+﻿using ProjectScript.Enums;
+using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
-using ProjectScript.Enums;
-using System.Collections.Generic;
+using UnityEngine.XR;
 
 public class BattlePhaseManager : MonoBehaviour
 {
@@ -13,7 +14,6 @@ public class BattlePhaseManager : MonoBehaviour
     // Instancias
     private ControlBattleField control;
     private PartnerPileManager partnerPileManager;
-    private MenuCardManager menuCardManager;
     private PlayerSetup playerSetupBlue;
     private PlayerSetup playerSetupRed;
 
@@ -47,7 +47,11 @@ public class BattlePhaseManager : MonoBehaviour
             buttonNextPhaseObj.gameObject.SetActive(true);
             UpdatePhase(); 
         }
-
+        else
+        {
+            playerSetupBlue.isActivePlayer = true;
+            playerSetupRed.isActivePlayer = true;
+        }
 
         // Display Current Player in Text
         if (currentPlayerText != null)
@@ -58,7 +62,7 @@ public class BattlePhaseManager : MonoBehaviour
         currentPlayerText.color = currentPlayer == PlayerSide.PlayerBlue ? Color.blue : Color.red;
 
         // Check for draw pile refill to end turn
-        if (control.GetPlayerSetup(currentPlayer).refill == true)
+        if (GameSetupStart.GetPlayerSetup(currentPlayer).refill == true)
         {
             phase = Phase.EndPhase;
         }
@@ -73,7 +77,7 @@ public class BattlePhaseManager : MonoBehaviour
                 
                 buttonPhaseNext.text = "Pular";
                 battlePhaseText.text = "Fase de Virar".ToUpper();
-                UpdateCardButtonControl(null);
+                ActivePlayerSide(null);
                 NextPhase();
                 break;
 
@@ -91,18 +95,18 @@ public class BattlePhaseManager : MonoBehaviour
                     playerSetupRed.drawPile.DrawCard(count, FieldPlace.Hand);
                 }
 
-                UpdateCardButtonControl(null);
+                ActivePlayerSide(null);
                 NextPhase();
                 break;
 
             case Phase.CostPhase:
                 battlePhaseText.text = "Fase de Data".ToUpper();
-                UpdateCardButtonControl(currentPlayer);
+                ActivePlayerSide(currentPlayer);
                 break;
 
             case Phase.EvolutionPhase:
                 battlePhaseText.text = "Fase de Evolução".ToUpper();
-                UpdateCardButtonControl(currentPlayer);
+                ActivePlayerSide(currentPlayer);
                 if(currentPlayer == playerSetupBlue.setPlayer)
                 {
                     playerSetupBlue.partnerPile.ShowPartnerPile();
@@ -117,17 +121,17 @@ public class BattlePhaseManager : MonoBehaviour
                 if (roundCount == 1) buttonPhaseNext.text = "Finalizar o turno";
 
                 battlePhaseText.text = "Fase de Principal".ToUpper();
-                UpdateCardButtonControl(currentPlayer);
+                ActivePlayerSide(currentPlayer);
                 break;
 
-            case Phase.SkillPhase:
+            case Phase.PreparationPhase:
                 battlePhaseText.text = "Fase de Preparação".ToUpper();
-                UpdateCardButtonControl(currentPlayer);
+                ActivePlayerSide(currentPlayer);
                 break;
 
             case Phase.AttackPhase:
                 battlePhaseText.text = "Fase de Ataque".ToUpper();
-                UpdateCardButtonControl(currentPlayer);
+                ActivePlayerSide(currentPlayer);
                 break;
             case Phase.EndPhase:
                 battlePhaseText.text = "Fase de Final".ToUpper();
@@ -135,21 +139,21 @@ public class BattlePhaseManager : MonoBehaviour
                 if (currentPlayer == playerSetupBlue.setPlayer)
                 {
                     playerSetupBlue.refill = false;
+                    if(playerSetupBlue.listHandObj.Count > GameSetupStart.endTurnSize)
+                    {
+                       Debug.LogWarning("cards acima do limite");
+                    }
                 }
                 else
                 {
-                    playerSetupBlue.refill = false;
+                    playerSetupRed.refill = false;
+                    if (playerSetupRed.listHandObj.Count > GameSetupStart.endTurnSize)
+                    {
+                        Debug.LogWarning("cards acima do limite");
+                    }
                 }
-                UpdateCardButtonControl(null);
-                /*if (hand.cardsInHands[currentPlayer].Count > setupStart.maxEndTurnSize)
-                {
-                    Debug.LogWarning("cards acima do limite");
-                }
-                else
-                {
-                    NextPhase();
-                    return; 
-                }*/
+                ActivePlayerSide(null);
+                NextPhase();
                 break;
         }
     }
@@ -189,9 +193,23 @@ public class BattlePhaseManager : MonoBehaviour
         phase++;
     }
 
-    public void UpdateCardButtonControl(PlayerSide? currentPlayer)
+    public void ActivePlayerSide(PlayerSide? currentPlayer)
     {
-        // nao esta funcionando
+        if(currentPlayer == null)
+        {
+            playerSetupRed.isActivePlayer = false;
+            playerSetupBlue.isActivePlayer = false;
+        }
+        else if(currentPlayer == PlayerSide.PlayerRed)
+        {
+            playerSetupRed.isActivePlayer = true;
+            playerSetupBlue.isActivePlayer = false;
+        }
+        else if(currentPlayer == PlayerSide.PlayerBlue)
+        {
+            playerSetupBlue.isActivePlayer = true;
+            playerSetupRed.isActivePlayer = false;
+        }
     }
 
 }

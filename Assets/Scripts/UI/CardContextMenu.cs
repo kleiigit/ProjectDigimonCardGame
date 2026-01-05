@@ -14,6 +14,7 @@ public class CardContextMenu : MonoBehaviour
 
     private GameObject activeMenu;
 
+
     [Tooltip("Offset em relação à carta")]
     public Vector2 menuOffset = new Vector2(100f, 50f);
 
@@ -32,6 +33,7 @@ public class CardContextMenu : MonoBehaviour
 
     public void ShowMenu(GameObject card, List<MenuOption> options, Vector2? customOffset = null)
     {
+
         if (menuPrefab == null || buttonPrefab == null || card == null)
         {
             Debug.LogError("Menu, botão ou carta não atribuídos!");
@@ -47,7 +49,6 @@ public class CardContextMenu : MonoBehaviour
             Debug.LogError("[CardContextMenu] A carta não possui um filho chamado 'CardCanvas'.");
             return;
         }
-
         // Instancia o menu dentro do CardCanvas
         activeMenu = Instantiate(menuPrefab, cardCanvas, false);
         RectTransform menuRect = activeMenu.GetComponent<RectTransform>();

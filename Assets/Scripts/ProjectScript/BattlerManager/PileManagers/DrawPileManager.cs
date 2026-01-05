@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class DrawPileManager : MonoBehaviour, IPile
 {
+    [SerializeField] Transform deckTransform;
     private bool rechargeWaiting = false;
 
     private PlayerSetup setup;
@@ -19,7 +20,7 @@ public class DrawPileManager : MonoBehaviour, IPile
 
     void Update()
     {
-        if (rechargeWaiting && setup.listDiscardObj.Count > 0)
+        if (rechargeWaiting && setup.listDiscardCards.Count > 0)
         {
             RefillDeckFromDiscard();
             rechargeWaiting = false;
@@ -47,7 +48,7 @@ public class DrawPileManager : MonoBehaviour, IPile
             switch (destination)
             {
                 case FieldPlace.Hand:
-                    Debug.Log($"[CardDrawController] Adicionando carta à mão do jogador Red: {nextCard.cardName}");
+                    //Debug.Log($"[CardDrawController] Adicionando carta à mão do jogador Red: {nextCard.cardName}");
                     setup.hand.AddCard(nextCard);
                     break;
 
@@ -66,7 +67,7 @@ public class DrawPileManager : MonoBehaviour, IPile
                     Debug.LogWarning($"Destino inválido: {destination}. Carta descartada.");
                     break;
             }
-
+            TriggerCardManager.TriggerDrawing();
         }
     }
     public void DrawCardToDataPile(int amount)
@@ -75,26 +76,13 @@ public class DrawPileManager : MonoBehaviour, IPile
     }
     public void RefillDeckFromDiscard()
     {
-        if (setup.listDiscardObj.Count == 0)
+        if (setup.listDiscardCards.Count == 0)
         {
             rechargeWaiting = true;
             Debug.LogWarning($"[DrawPileManager] Sem cartas na lixeira para recarregar {setup.setPlayer}");
             return;
         }
-
-        // Obtem lista de GameObjects do descarte
-        List<GameObject> discardedObjects = discardManager.PullAllFromDiscard(setup.setPlayer);
-
-        // Converte para lista de Cards pegando o componente Card de cada GameObject
-        List<Card> cards = new List<Card>();
-        foreach (GameObject go in discardedObjects)
-        {
-            Card card = go.GetComponent<Card>();
-            if (card != null)
-                cards.Add(card);
-            else
-                Debug.LogWarning($"GameObject {go.name} não possui componente Card");
-        }
+        List<Card> cards = new List<Card>(discardManager.PullAllFromDiscard(setup.setPlayer));
 
         setup.playerDeck = cards;
 
@@ -112,14 +100,10 @@ public class DrawPileManager : MonoBehaviour, IPile
     {
         throw new System.NotImplementedException();
     }
-
-    public void RemoveCard(GameObject cardObject)
-    {
-        throw new System.NotImplementedException();
-    }
+    public void RemoveCard(GameObject cardObject) { }
 
     public void UpdateVisuals()
     {
-        throw new System.NotImplementedException();
+        
     }
 }

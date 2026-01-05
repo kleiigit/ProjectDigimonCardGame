@@ -4,12 +4,13 @@ using UnityEngine.UI;
 
 public class CardHoverScale : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
+    
     // Hover ao passar o mouse ou controle do jogador
     private RectTransform rectTransform;
     private Vector3 baseScale;
     private bool isHovered = false;
     private int originalSiblingIndex;
-
+    [Header("Controla o tamanmho da carta ao passar o mouse em cima.")]
     [SerializeField] private float scaleMultiplier = 1.1f;
 
     [Header("Configurações")]
@@ -28,6 +29,7 @@ public class CardHoverScale : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     {
         if (isHovered) return;
         if (gameObject.layer == 13) return; //for segurança, não aplicar hover em objetos que já estão no layer 13
+        if (gameObject.tag != "Card") return; // se nao for Card
 
         baseScale = rectTransform.localScale;
         rectTransform.localScale = baseScale * scaleMultiplier;
@@ -45,7 +47,8 @@ public class CardHoverScale : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         }
         else
         {
-            Debug.LogWarning("[CardHoverScale] Não foi possível exibir a carta no HoverPanel. Verifique se CardDisplay e cardData estão atribuídos.", gameObject);
+            Debug.LogWarning("[CardHoverScale] " +
+                "Não foi possível exibir a carta no HoverPanel.", gameObject);
         }
     }
 

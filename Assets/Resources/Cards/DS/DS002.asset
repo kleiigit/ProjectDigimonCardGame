@@ -23,7 +23,9 @@ MonoBehaviour:
   sprite: {fileID: 21300000, guid: 339a31d446660cc408711c8be5aa8030, type: 3}
   effects:
   - trigger: 3
-    promptEffect: 
+    promptEffect: 'Down
+
+      Draw,1'
     DescriptionEffect: '<down>: Compre 1 carta.'
   - trigger: 5
     promptEffect: 

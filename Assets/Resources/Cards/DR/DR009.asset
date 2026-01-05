@@ -26,7 +26,7 @@ MonoBehaviour:
     promptEffect: EF,this;change,power;1500;endturn
     DescriptionEffect: "At\xE9 o final deste turno, esse Digimon tem 1500 de DP."
   - trigger: 5
-    promptEffect: EF,draw,1
+    promptEffect: Draw,1
     DescriptionEffect: Compre 1 carta.
   level: 3
   power: 700

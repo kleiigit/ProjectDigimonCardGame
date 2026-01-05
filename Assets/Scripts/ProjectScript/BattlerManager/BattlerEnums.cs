@@ -13,7 +13,7 @@ namespace ProjectScript.Enums
         EvolutionPhase,
         MainPhase,
         BattlePhase,
-        SkillPhase,
+        PreparationPhase,
         AttackPhase,
         EndPhase
     }
@@ -29,8 +29,15 @@ namespace ProjectScript.Enums
         CheckZone,
         Hand,
     }
-    public enum Effects
+    public enum Keyword
     {
         Draw,
+        Target,
+        Condition,
+        Destroy,
+        Discard,
+        Down,
+        Freeze,
+        Cache,
     }
 }

@@ -2,22 +2,22 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using SinuousProductions;
+using ProjectScript.Enums;
 
 public class GridManager : MonoBehaviour
 {
     public List<GridCell> playerRedCells;
     public List<GridCell> playerBlueCells;
-    public GameObject cardPrefab;
     private FieldCard fieldCardScript;
-
-    public bool AddObjectToGrid(Card cardData, int gridPosition)
+    public bool AddObjectToGrid(Card cardData, int gridPosition, PlayerSide playerSide)
     {
         GridCell targetCell = null;
         bool isRedOwnerCell = false;
 
-        Debug.Log("Iniciando AddObjectToGrid com card: " + cardData.cardName);
+        //Debug.Log("Iniciando AddObjectToGrid com card: " + cardData.cardName);
 
         targetCell = playerRedCells.Find(cell => cell.gridIndex == gridPosition);
+
         if (targetCell != null)
         {
             isRedOwnerCell = true;
@@ -27,50 +27,44 @@ public class GridManager : MonoBehaviour
             targetCell = playerBlueCells.Find(cell => cell.gridIndex == gridPosition);
         }
 
-        if (targetCell != null)
-        {
-            if (targetCell.cellFull)
-            {
-                Debug.Log($"Célula {gridPosition} já está ocupada.");
-                return false;
-            }
-
-            GameObject newObj = Instantiate(cardPrefab);
-            newObj.name = cardData.cardName.ToUpper() + " - " + cardData.cardID;
-            newObj.GetComponent<CardDisplay>().cardData = cardData;
-            newObj.GetComponent<CardDisplay>().UpdateCardDisplay();
-
-            fieldCardScript = newObj.GetComponent<FieldCard>();
-            fieldCardScript.enabled = true;
-            fieldCardScript.parentCell = targetCell;
-
-            // Define o cardOwner com base no gridOwner da célula
-            fieldCardScript.SetCardOwnerFromGrid();
-
-            newObj.transform.SetParent(targetCell.transform, false);
-            newObj.transform.localPosition = Vector3.zero;
-
-            RectTransform rectTransform = newObj.GetComponent<RectTransform>();
-            if (isRedOwnerCell)
-            {
-                rectTransform.localScale = new Vector3(-0.56f, -0.56f, 0.56f); // Invertido
-            }
-            else
-            {
-                rectTransform.localScale = new Vector3(0.56f, 0.56f, 0.56f); // Normal
-            }
-
-            newObj.layer = 7;
-            targetCell.cellFull = true;
-            GameManager.Instance.AddCardToField(newObj);
-            Debug.Log($"Objeto criado na célula {gridPosition}.");
-            return true;
-        }
-        else
+        if (targetCell == null)
         {
             Debug.LogWarning($"Nenhuma célula encontrada para a posição {gridPosition}.");
             return false;
         }
+
+        if (targetCell.cellFull)
+        {
+            Debug.Log($"Célula {gridPosition} já está ocupada.");
+            return false;
+        }
+
+        GameObject newObj = Instantiate(
+            GameManager.cardPrefab,
+            targetCell.transform.position,
+            targetCell.transform.rotation,
+            targetCell.transform
+        );
+
+        newObj.name = cardData.cardName.ToUpper() + " - " + cardData.cardID;
+        newObj.GetComponent<RectTransform>().localScale = new Vector3(0.55f, 0.55f, 1f);
+        newObj.GetComponent<MenuCardManager>().handOwner = playerSide;
+
+        CardDisplay cardDisplay = newObj.GetComponent<CardDisplay>();
+        cardDisplay.cardData = cardData;
+        cardDisplay.UpdateCardDisplay();
+
+        fieldCardScript = newObj.GetComponent<FieldCard>();
+        fieldCardScript.enabled = true;
+        fieldCardScript.parentCell = targetCell;
+
+        // Ajustes locais
+        
+        newObj.layer = 7;
+
+        targetCell.cellFull = true;
+        GameManager.Instance.AddCardToField(newObj);
+        return true;
     }
 
 

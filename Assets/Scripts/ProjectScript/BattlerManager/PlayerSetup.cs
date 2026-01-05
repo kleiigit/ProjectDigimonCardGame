@@ -12,6 +12,7 @@ public class PlayerSetup : MonoBehaviour
     public int maxLevelPartner;
     public int maxMemory;
     public int currentMemory;
+    public GameObject checkzone;
 
     public List<DigimonDisplay> allDigimon = new();
     public List<Card> playerDeck = new();
@@ -20,7 +21,7 @@ public class PlayerSetup : MonoBehaviour
     public List<GameObject> listHandObj = new();
     public List<GameObject> listEvoObj = new();
     public List<GameObject> listSecurityObj = new();
-    public List<GameObject> listDiscardObj = new();
+    public List<Card> listDiscardCards = new();
     public List<GameObject> listDataObj = new();
 
     [HideInInspector] public PartnerPileManager partnerPile;
@@ -48,7 +49,7 @@ public class PlayerSetup : MonoBehaviour
 
         listHandObj.Clear();
         listEvoObj.Clear();
-        listDiscardObj.Clear();
+        listDiscardCards.Clear();
         listDataObj.Clear();
         listSecurityObj.Clear();
         listEvoObj.Clear();
@@ -62,5 +63,10 @@ public class PlayerSetup : MonoBehaviour
             maxLevelPartner = evoPile.GetActivePartner()?.level ?? 0;
             maxMemory = evoPile.GetActivePartner()?.leaderMemory ?? 0;
         }
+    }
+
+    public override string ToString()
+    {
+        return setPlayer.ToString();
     }
 }

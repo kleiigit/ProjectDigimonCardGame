@@ -26,8 +26,9 @@ MonoBehaviour:
     promptEffect: Draw,1
     DescriptionEffect: Compre 1 carta.
   - trigger: 5
-    promptEffect: 
-    DescriptionEffect: <cache>
+    promptEffect: Cache
+    DescriptionEffect: <cache> (Envie a carta do topo do seu baralho para a pilha
+      de Dados.)
   skillTimeActivation: 0
   programSpritePosition: {x: 0, y: 0.66}
   programSpriteScale: 2.222

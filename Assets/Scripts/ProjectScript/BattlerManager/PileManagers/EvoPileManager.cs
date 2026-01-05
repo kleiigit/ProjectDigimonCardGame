@@ -1,9 +1,8 @@
-#nullable enable
+
 using ProjectScript.Enums;
 using ProjectScript.Interfaces;
 using SinuousProductions;
 using System;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -90,6 +89,9 @@ public class EvoPileManager : MonoBehaviour, IPile
         topEvoCard.name = "Active Partner - " + cardData.cardName.ToUpper() + " - " + cardData.cardID;
         Destroy(activePartner);
         activePartner = topEvoCard;
+        activePartner.GetComponent<FieldCard>().enabled = true;
+        activePartner.GetComponent<DigimonDisplay>().enabled = true;
+
         OnPartnerChosen?.Invoke(setup.setPlayer, cardData);
     }
     public void RemoveCard(GameObject cardObject)
@@ -134,5 +136,52 @@ public class EvoPileManager : MonoBehaviour, IPile
     public void ShowEvoPile()
     {
         rectEvoPile.gameObject.SetActive(true);
+    }
+
+    public bool CanEvolveCard(Card partner)
+    {
+        DigimonCard digiPartner = partner as DigimonCard;
+        if (setup.dataPile.HasSufficientDataToPlayCard(partner.GetColorCost()))
+        {
+            SelectionDataManager.CostCard(partner.GetColorCost());
+            if (activePartner == null)
+            {
+                if (digiPartner.level > 0)
+                {
+                    Debug.LogWarning("noButton active partner to evolve from.");
+                    return false;
+                }
+
+                else if (digiPartner.level == 0)
+                {
+                    Debug.Log("Partner inicial escolhido");
+                    return true;
+                }
+                else
+                {
+                    Debug.LogWarning("Cannot evolve to this partner. Level requirement not met.");
+                    return false;
+                }
+            }
+            else
+            {
+                if (BattlePhaseManager.phase == 0) return false;
+
+                if ((digiPartner.level -1 == (activePartner.GetComponent<CardDisplay>().cardData as DigimonCard).level))
+                {
+                    return true;
+                }
+                else
+                {
+                    Debug.LogWarning("Cannot evolve to this partner. Level requirement not met.");
+                    return false;
+                }
+            }
+        }
+        else
+        {
+            Debug.Log("Data insuficiente");
+            return false;
+        }
     }
 }

@@ -15,8 +15,6 @@ namespace SinuousProductions
                 (list[j], list[i]) = (list[i], list[j]);
             }
         }
-
-
         public static IEnumerator FadeIn(CanvasGroup group, float alpha, float duration)
         {
             var time = 0.0f;
@@ -32,7 +30,6 @@ namespace SinuousProductions
 
             group.alpha = alpha; // Ensure final alpha is set
         }
-
         public static IEnumerator FadeOut(CanvasGroup group, float alpha, float duration)
         {
             var time = 0.0f;

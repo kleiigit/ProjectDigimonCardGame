@@ -22,7 +22,7 @@ namespace SinuousProductions
         [Header("Sprite Configuration:")]
         public Sprite sprite;
 
-        [Header("Card Description and Effects:")]
+        [Header("Card Description and Keyword:")]
         public List<CardEffects> effects = new List<CardEffects>(); // List of Effect instances for card effects
 
 
@@ -47,6 +47,16 @@ namespace SinuousProductions
                 if (string.IsNullOrEmpty(cardName))
                     cardName = name;
             }
+        }
+        public Dictionary<CardColor,int> GetColorCost()
+        {
+            Dictionary<CardColor, int> cardCostColor = new Dictionary<CardColor, int>();
+            for(int i = 0; i < costColor.Count; i++)
+            {
+                int value = (i < cost.Count) ? cost[i] : 0;
+                cardCostColor[costColor[i]] = value;
+            }
+            return cardCostColor;
         }
     }
 }

@@ -4,16 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using ProjectScript.Interfaces;
+using UnityEditor.PackageManager;
 
 public class DataPileManager : MonoBehaviour, IPile
 {
-    private PlayerSetup setup;
-    public Transform dataPileTransform;
-    public Dictionary<CardColor, int> colorCounts = new Dictionary<CardColor, int>();
-
-    [Header("Visualização de contagem de cores")]
-    public List<string> ColorCountList = new List<string>();
-
     public enum Direction
     {
         Up,
@@ -21,7 +15,9 @@ public class DataPileManager : MonoBehaviour, IPile
         Left,
         Right
     }
-
+    private PlayerSetup setup;
+    public Transform dataPileTransform;
+    public Dictionary<CardColor, int> colorCounts = new Dictionary<CardColor, int>();
     [Header("Configurações de posicionamento 2D")]
     public Direction stackDirection = Direction.Down;
     public float cardRotationZ = 0f;
@@ -32,14 +28,6 @@ public class DataPileManager : MonoBehaviour, IPile
     {
         setup = GetComponent<PlayerSetup>();
         ColorDictionary();
-    }
-
-    private void ColorDictionary()
-    {
-        foreach (CardColor color in System.Enum.GetValues(typeof(CardColor)))
-        {
-            colorCounts[color] = 0;
-        }
     }
 
     public void AddCard(Card cardData)
@@ -57,6 +45,11 @@ public class DataPileManager : MonoBehaviour, IPile
         UpdateVisuals();
 
         Debug.Log($"[DataPileManager] Carta adicionada à DataPile do {setup.setPlayer}: {cardData.cardName}");
+    }
+    public void RemoveCard(GameObject cardObject)
+    {
+        setup.listDataObj.Remove(cardObject);
+        Destroy(cardObject);
     }
     private void UpdateColorCount()
     {
@@ -76,7 +69,6 @@ public class DataPileManager : MonoBehaviour, IPile
             }
         }
     }
-
     public void UpdateVisuals()
     {
         setup.listDataObj.RemoveAll(card => card == null);
@@ -113,15 +105,33 @@ public class DataPileManager : MonoBehaviour, IPile
         }
     }
 
+    private void ColorDictionary()
+    {
+        foreach (CardColor color in System.Enum.GetValues(typeof(CardColor)))
+        {
+            colorCounts[color] = 0;
+        }
+    }
     public void MoveCardFromHandToDataPile(GameObject cardObject)
     {
         setup.hand.RemoveCard(cardObject);
         setup.dataPile.AddCard(cardObject.GetComponent<CardDisplay>().cardData);
     }
-    public bool HasSufficientDataToPlayCard(Card card, PlayerSide playerSide)
+    public bool HasSufficientDataToPlayCard(Dictionary<CardColor,int> costColor)
     {
+        foreach(var datacolor in costColor)
+        {
+            //Debug.Log($"Custo de Data: {datacolor.Key}: {datacolor.Value}");
+        }
+        foreach (var datacolor in colorCounts)
+        {
+            if (datacolor.Value == 0) continue;
+            //Debug.Log($"Banco de Data: {datacolor.Key}: {datacolor.Value}");
+        }
+
         Dictionary<CardColor, int> tempCounts = new Dictionary<CardColor, int>(colorCounts);
 
+        // atribui as cores neutras ao total
         int availableColorless = tempCounts.GetValueOrDefault(CardColor.Colorless, 0);
         int totalResourcesAvailable = 0;
         foreach (var pair in tempCounts)
@@ -129,22 +139,19 @@ public class DataPileManager : MonoBehaviour, IPile
             totalResourcesAvailable += pair.Value;
         }
 
-        int totalCost = 0;
-        for (int i = 0; i < card.cost.Count; i++)
-        {
-            totalCost += card.cost[i];
-        }
+        int totalCost = costColor.Sum(x => x.Value);
 
         if (totalResourcesAvailable < totalCost)
         {
+            Debug.Log("total cost maior que recursos disponiveis");
             return false;
         }
 
         // Processa custo por cor como antes
-        for (int i = 0; i < card.cost.Count; i++)
+        foreach(var pair in costColor)
         {
-            CardColor requiredColor = card.costColor[i];
-            int requiredAmount = card.cost[i];
+            CardColor requiredColor = pair.Key;
+            int requiredAmount = pair.Value;
 
             int availableAmount = tempCounts.GetValueOrDefault(requiredColor, 0);
 
@@ -162,17 +169,14 @@ public class DataPileManager : MonoBehaviour, IPile
                 }
                 else
                 {
+                    Debug.Log("sem cor indisponiveis");
                     return false;
                 }
             }
         }
-
+        Debug.Log("Custos compridos");
         return true;
     }
 
-    public void RemoveCard(GameObject cardObject)
-    {
-        setup.listDataObj.Remove(cardObject);
-        Destroy(cardObject);
-    }
+    
 }

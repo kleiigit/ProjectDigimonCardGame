@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 3515436307152563945}
   - component: {fileID: 9131534144556338805}
   - component: {fileID: 1596307906107517982}
-  - component: {fileID: 930561626352447760}
   - component: {fileID: 4835888119520759230}
+  - component: {fileID: 899582579817303960}
   m_Layer: 6
   m_Name: GridCellPrefab(Clone)
   m_TagString: Untagged
@@ -28,9 +28,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9210982278067241708}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.5, y: -0.6354839, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1.8528442}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -47,12 +47,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a886aeb0ec20514683ee6073e4d6920, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridIndex: 0
+  gridIndex: 3
   cellFull: 0
   ObjectInCell: {fileID: 0}
   owner: 0
 --- !u!212 &1596307906107517982
 SpriteRenderer:
+  serializedVersion: 2
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -71,10 +72,12 @@ SpriteRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10302, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -92,9 +95,11 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_Sprite: {fileID: 3034206139368750928, guid: d09ceb7855b276f438a5a47a1e95fd06, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -104,9 +109,23 @@ SpriteRenderer:
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!61 &930561626352447760
+--- !u!114 &4835888119520759230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9210982278067241708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca30d87b79c850b4dbc906faf4e52897, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  highlighColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  posColor: {r: 0, g: 1, b: 0, a: 1}
+  negColor: {r: 1, g: 0, b: 0, a: 1}
+--- !u!61 &899582579817303960
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -150,20 +169,5 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.6640625, y: 0.8671875}
+  m_Size: {x: 2.09375, y: 2.09375}
   m_EdgeRadius: 0
---- !u!114 &4835888119520759230
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9210982278067241708}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca30d87b79c850b4dbc906faf4e52897, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  highlighColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  posColor: {r: 0, g: 1, b: 0, a: 1}
-  negColor: {r: 1, g: 0, b: 0, a: 1}

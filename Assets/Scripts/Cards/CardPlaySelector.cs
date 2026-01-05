@@ -3,6 +3,7 @@ using SinuousProductions;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.XR;
 
 public class CardPlaySelector : MonoBehaviour
 {
@@ -12,11 +13,8 @@ public class CardPlaySelector : MonoBehaviour
     private bool isAwaitingTarget = false;
     private GameManager gameManager;
     private GridManager gridManager;
-    private HandManager handManager;
     private MenuCardManager menuCardManager;
-
-    //teste
-    private DiscardManager discardManager;
+    private ControlBattleField battleField;
 
     private Image[] imageRenderers;
     private Color[] originalColors;
@@ -31,9 +29,9 @@ public class CardPlaySelector : MonoBehaviour
     {
         gameManager = FindFirstObjectByType<GameManager>();
         gridManager = FindFirstObjectByType<GridManager>();
-        handManager = FindFirstObjectByType<HandManager>();
+        battleField = FindFirstObjectByType<ControlBattleField>();
+
         cardDisplay = GetComponent<CardDisplay>();
-        discardManager = FindFirstObjectByType<DiscardManager>();
         menuCardManager = GetComponent<MenuCardManager>();
 
 
@@ -63,8 +61,6 @@ public class CardPlaySelector : MonoBehaviour
 
     public void StartCardPlacement()
     {
-        Debug.Log("StartCardPlacement chamado");
-
         if (isAwaitingTarget) return;
 
         Card card = cardDisplay.cardData;
@@ -77,8 +73,6 @@ public class CardPlaySelector : MonoBehaviour
     // joga a carta
     private IEnumerator WaitForGridClick(Card card, PlayerSide playerSide)
     {
-        Debug.Log("Selecione um local no campo para jogar a carta.");
-
         while (isAwaitingTarget)
         {
             if (Input.GetMouseButtonDown(0))
@@ -95,20 +89,13 @@ public class CardPlaySelector : MonoBehaviour
                         yield break;
                     }
 
-                    if (gridManager.AddObjectToGrid(card, cell.gridIndex))
+                    if (gridManager.AddObjectToGrid(card, cell.gridIndex, playerSide))
                     {
-                        handManager.RemoveCard(this.gameObject);
+                        GameSetupStart.GetPlayerSetup(menuCardManager.handOwner).hand.RemoveCard(this.gameObject);
                         Debug.Log("Carta jogada: " + card.cardName.ToUpper());
                         isAwaitingTarget = false;
+                        TriggerCardManager.TriggerWhenPlayed(card, GameSetupStart.GetPlayerSetup(menuCardManager.handOwner));
                         Destroy(gameObject);
-                        if(playerSide == PlayerSide.PlayerBlue)
-                        {
-                            GameSetupStart.playerBlue.discard.AddCard(card);
-                        }
-                        else
-                        {
-                            GameSetupStart.playerRed.discard.AddCard(card);
-                        }
                         yield break;
                     }
                     else

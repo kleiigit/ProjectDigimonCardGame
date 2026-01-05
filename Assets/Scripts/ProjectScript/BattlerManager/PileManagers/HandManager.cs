@@ -30,6 +30,7 @@ public class HandManager : MonoBehaviour, IPile
         newCard.name = cardData.cardName.ToUpper() + " - " + cardData.cardID;
         CardDisplay cardDisplay = newCard.GetComponent<CardDisplay>();
         cardDisplay.cardData = cardData;
+        newCard.gameObject.layer = 16;
         newCard.GetComponent<MenuCardManager>().handOwner = setup.setPlayer;
         cardDisplay.UpdateCardDisplay();
         setup.listHandObj.Add(newCard);
@@ -38,9 +39,7 @@ public class HandManager : MonoBehaviour, IPile
 
     public void RemoveCard(GameObject cardObject)
     {
-        Debug.Log($"Removendo carta da mão {setup.setPlayer}: {cardObject.name}");
         bool removed = setup.listHandObj.Remove(cardObject);
-        Debug.Log(removed ? "Carta removida com sucesso." : "Carta não encontrada na lista.");
         if (removed)
         {
             setup.listHandObj.RemoveAll(card => card == null);

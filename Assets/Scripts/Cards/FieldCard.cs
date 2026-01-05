@@ -1,22 +1,23 @@
 using UnityEngine;
 using UnityEngine.UI;
 using ProjectScript.Enums;
+using System;
 
 public class FieldCard : MonoBehaviour
 {
     public GridCell parentCell;
     public bool downPosition = false;
-    public GameObject downButton;
+    public bool isFreeze = false;
     public DigimonDisplay digimonDisplay;
     //private EffectManager effectManager;
     private CardDisplay cardDisplay;
     private MenuCardManager menuCardManager;
-    private TriggerCardAction triggerCardAction;
 
     public CardType cardType;
     public GameObject highLight;
     private Image highLightImage;
     public GameObject interations;
+    public Quaternion originalRotation;
 
     [SerializeField] private GameObject selectionIndicator;
     [SerializeField] private TMPro.TextMeshProUGUI selectionNumberText;
@@ -26,7 +27,6 @@ public class FieldCard : MonoBehaviour
 
     private void Awake()
     {
-        triggerCardAction = FindFirstObjectByType<TriggerCardAction>();
         //effectManager = FindFirstObjectByType<EffectManager>();
         cardDisplay = GetComponent<CardDisplay>();
         if (highLight != null)
@@ -34,7 +34,6 @@ public class FieldCard : MonoBehaviour
 
         if (highLightImage == null)
             Debug.LogWarning("highLight não possui componente Image no " + gameObject.name);
-
         // Captura todas as imagens da carta e salva suas cores originais
         allImages = GetComponentsInChildren<Image>(includeInactive: true);
         originalColors = new Color[allImages.Length];
@@ -68,6 +67,8 @@ public class FieldCard : MonoBehaviour
 
     private void Start()
     {
+        menuCardManager = GetComponent<MenuCardManager>();
+        originalRotation = gameObject.transform.rotation;
         
         if (cardType == CardType.Digimon || cardType == CardType.Partner)
         {
@@ -78,12 +79,6 @@ public class FieldCard : MonoBehaviour
                 DigimonDisplay.AllDigimons.Add(digimonDisplay);
             cardDisplay.protectionBox.rectTransform.anchoredPosition = new Vector2(-0.9653f, 0.189389f);
             cardDisplay.protectionBox.rectTransform.localScale = new Vector3(1f, 1f, 1);
-            triggerCardAction.TriggerOnplay(cardDisplay.cardData);
-
-            if (cardType == CardType.Program)
-            {
-                Debug.Log("Carta Programa jogada! " + cardDisplay.cardData.cardName.ToUpper() + $" [{cardDisplay.cardData.effects.Count}]");
-            }
         }
     }
 
@@ -95,7 +90,7 @@ public class FieldCard : MonoBehaviour
             
             if (menuCardManager.handOwner == BattlePhaseManager.currentPlayer)
             {
-                Debug.Log(this.gameObject.name + " up!");
+                Debug.Log(gameObject.name + " up!");
                 downPosition = false;
             }
         }
@@ -109,20 +104,25 @@ public class FieldCard : MonoBehaviour
     public void SetDownPosition()
     {
         downPosition = true;
-        Debug.Log(this.gameObject.name + " down!");
+        TriggerCardManager.TriggerDowned();
+        Debug.Log(gameObject.name + " down!");
+    }
+    public void SetFreeze()
+    {
+        isFreeze = true;
+        TriggerCardManager.TriggerFreeze();
+        Debug.Log(gameObject.name + " freezed!");
     }
     public void DestroyFieldCard()
     {
         if (cardDisplay == null || cardDisplay.cardData == null)
         {
-            Debug.LogWarning("DestroyCardAndSendToDataPile: cardDisplay ou cardData está nulo.");
+            Debug.LogWarning("DestroyCardAndSendToDataPile: _cardData ou cardData está nulo.");
             return;
         }
 
-        PlayerSide playerSide = GetFieldOwner();
-
-        GameManager.Instance.cardsInFieldBlue.Remove(this.gameObject);
-        GameManager.Instance.cardsInFieldRed.Remove(this.gameObject);
+        GameManager.Instance.cardsInFieldBlue.Remove(gameObject);
+        GameManager.Instance.cardsInFieldRed.Remove(gameObject);
         parentCell.cellFull = false;
 
         if (menuCardManager.handOwner == PlayerSide.PlayerBlue)
@@ -133,7 +133,29 @@ public class FieldCard : MonoBehaviour
         {
             GameSetupStart.playerRed.dataPile.AddCard(cardDisplay.cardData);
         }
-        Destroy(this.gameObject);
+        TriggerCardManager.TriggerDigimonDestroyed();
+        Destroy(gameObject);
+    }
+    public void DiscardFieldCard()
+    {
+        if (cardDisplay == null || cardDisplay.cardData == null)
+        {
+            Debug.LogWarning("DestroyCardAndSendToDataPile: _cardData ou cardData está nulo.");
+            return;
+        }
+
+        GameManager.Instance.cardsInFieldBlue.Remove(gameObject);
+        GameManager.Instance.cardsInFieldRed.Remove(gameObject);
+        parentCell.cellFull = false;
+
+        if (menuCardManager.handOwner == PlayerSide.PlayerBlue)
+        {
+            GameSetupStart.playerBlue.discard.AddCard(cardDisplay.cardData);
+        }
+        else
+        {
+            GameSetupStart.playerRed.discard.AddCard(cardDisplay.cardData);
+        }
     }
 
     // Update Methods
@@ -141,13 +163,15 @@ public class FieldCard : MonoBehaviour
     {
         if (downPosition)
         {
-            this.gameObject.transform.rotation = Quaternion.Euler(0f, 0f, 90f);
+            transform.rotation = originalRotation;
+            transform.rotation = originalRotation * Quaternion.Euler(0f, 0f, 90f);
             cardDisplay.PowerImage.rectTransform.localScale = new Vector3(1f, 1f, 1f);
             cardDisplay.cardPowerText.color = Color.grey;
         }
         else
         {
-            this.gameObject.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+            transform.rotation = originalRotation;
+            transform.rotation = originalRotation * Quaternion.Euler(0f, 0f, 0f);
             cardDisplay.PowerImage.rectTransform.localScale = new Vector3(1.5f, 1.5f, 1f);
             cardDisplay.cardPowerText.color = Color.white;
         }
@@ -187,17 +211,6 @@ public class FieldCard : MonoBehaviour
     public PlayerSide GetFieldOwner()
     {
         return parentCell.owner;
-    }
-    public void SetCardOwnerFromGrid()
-    {
-        if (parentCell != null)
-        {
-            menuCardManager.handOwner = GetFieldOwner();
-        }
-        else
-        {
-            Debug.LogWarning($"[SetCardOwnerFromGrid] parentCell está nulo em {gameObject.name}.");
-        }
     }
     public void SetHighlightColor(Color color)
     {

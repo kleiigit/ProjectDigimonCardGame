@@ -16,7 +16,7 @@ public class PartnerPileManager : MonoBehaviour, IPile
     public GameObject partnerPileZone;
     public float cardSpacing = 100f;
 
-    public static event Action<PlayerSide,Card> OnPartnerChosenHandler;
+    //public static event Action<PlayerSide,Card> OnPartnerChosenHandler;
 
     void Awake()
     {
@@ -102,13 +102,6 @@ public class PartnerPileManager : MonoBehaviour, IPile
 
     public void UpdatePartnerPileCostColors()
     {
-        var dataPileManager = FindFirstObjectByType<DataPileManager>();
-        if (dataPileManager == null)
-        {
-            Debug.LogWarning("[PartnerPileManager] DataPileManager não encontrado.");
-            return;
-        }
-
         foreach (var cardGO in setup.listPartnerObj)
         {
             if (cardGO == null) continue;
@@ -120,13 +113,13 @@ public class PartnerPileManager : MonoBehaviour, IPile
                 continue;
             }
 
-            bool canPlay = dataPileManager.HasSufficientDataToPlayCard(cardDisplay.cardData, PlayerSide.PlayerRed);
+            bool canPlay = setup.dataPile.HasSufficientDataToPlayCard(cardDisplay.cardData.GetColorCost());
         }
     }
     public void ShowPartnerPile()
     {
         partnerPileTransform.gameObject.SetActive(true);
-        Debug.Log("set actve");
+        setup.hand.HideHand();
     }
     public void OpenSelectionUI(int levelFilter)
     {

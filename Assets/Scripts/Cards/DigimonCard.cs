@@ -18,5 +18,18 @@ public class DigimonCard : Card
 
     public Vector2 digimonSpritePosition = new Vector2(0, 0.55f);
     public float digimonSpriteScale = 1.6f;
+
+    public bool CanDigimonPlayed(PlayerSetup setup)
+    {
+        if(setup.evoPile.GetActivePartner() == null) 
+            return false;
+
+        DigimonCard activePartner = setup.evoPile.GetActivePartner();
+        if (activePartner.level >= level)
+        {
+            if (setup.currentMemory + level <= activePartner.leaderMemory) return true;
+        }
+        return false;
+    }
 }
 

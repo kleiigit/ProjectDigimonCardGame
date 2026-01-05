@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class GameSetupStart : MonoBehaviour
 {
+    public static PlayerSetup playerBlue;
+    public static PlayerSetup playerRed;
+
+    public static int endTurnSize;
+
     public int startingHandSize = 5;
     public int drawPerTurn = 2;
     public int securityPileSize = 7;
@@ -12,8 +17,7 @@ public class GameSetupStart : MonoBehaviour
     // player Setup
     [SerializeField] private PlayerSetup playerBlueSetup;
     [SerializeField] private PlayerSetup playerRedSetup;
-    public static PlayerSetup playerBlue;
-    public static PlayerSetup playerRed;  
+     
 
     public bool playerBlueChosen = false;
     public bool playerRedChosen = false;
@@ -23,6 +27,7 @@ public class GameSetupStart : MonoBehaviour
     {
         playerBlue = playerBlueSetup;
         playerRed = playerRedSetup;
+        endTurnSize = maxEndTurnSize;
     }
     void Start()
     {
@@ -35,6 +40,18 @@ public class GameSetupStart : MonoBehaviour
     private void OnDestroy()
     {
         EvoPileManager.OnPartnerChosen -= OnPartnerChosenHandler;
+    }
+
+    public static PlayerSetup GetPlayerSetup(PlayerSide player)
+    {
+        if (playerBlue == null || playerRed == null)
+        {
+            Debug.LogWarning("setup nao encontrado");
+        }
+        if (player == PlayerSide.PlayerBlue)
+            return playerBlue;
+        else
+            return playerRed;
     }
 
     private void OnPartnerChosenHandler(PlayerSide playerSide, Card chosenPartner)
@@ -55,13 +72,9 @@ public class GameSetupStart : MonoBehaviour
     {
         
         DrawPileManager.BattleSetupHand(startingHandSize);
-
-        Debug.LogWarning($"[GameSetupStart] Pile Blue tem {playerBlueSetup.playerDeck.Count} cartas após compra inicial.");
-        Debug.LogWarning($"[GameSetupStart] Pile Red tem {playerRedSetup.playerDeck.Count} cartas após compra inicial.");
-
         SecurityPileManager.BattleSetupSecurity(securityPileSize);
 
         BattlePhaseManager.roundCount = 1;
-        Debug.Log("[GameSetupStart] Setup concluído, batalha iniciada.");
+        Debug.LogWarning("[GameSetupStart] Setup concluído, batalha iniciada.");
     }
 }

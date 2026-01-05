@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
 using SinuousProductions;
 using ProjectScript.Enums;
 using ProjectScript.Interfaces;
@@ -10,6 +9,7 @@ public class DiscardManager : MonoBehaviour, IPile
     public Transform discardGrid;
     [SerializeField]
     private GameObject topDiscardCard;
+    [SerializeField] private GameObject discardCardsParent;
 
     [SerializeField] private Vector3 topCardScale = new Vector3(0.85f, 0.85f, 1f);
 
@@ -24,6 +24,9 @@ public class DiscardManager : MonoBehaviour, IPile
 
     public void AddCard(Card card)
     {
+        if(topDiscardCard != null)
+            Destroy(topDiscardCard);
+
         GameObject newCard = Instantiate(GameManager.cardPrefab, discardGrid);
         CardDisplay cardDisplay = newCard.GetComponent<CardDisplay>();
         cardDisplay.cardData = card;
@@ -31,13 +34,15 @@ public class DiscardManager : MonoBehaviour, IPile
 
         newCard.transform.localScale = Vector3.one;
         newCard.name = card.cardName;
-        newCard.layer = 15; //trash
-
-        setup.listDiscardObj.Add(newCard);
+        newCard.layer = 17; //trash
+        newCard.GetComponent<MenuCardManager>().handOwner = setup.setPlayer;
+        topDiscardCard = newCard;
+        setup.listDiscardCards.Add(card);
 
         // Atualiza o visual do topo para esta nova carta
         newCard.transform.SetAsLastSibling();
         newCard.transform.localScale = topCardScale;
+        TriggerCardManager.TriggerDiscarted();
         UpdateVisuals();
     }
     public void RemoveCard(GameObject cardObject)
@@ -45,67 +50,50 @@ public class DiscardManager : MonoBehaviour, IPile
         Destroy(cardObject);
     }
 
-    public List<GameObject> PullAllFromDiscard(PlayerSide side)
+    public List<Card> PullAllFromDiscard(PlayerSide side)
     {
-        List<GameObject> cardsToReturn = new List<GameObject>(setup.listDiscardObj);
-        setup.listDiscardObj.Clear();
+        setup.listDiscardCards.Clear();
         UpdateVisuals();
 
-        return cardsToReturn;
+        return setup.listDiscardCards;
     }
 
     public void UpdateVisuals()
     {
-        if (setup.listDiscardObj.Count == 0) return;
-        // Se não houver cartas, destrói o visual do topo (se existir)
-        if (topDiscardCard != null)
-        {
-            Destroy(topDiscardCard);
-            topDiscardCard = null;
-        }
-
-        GameObject topCard = setup.listDiscardObj[^1];
-
-        if (topDiscardCard != topCard)
-        {
-            // Se o visual do topo for diferente da última carta da lista, ajusta:
-            if (topDiscardCard != null)
-            {
-                Destroy(topDiscardCard);
-            }
-
-            topDiscardCard = topCard;
-        }
-
-        topCard.transform.SetAsLastSibling();
-        topCard.transform.localScale = topCardScale;
+        if (setup.listDiscardCards.Count == 0 || topDiscardCard == null) return;
+        topDiscardCard.layer = 17;
+        topDiscardCard.transform.SetAsLastSibling();
+        topDiscardCard.transform.localScale = topCardScale;
     }
 
-    public void ListDiscardCardsButton(PlayerSide side)
+    public void ListDiscardCardsButton()
     {
-        string listDescription = $"Cartas na pilha de descarte do jogador {side}";
-        Debug.Log("Botão de lista acionado");
-
-        List<Card> cardDataList = new();
-
-        foreach (var cardGO in setup.listDiscardObj)
+        if (setup == null)
         {
-            if (cardGO == null || !cardGO) continue;
-
-            CardDisplay display = cardGO.GetComponent<CardDisplay>();
-            if (display != null && display.cardData != null)
-            {
-                cardDataList.Add(display.cardData);
-            }
+            Debug.LogError("Setup não foi inicializado no DiscardManager.");
+            return;
         }
-
-        if (cardDataList.Count == 0)
+        if (setup.listDiscardCards == null)
         {
-            Debug.LogWarning("[DiscardClickHandler] Nenhuma carta com dados válidos para exibir.");
+            Debug.LogError("listDiscardCards não foi inicializada.");
+            return;
+        }
+        if (setup.listDiscardCards.Count == 0)
+        {
+            Debug.LogWarning("Nenhuma carta para exibir.");
             return;
         }
 
-        DisplayListCards.Instance.ShowCardList(cardDataList, listDescription, false);
+        string listDescription = $"Lixeira do {setup.evoPile.GetActivePartner().cardName}";
+        Debug.Log("Botão de lista acionado");
+
+        displayListCards.side = setup.setPlayer;
+
+        // necessário configuração de posse para saber se o jogador pode ativar ou nao efeitos das cartas na lixeira
+        displayListCards.isOwner = false;
+
+        displayListCards.ShowCardList(setup.listDiscardCards, listDescription, false);
     }
+
 
 }

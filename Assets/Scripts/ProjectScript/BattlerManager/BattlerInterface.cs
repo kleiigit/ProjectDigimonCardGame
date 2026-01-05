@@ -10,4 +10,9 @@ namespace ProjectScript.Interfaces
         void RemoveCard(GameObject cardObject);
         void UpdateVisuals();
     }
+    public interface ISelectable
+    {
+        void OnSelected();
+        void OnDeselected();
+    }
 }

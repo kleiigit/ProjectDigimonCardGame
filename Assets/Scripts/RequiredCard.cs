@@ -1,7 +1,7 @@
 using UnityEngine;
 using ProjectScript.Enums;
 
-namespace SinuousProductions
+namespace ProjectScript.BattlerManager
 {
     [System.Serializable]
     public class RequiredCard
@@ -30,16 +30,6 @@ namespace SinuousProductions
         public bool powerLessThanOrEqual = false;
         public bool powerGreaterThanOrEqual = false;
 
-        public CardLocation cardLocation = CardLocation.None;
-    }
-    public enum CardLocation
-    {
-        None,
-        Field,
-        Hand,
-        DataPile,
-        SecurityPile,
-        Deck,
-        Trash
+        public FieldPlace cardLocation;
     }
 }

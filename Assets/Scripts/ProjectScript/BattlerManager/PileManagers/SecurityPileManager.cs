@@ -2,10 +2,8 @@
 using ProjectScript.Interfaces;
 using SinuousProductions;
 using System.Collections.Generic;
-using TMPro;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class SecurityPileManager : MonoBehaviour, IPile
 {
@@ -55,14 +53,14 @@ public class SecurityPileManager : MonoBehaviour, IPile
 
     public void RemoveCard(GameObject gameObject)
     {
+        TriggerCardManager.TriggerSecurityDestroyed();
         setup.listSecurityObj.Remove(gameObject);
+        Destroy(gameObject);
         UpdateVisuals();
     }
 
     public void DestroySecurity()
     {
-        Debug.Log($"[GetOpponentAtFront] Chamando DestroySecurity para o lado: {setup.setPlayer}");
-
         if (setup.listSecurityObj.Count == 0)
         {
             Debug.LogWarning("Não há cartas na pilha de segurança do lado especificado.");
@@ -77,66 +75,9 @@ public class SecurityPileManager : MonoBehaviour, IPile
 
         GameObject topCard = setup.listSecurityObj[^1];
         var cardData = topCard.GetComponent<CardDisplay>().cardData;
-
-        setup.securityPile.RemoveCard(topCard);
-
-        // checkzone
-        topCard.transform.SetParent(revealGrid);
-        topCard.transform.localPosition = Vector3.zero;
-
-        bool hasSecurityEffect = false;
-        foreach (var effect in cardData.effects)
-        {
-            if (effect.trigger == CardEffects.Trigger.Security)
-            {
-                hasSecurityEffect = true;
-                break;
-            }
-        }
-
-        DataPileManager dataPileManager = FindFirstObjectByType<DataPileManager>();
-        if (dataPileManager == null)
-        {
-            Debug.LogError("DataPileManager não encontrado na cena.");
-            Destroy(topCard);
-            return;
-        }
-
-        void MoveCardToDataPileAndDestroy()
-        {
-            Debug.Log($"[GetOpponentAtFront] Chamando DestroySecurity para o lado: {setup.setPlayer}");
-            setup.securityPile.AddCard(cardData);
-            Destroy(topCard);
-
-        }
-
-        if (hasSecurityEffect && decisionPanel != null)
-        {
-            decisionPanel.SetActive(true);
-
-            Button simButton = decisionPanel.transform.Find("Sim")?.GetComponent<Button>();
-            Button naoButton = decisionPanel.transform.Find("Nao")?.GetComponent<Button>();
-
-            simButton?.onClick.RemoveAllListeners();
-            simButton?.onClick.AddListener(() =>
-            {
-                
-               
-                MoveCardToDataPileAndDestroy();
-                decisionPanel.SetActive(false);
-            });
-
-            naoButton?.onClick.RemoveAllListeners();
-            naoButton?.onClick.AddListener(() =>
-            {
-                MoveCardToDataPileAndDestroy();
-                decisionPanel.SetActive(false);
-            });
-        }
-        else
-        {
-            MoveCardToDataPileAndDestroy();
-        }
+        setup.securityPile.RemoveCard(setup.listSecurityObj[^1]);
+        UIWindowManager.Instance.MoveToCheckZone(topCard.GetComponent<CardDisplay>().cardData, setup, FieldPlace.SecurityPile);
+        UpdateVisuals();
     }
 
     public void UpdateVisuals()
@@ -146,6 +87,7 @@ public class SecurityPileManager : MonoBehaviour, IPile
             Debug.LogError("Setup nao configuado");
         }
         if (setup.listSecurityObj.Count == 0) return;
+
         List<GameObject> cards = setup.listSecurityObj;
 
         for (int i = 0; i < setup.listSecurityObj.Count; i++)
