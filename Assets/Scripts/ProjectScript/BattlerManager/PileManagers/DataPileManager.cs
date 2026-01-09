@@ -1,10 +1,12 @@
-using SinuousProductions;
 using ProjectScript.Enums;
-using System.Collections.Generic;
-using UnityEngine;
-using System.Linq;
 using ProjectScript.Interfaces;
+using SinuousProductions;
+using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEditor.PackageManager;
+using UnityEngine;
+using static UnityEditor.Progress;
 
 public class DataPileManager : MonoBehaviour, IPile
 {
@@ -16,6 +18,8 @@ public class DataPileManager : MonoBehaviour, IPile
         Right
     }
     private PlayerSetup setup;
+    private DisplayListCards displayListCards;
+
     public Transform dataPileTransform;
     public Dictionary<CardColor, int> colorCounts = new Dictionary<CardColor, int>();
     [Header("Configurações de posicionamento 2D")]
@@ -26,6 +30,7 @@ public class DataPileManager : MonoBehaviour, IPile
 
     void Awake()
     {
+        displayListCards = FindFirstObjectByType<DisplayListCards>();
         setup = GetComponent<PlayerSetup>();
         ColorDictionary();
     }
@@ -38,7 +43,8 @@ public class DataPileManager : MonoBehaviour, IPile
         newCard.GetComponent<CardDisplay>().cardData = cardData;
         newCard.GetComponent<CardDisplay>().UpdateCardDisplay();
         newCard.transform.localScale = new Vector3(cardScale, cardScale, 1);
-        newCard.layer = LayerMask.NameToLayer("Data");
+        newCard.layer = LayerMask.NameToLayer("DataPile");
+        newCard.GetComponent<MenuCardManager>().handOwner = setup.setPlayer;
 
         setup.listDataObj.Add(newCard);
         UpdateColorCount();
@@ -50,6 +56,12 @@ public class DataPileManager : MonoBehaviour, IPile
     {
         setup.listDataObj.Remove(cardObject);
         Destroy(cardObject);
+    }
+    public void DiscardData(GameObject cardObject)
+    {
+        setup.discard.AddCard(cardObject.GetComponent<CardDisplay>().cardData);
+        RemoveCard(cardObject);
+        UpdateVisuals();
     }
     private void UpdateColorCount()
     {
@@ -117,66 +129,58 @@ public class DataPileManager : MonoBehaviour, IPile
         setup.hand.RemoveCard(cardObject);
         setup.dataPile.AddCard(cardObject.GetComponent<CardDisplay>().cardData);
     }
-    public bool HasSufficientDataToPlayCard(Dictionary<CardColor,int> costColor)
+    public bool HasSufficientDataToPlayCard(Dictionary<CardColor, int> costColor)
     {
-        foreach(var datacolor in costColor)
-        {
-            //Debug.Log($"Custo de Data: {datacolor.Key}: {datacolor.Value}");
-        }
-        foreach (var datacolor in colorCounts)
-        {
-            if (datacolor.Value == 0) continue;
-            //Debug.Log($"Banco de Data: {datacolor.Key}: {datacolor.Value}");
-        }
-
         Dictionary<CardColor, int> tempCounts = new Dictionary<CardColor, int>(colorCounts);
 
-        // atribui as cores neutras ao total
-        int availableColorless = tempCounts.GetValueOrDefault(CardColor.Colorless, 0);
-        int totalResourcesAvailable = 0;
-        foreach (var pair in tempCounts)
-        {
-            totalResourcesAvailable += pair.Value;
-        }
+        int totalAvailable = tempCounts.Values.Sum();
+        int totalCost = costColor.Values.Sum();
 
-        int totalCost = costColor.Sum(x => x.Value);
-
-        if (totalResourcesAvailable < totalCost)
-        {
-            Debug.Log("total cost maior que recursos disponiveis");
+        if (totalAvailable < totalCost)
             return false;
-        }
 
-        // Processa custo por cor como antes
-        foreach(var pair in costColor)
+        foreach (var pair in costColor)
         {
-            CardColor requiredColor = pair.Key;
-            int requiredAmount = pair.Value;
+            if (pair.Key == CardColor.Colorless)
+                continue;
 
-            int availableAmount = tempCounts.GetValueOrDefault(requiredColor, 0);
+            int available = tempCounts.GetValueOrDefault(pair.Key, 0);
 
-            if (availableAmount >= requiredAmount)
-            {
-                tempCounts[requiredColor] -= requiredAmount;
-            }
-            else
-            {
-                int deficit = requiredAmount - availableAmount;
-                if (availableColorless >= deficit)
-                {
-                    tempCounts[requiredColor] = 0;
-                    availableColorless -= deficit;
-                }
-                else
-                {
-                    Debug.Log("sem cor indisponiveis");
-                    return false;
-                }
-            }
+            if (available < pair.Value)
+                return false;
+
+            tempCounts[pair.Key] -= pair.Value;
         }
-        Debug.Log("Custos compridos");
+
+        int colorlessCost = costColor.GetValueOrDefault(CardColor.Colorless, 0);
+        int remainingResources = tempCounts.Values.Sum();
+
+        if (remainingResources < colorlessCost)
+            return false;
+
         return true;
     }
 
-    
+
+
+    public void ListDataCardsButton()
+    {
+        if (setup.listDataObj.Count == 0)
+        {
+            Debug.LogWarning("Nenhuma carta para exibir.");
+            return;
+        }
+
+        string listDescription = $"Cartas dados do {setup.evoPile.GetActivePartner().cardName}";
+        Debug.Log("Botão de lista acionado");
+
+        displayListCards.side = setup.setPlayer;
+
+        displayListCards.isOwner = false;
+        LayerMask layerMask = 12;
+
+        displayListCards.ShowCardList
+            (setup.listDataObj.Select(p => p.GetComponent<CardDisplay>()
+            .cardData).ToList(), layerMask, listDescription, false);
+    }
 }

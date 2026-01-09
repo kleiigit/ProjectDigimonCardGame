@@ -18,18 +18,24 @@ namespace SinuousProductions
         public bool isOwner = false;
         
         private GridLayoutGroup gridLayout;
+        private SelectionManager selectionManager;
         private List<GameObject> instantiatedCards = new();
         private Dictionary<string, int> deckCardWeights = new Dictionary<string, int>();
 
         private bool isPanelOpen = false;
         public bool collectionCards = true;
 
+        private void Start()
+        {
+            selectionManager = FindAnyObjectByType<SelectionManager>();
+        }
         private void Update()
         {
             if (!isPanelOpen) return;
 
             if (Input.GetMouseButtonDown(0))
             {
+                if (selectionManager.IsSelecting == true) return;
                 if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
                 {
                     if (IsPointerOverDisplayObj()) return;
@@ -79,11 +85,10 @@ namespace SinuousProductions
             return rectTransform.rect.Contains(localPoint);
         }
 
-        public void ShowCardList(List<Card> cardList, string panelDescription, bool useCollectionMode)
+        public void ShowCardList(List<Card> cardList, LayerMask layerMask, string panelDescription, bool useCollectionMode)
         {
             ClearPrevious();
-            if (!useCollectionMode) closeButton.SetActive(true);
-            else closeButton.SetActive(false);
+            closeButton.SetActive(!useCollectionMode);
 
             if (cardList == null || cardList.Count == 0)
             {
@@ -96,11 +101,12 @@ namespace SinuousProductions
             // list cards in game
             if (!GameManager.isInDeckEditScreen)
             {
-                RectTransform _rectDisplay = displayListObj.GetComponent<RectTransform>();
-                Image _imageDisplay = displayListObj.gameObject.GetComponent<Image>();
-                _rectDisplay.anchoredPosition = new Vector2(274f, -343f);
-                _rectDisplay.sizeDelta = new Vector2(975f, 226f);
-                _imageDisplay.color = new Color32(0,0,0,215);
+                RectTransform rectDisplay = displayListObj.GetComponent<RectTransform>();
+                Image imageDisplay = displayListObj.GetComponent<Image>();
+
+                rectDisplay.anchoredPosition = new Vector2(274f, -343f);
+                rectDisplay.sizeDelta = new Vector2(975f, 226f);
+                imageDisplay.color = new Color32(0, 0, 0, 215);
 
                 gridLayout = cardGridContent.GetComponent<GridLayoutGroup>();
                 gridLayout.padding.top = 334;
@@ -109,7 +115,7 @@ namespace SinuousProductions
                 gridLayout.spacing = new Vector2(265f, 300f);
 
                 panelDescriptionText.gameObject.SetActive(true);
-                panelDescriptionText.GetComponent<RectTransform>().anchoredPosition = new Vector2(-211f, -43f);
+                panelDescriptionText.rectTransform.anchoredPosition = new Vector2(-211f, -43f);
 
                 closeButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(407f, 71f);
             }
@@ -119,54 +125,36 @@ namespace SinuousProductions
             if (panelDescriptionText != null)
                 panelDescriptionText.text = panelDescription;
 
-            foreach (Card _cardData in cardList)
+            foreach (Card cardData in cardList)
             {
-                if (_cardData == null) continue;
+                if (cardData == null)
+                    continue;
 
+                // modo normal
                 if (!useCollectionMode)
                 {
                     GameObject cardObj = Instantiate(GameManager.cardPrefab, cardGridContent, false);
-                    cardObj.name = _cardData.cardID;
-                    cardObj.layer = 14;
+                    SetupCardBase(cardObj, cardData, layerMask);
 
-                    if(!GameManager.isInDeckEditScreen)
+                    if (!GameManager.isInDeckEditScreen)
                     {
                         cardObj.GetComponent<RectTransform>().localScale = new Vector3(100f, 100f, 1f);
-                        if (!isOwner)
-                            cardObj.GetComponent<CardSelectable>().enabled = false;
                         cardObj.GetComponent<MenuCardManager>().handOwner = side;
-                    }
-                    var display = cardObj.GetComponent<CardDisplay>();
-                    if (display != null)
-                    {
-                        display.cardData = _cardData;
-                        display.UpdateCardDisplay();
+                        cardObj.GetComponent<CardSelectable>().enabled = BattlePhaseManager.currentPlayer == side;
                     }
 
-                    CardsCollectionManager.Instance.ApplyVisualStatus(cardObj, _cardData.cardID);
                     instantiatedCards.Add(cardObj);
                 }
-
                 // collection mode
                 else
                 {
-                    int quantity = CardsCollectionManager.Instance.GetCardQuantity(_cardData.cardID);
-                    CardStatus status = CardsCollectionManager.Instance.GetCardStatus(_cardData.cardID);
+                    int quantity = CardsCollectionManager.Instance.GetCardQuantity(cardData.cardID);
+                    CardStatus status = CardsCollectionManager.Instance.GetCardStatus(cardData.cardID);
 
                     if (status == CardStatus.Seen)
                     {
                         GameObject cardObj = Instantiate(GameManager.cardPrefab, cardGridContent, false);
-                        cardObj.name = _cardData.cardID;
-                        cardObj.layer = 14;
-
-                        var display = cardObj.GetComponent<CardDisplay>();
-                        if (display != null)
-                        {
-                            display.cardData = _cardData;
-                            display.UpdateCardDisplay();
-                        }
-
-                        CardsCollectionManager.Instance.ApplyVisualStatus(cardObj, _cardData.cardID);
+                        SetupCardBase(cardObj, cardData, layerMask);
                         instantiatedCards.Add(cardObj);
                     }
                     else if (status == CardStatus.Owned && quantity > 0)
@@ -174,51 +162,8 @@ namespace SinuousProductions
                         if (collectionCards)
                         {
                             GameObject cardObj = Instantiate(GameManager.cardPrefab, cardGridContent, false);
-                            cardObj.name = _cardData.cardID;
-                            cardObj.layer = 14;
-
-                            var display = cardObj.GetComponent<CardDisplay>();
-                            if (display != null)
-                            {
-                                display.cardData = _cardData;
-                                display.UpdateCardDisplay();
-                            }
-
-                            Transform cardCanvas = cardObj.transform.Find("CardCanvas");
-                            if (cardCanvas != null)
-                            {
-                                GameObject counterObj = new GameObject("CardCounter");
-                                counterObj.transform.SetParent(cardCanvas.transform, false);
-
-                                Image bg = counterObj.AddComponent<Image>();
-                                bg.color = new Color(0, 0, 0, 0.6f);
-                                bg.raycastTarget = false;
-
-                                RectTransform rt = counterObj.GetComponent<RectTransform>();
-                                rt.anchorMin = new Vector2(1, 0);
-                                rt.anchorMax = new Vector2(1, 0);
-                                rt.pivot = new Vector2(1, 0);
-                                rt.anchoredPosition = new Vector2(0, 0);
-                                rt.sizeDelta = new Vector2(1.5f, 1.5f);
-
-                                GameObject textObj = new GameObject("CounterText");
-                                textObj.transform.SetParent(counterObj.transform, false);
-
-                                TMPro.TextMeshProUGUI text = textObj.AddComponent<TMPro.TextMeshProUGUI>();
-                                text.text = $"x{quantity}";
-                                text.fontSize = 1;
-                                text.alignment = TMPro.TextAlignmentOptions.Center;
-                                text.color = Color.white;
-                                text.raycastTarget = false;
-                                
-                                RectTransform textRT = text.GetComponent<RectTransform>();
-                                textRT.anchorMin = Vector2.zero;
-                                textRT.anchorMax = Vector2.one;
-                                textRT.offsetMin = Vector2.zero;
-                                textRT.offsetMax = Vector2.zero;
-                            }
-
-                            CardsCollectionManager.Instance.ApplyVisualStatus(cardObj, _cardData.cardID);
+                            SetupCardBase(cardObj, cardData, layerMask);
+                            CreateCardCounter(cardObj, quantity);
                             instantiatedCards.Add(cardObj);
                         }
                         else
@@ -226,17 +171,7 @@ namespace SinuousProductions
                             for (int i = 0; i < quantity; i++)
                             {
                                 GameObject cardObj = Instantiate(GameManager.cardPrefab, cardGridContent, false);
-                                cardObj.name = _cardData.cardID;
-                                cardObj.layer = 14;
-
-                                var display = cardObj.GetComponent<CardDisplay>();
-                                if (display != null)
-                                {
-                                    display.cardData = _cardData;
-                                    display.UpdateCardDisplay();
-                                }
-
-                                CardsCollectionManager.Instance.ApplyVisualStatus(cardObj, _cardData.cardID);
+                                SetupCardBase(cardObj, cardData, layerMask);
                                 instantiatedCards.Add(cardObj);
                             }
                         }
@@ -244,6 +179,58 @@ namespace SinuousProductions
                 }
             }
         }
+
+        private void SetupCardBase(GameObject cardObj, Card cardData, LayerMask layerMask)
+        {
+            cardObj.name = cardData.cardName;
+            cardObj.layer = layerMask;
+
+            var display = cardObj.GetComponent<CardDisplay>();
+            if (display != null)
+            {
+                display.cardData = cardData;
+                display.UpdateCardDisplay();
+            }
+
+            CardsCollectionManager.Instance.ApplyVisualStatus(cardObj, cardData.cardID);
+        }
+
+        private void CreateCardCounter(GameObject cardObj, int quantity)
+        {
+            Transform cardCanvas = cardObj.transform.Find("CardCanvas");
+            if (cardCanvas == null) return;
+
+            GameObject counterObj = new GameObject("CardCounter");
+            counterObj.transform.SetParent(cardCanvas, false);
+
+            Image bg = counterObj.AddComponent<Image>();
+            bg.color = new Color(0, 0, 0, 0.6f);
+            bg.raycastTarget = false;
+
+            RectTransform rt = counterObj.GetComponent<RectTransform>();
+            rt.anchorMin = new Vector2(1, 0);
+            rt.anchorMax = new Vector2(1, 0);
+            rt.pivot = new Vector2(1, 0);
+            rt.anchoredPosition = Vector2.zero;
+            rt.sizeDelta = new Vector2(1.5f, 1.5f);
+
+            GameObject textObj = new GameObject("CounterText");
+            textObj.transform.SetParent(counterObj.transform, false);
+
+            TMPro.TextMeshProUGUI text = textObj.AddComponent<TMPro.TextMeshProUGUI>();
+            text.text = $"x{quantity}";
+            text.fontSize = 1;
+            text.alignment = TMPro.TextAlignmentOptions.Center;
+            text.color = Color.white;
+            text.raycastTarget = false;
+
+            RectTransform textRT = text.GetComponent<RectTransform>();
+            textRT.anchorMin = Vector2.zero;
+            textRT.anchorMax = Vector2.one;
+            textRT.offsetMin = Vector2.zero;
+            textRT.offsetMax = Vector2.zero;
+        }
+
 
         public void AddCardToDisplay(Card card)
         {

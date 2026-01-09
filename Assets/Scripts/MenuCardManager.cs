@@ -1,6 +1,5 @@
 using ProjectScript.Enums;
 using SinuousProductions;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -53,12 +52,18 @@ public class MenuCardManager : MonoBehaviour
 
         // Bloqueios gerais
         if (GetComponentInParent<GridLayoutGroup>() != null) return;
-        if (gameObject.layer == 12) return;
+
+        if (gameObject.layer == LayerMask.NameToLayer("DataPile"))
+        {
+            setup.dataPile.ListDataCardsButton();
+            return;
+        }
         if (gameObject.layer == 17)
         {
             setup.discard.ListDiscardCardsButton();
             return;
         }
+        
         Card _cardData = GetComponent<CardDisplay>().cardData;
         CardContextMenu globalMenu = FindFirstObjectByType<CardContextMenu>();
         if (globalMenu == null) return;
@@ -138,11 +143,16 @@ public class MenuCardManager : MonoBehaviour
                     ButtonAttack));
                 }
             }
-            if (GetComponent<CardDisplay>().cardData.effects.Any(p => p.trigger == CardEffects.Trigger.Action))
+
+            foreach (CardEffects item in GetComponent<CardDisplay>().cardData.effects.
+                Where(p => p.trigger == CardEffects.Trigger.Action))
             {
-                options.Add(new CardContextMenu.MenuOption(
-                    "Activate Effect",
-                    ButtonEffectCard));
+                if(EffectManager.CriteriaEffect(item, _cardData, setup))
+                {
+                    options.Add(new CardContextMenu.MenuOption(
+                        "Activate Effect",
+                        ButtonEffectCard));
+                }
             }
         }
 
@@ -195,13 +205,9 @@ public class MenuCardManager : MonoBehaviour
     {
         if (cardType != CardType.Skill) return;
 
-        if ((_cardData as ProgramandSkillCard).skillTimeActivation ==
-            Card.SkillActivation.AttackPhase)
+        if ((_cardData as ProgramandSkillCard).skillTimeActivation == Card.SkillActivation.AttackPhase)
         {
-            options.Add(new CardContextMenu.MenuOption(
-                "Play Card",
-                ButtonPlayCard
-            ));
+            options.Add(new CardContextMenu.MenuOption("Play Card", ButtonPlayCard));
         }
     }
 
@@ -317,22 +323,23 @@ public class MenuCardManager : MonoBehaviour
     public void ButtonEvoPartner()
     {
         DigimonCard cardPartner = _cardData as DigimonCard;
-        if(setup == null)
-        {
-            Debug.LogWarning("PlayerSetup não encontrado para o lado: " + handOwner);
-            setup = GameSetupStart.GetPlayerSetup(handOwner);
-        }
-        // colocar a logica de evolução em um local apropriado
-        //setup.partnerPile.ChoosePartner(this.gameObject);
-        Debug.Log($"Evolving partner to {cardPartner.cardName} - {setup.setPlayer}");
-        setup.evoPile.AddCard(cardPartner);
-        setup.partnerPile.RemoveCard(this.gameObject);
-        Destroy(gameObject);
-        setup.partnerPile.HidePartnerPile();
 
-        if ((int)BattlePhaseManager.phase > 1)
-            BattlePhaseManager.phase++;
+        SelectionDataManager.CostCard(setup, cardPartner.GetColorCost(),
+            () =>
+            {
+                Debug.Log($"Evolving partner to {cardPartner.cardName} - {setup.setPlayer}");
+
+                setup.evoPile.AddCard(cardPartner);
+                setup.partnerPile.RemoveCard(this.gameObject);
+                Destroy(gameObject);
+                setup.partnerPile.HidePartnerPile();
+
+                if ((int)BattlePhaseManager.phase > 1)
+                    BattlePhaseManager.phase++;
+            }
+        );
     }
+
     public void ButtonPlayCard()
     {
         DigimonCard cardDigimon = _cardData as DigimonCard;
@@ -350,24 +357,33 @@ public class MenuCardManager : MonoBehaviour
                 cardPlaySelector.StartCardPlacement();
             }
         }
-        else if (_cardData.cardType == CardType.Program)
-        {
-            if (setup.dataPile.HasSufficientDataToPlayCard(_cardData.GetColorCost()))
+        else {
+            SelectionDataManager.CostCard(setup, _cardData.GetColorCost(),
+            () =>
             {
-                Debug.Log("Program card played.");
-                UIWindowManager.Instance.MoveToCheckZone(_cardData, setup, FieldPlace.Hand);
-                setup.hand.RemoveCard(this.gameObject);
+                if (_cardData.cardType == CardType.Program)
+                {
+                    if (setup.dataPile.HasSufficientDataToPlayCard(_cardData.GetColorCost()))
+                    {
+                        Debug.Log("Program card played.");
+                        UIWindowManager.Instance.MoveToCheckZone(_cardData, setup, FieldPlace.Hand);
+                        setup.hand.RemoveCard(this.gameObject);
+                    }
+                }
+                else if (_cardData.cardType == CardType.Skill)
+                {
+                    if (setup.dataPile.HasSufficientDataToPlayCard(_cardData.GetColorCost()))
+                    {
+                        Debug.Log("Skill card played.");
+                        setup.partnerPile.HidePartnerPile();
+                        UIWindowManager.Instance.MoveToCheckZone(_cardData, setup, FieldPlace.PartnerPile);
+                        setup.partnerPile.RemoveCard(this.gameObject);
+                    }
+                }
             }
+            );
         }
-        else if (_cardData.cardType == CardType.Skill)
-        {
-            if (setup.dataPile.HasSufficientDataToPlayCard(_cardData.GetColorCost()))
-            {
-                Debug.Log("Skill card played.");
-                UIWindowManager.Instance.MoveToCheckZone(_cardData, setup, FieldPlace.Hand);
-                setup.hand.RemoveCard(this.gameObject);
-            }
-        }
+        
     }
     public void ButtonCostPhaseConfirm()
     {

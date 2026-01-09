@@ -66,6 +66,7 @@ namespace SinuousProductions
         public TMP_Text securityCount;
         private Dictionary<string, int> cardQuantities = new Dictionary<string, int>();
         private const int MaxDecks = 10;
+        private LayerMask layerMask = 14;
 
         [Header("Banco de Cartas")]
         [SerializeField] public List<Card> cardDatabase = new List<Card>(); // Banco de dados de cartas, preenchido pelo CardsCollectionManager
@@ -255,10 +256,10 @@ namespace SinuousProductions
 
             // Atualiza o Display usando as listas ordenadas
             mainDeckDisplay.SetCardGridContent(mainDeckContent);
-            mainDeckDisplay.ShowCardList(mainDeckCards, "Cartas do Baralho Principal", false);
+            mainDeckDisplay.ShowCardList(mainDeckCards, layerMask, "Cartas do Baralho Principal", false);
 
             partnerDeckDisplay.SetCardGridContent(partnerDeckContent);
-            partnerDeckDisplay.ShowCardList(partnerDeckCards, "Cartas do Baralho Parceiro", false);
+            partnerDeckDisplay.ShowCardList(partnerDeckCards, layerMask, "Cartas do Baralho Parceiro", false);
 
             // Atualiza coleção normalmente
             collectionDisplay.SetCardGridContent(collectionContent);
@@ -355,7 +356,7 @@ namespace SinuousProductions
 
             Debug.Log($"allCards count. {allCards.Count} cartas carregadas para visualização.");
 
-            collectionDisplay.ShowCardList(allCards, description, false);
+            collectionDisplay.ShowCardList(allCards, layerMask, description, false);
 
             collectionPanel.SetActive(true);
             collectionDisplay.gameObject.SetActive(true);
@@ -847,7 +848,7 @@ namespace SinuousProductions
             if (cardDatabase != null && cardDatabase.Count > 0)
             {
                 DeckCardSorter.SortCardsDefault(cardDatabase);
-                collectionDisplay.ShowCardList(cardDatabase, "Todas as Cartas", false);
+                collectionDisplay.ShowCardList(cardDatabase, layerMask, "Todas as Cartas", false);
 
                 if (sortStatusText != null)
                     sortStatusText.text = "Sort: Default";

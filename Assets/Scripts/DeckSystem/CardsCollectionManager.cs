@@ -30,6 +30,7 @@ namespace SinuousProductions
     {
         public static CardsCollectionManager Instance;
         public Material grayscaleMaterial;
+        private LayerMask layerMask = 14;
 
         [Header("Visuais")]
 
@@ -189,7 +190,7 @@ namespace SinuousProductions
             if (display != null)
             {
                 Debug.Log("Chamando DisplayListCards.ShowCardList com " + allCards.Count + " cartas.");
-                display.ShowCardList(allCards, "Cartas da Coleção", true);
+                display.ShowCardList(allCards, layerMask, "Cartas da Coleção", true);
             }
             else
             {

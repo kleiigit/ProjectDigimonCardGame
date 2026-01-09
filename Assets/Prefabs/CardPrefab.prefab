@@ -4671,6 +4671,8 @@ GameObject:
   - component: {fileID: 4052121982008854928}
   - component: {fileID: 2395983466917224746}
   - component: {fileID: 3259424807901155219}
+  - component: {fileID: 6570851792768604003}
+  - component: {fileID: 4435286406062292992}
   m_Layer: 10
   m_Name: CardPrefab
   m_TagString: Card
@@ -4711,6 +4713,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardSelectable
   selectionIndicator: {fileID: 899810508249742571}
+  cardSelected: 0
 --- !u!114 &486047245430268343
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4747,11 +4750,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   parentCell: {fileID: 0}
   downPosition: 0
-  downButton: {fileID: 0}
+  isFreeze: 0
   digimonDisplay: {fileID: 0}
   cardType: 0
   highLight: {fileID: 3063430743002311965}
   interations: {fileID: 2419206357586397910}
+  originalRotation: {x: 0, y: 0, z: 0, w: 0}
   selectionIndicator: {fileID: 899810508249742571}
   selectionNumberText: {fileID: 2885078201052863423}
 --- !u!114 &7904320754447769184
@@ -4961,6 +4965,41 @@ MonoBehaviour:
   handOwner: 1
   currentCell: {fileID: 0}
   buttonInteractiveCard: {fileID: 3434883404616311170}
+--- !u!222 &6570851792768604003
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4034884543552943236}
+  m_CullTransparentMesh: 1
+--- !u!114 &4435286406062292992
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4034884543552943236}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.RawImage
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Texture: {fileID: 0}
+  m_UVRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
 --- !u!1 &4118293231901790697
 GameObject:
   m_ObjectHideFlags: 0
@@ -5646,6 +5685,7 @@ GameObject:
   - component: {fileID: 360322836676183365}
   - component: {fileID: 1918702029576622889}
   - component: {fileID: 271352858233079148}
+  - component: {fileID: 726219090193757759}
   m_Layer: 10
   m_Name: CardImage
   m_TagString: Untagged
@@ -5726,6 +5766,19 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &726219090193757759
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4592333301243402736}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Mask
+  m_ShowMaskGraphic: 1
 --- !u!1 &4654775935686681599
 GameObject:
   m_ObjectHideFlags: 0

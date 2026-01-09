@@ -39,7 +39,7 @@ namespace Processor.EffectManager
             string[] commands = PromptedEffect.Split(';'); //Separa os comandos
             if (commands.Length == 0)
             {
-                Debug.LogWarning($"[ExecuteCardEffect] Malformed 'TE' command: \"{PromptedEffect}\"");
+                Debug.LogWarning($"[ExecuteCardEffect] Malformed: \"{PromptedEffect}\"");
                 return;
             }
 

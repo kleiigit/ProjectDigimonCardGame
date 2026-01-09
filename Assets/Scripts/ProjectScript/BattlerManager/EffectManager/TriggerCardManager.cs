@@ -83,11 +83,21 @@ public class TriggerCardManager : MonoBehaviour
     }
     internal static void TriggerFreeze()
     {
-        throw new NotImplementedException();
+        Debug.Log("[TRIGGER] Freeze effect: ");
     }
 
     internal static void TriggerCache()
     {
         Debug.Log("[TRIGGER] Cache effect: ");
+    }
+
+    internal static void TriggerActiveSkill(Card card, PlayerSetup side)
+    {
+        Debug.Log("[TRIGGER] Active Skill: " + card.cardName);
+        if (card.effects.Count == 0 || card.cardType != CardType.Skill) return;
+        foreach (var effect in card.effects.Where(p => p.trigger == CardEffects.Trigger.NoTrigger))
+        {
+            EffectManager.ExecuteCardEffect(effect, card, side);
+        }
     }
 }

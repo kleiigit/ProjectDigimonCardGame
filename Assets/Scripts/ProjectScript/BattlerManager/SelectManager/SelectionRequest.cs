@@ -8,11 +8,13 @@ namespace ProjectScript.Selection
     {
         // preciso colocar os criterios aqui de selecao da carta
         public int amount;
+        public SelectionCriteria criteria;
         public Action<List<ISelectable>> onComplete;
 
-        public SelectionRequest(int amount, Action<List<ISelectable>> onComplete)
+        public SelectionRequest(int amount, SelectionCriteria criteria, Action<List<ISelectable>> onComplete)
         {
             this.amount = amount;
+            this.criteria = criteria;
             this.onComplete = onComplete;
         }
     }

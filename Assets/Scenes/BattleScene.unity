@@ -575,25 +575,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 3392788863998109283, guid: 784807b14d638ee4fa8274e574ac472d, type: 3}
   m_PrefabInstance: {fileID: 65752458}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &151029383 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1414152483257998002, guid: 06905c2bc94d64146b741a35caec5348, type: 3}
-  m_PrefabInstance: {fileID: 8825562748814655646}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &151029384
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 151029383}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 15b495662fbe0ec429d05d3d3f3605b7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UICardHandPosition
-  spacing: 100
-  updatePosition: 0
 --- !u!224 &194515967 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2501287714049503060, guid: 06905c2bc94d64146b741a35caec5348, type: 3}
@@ -1639,6 +1620,7 @@ GameObject:
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
   - component: {fileID: 519420030}
+  - component: {fileID: 519420033}
   m_Layer: 0
   m_Name: Main Camera Blue
   m_TagString: MainCamera
@@ -1764,6 +1746,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &519420033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c49b4cc203aa6414fae5c798d1d0e7d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.EventSystems.PhysicsRaycaster
+  m_EventMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_MaxRayIntersections: 0
 --- !u!1 &521721225
 GameObject:
   m_ObjectHideFlags: 0
@@ -2102,7 +2100,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 558461810}
-  - component: {fileID: 558461811}
   m_Layer: 5
   m_Name: PartnerEvo
   m_TagString: Untagged
@@ -2129,24 +2126,6 @@ RectTransform:
   m_AnchoredPosition: {x: -38, y: -330}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &558461811
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 558461809}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 87a2671241828a647ba035ae14711c13, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objectToPosition: {fileID: 7810146898459920479}
-  widthDivider: 2
-  heightDivider: 2
-  widthMultiplier: 1
-  heightMultiplier: 2
-  updatePosition: 1
 --- !u!4 &587039809 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3515436307152563945, guid: 32a742755dede614294c054946c048f8, type: 3}
@@ -5090,13 +5069,39 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1634549766}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 15b495662fbe0ec429d05d3d3f3605b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UICardHandPosition
   spacing: 100
   updatePosition: 0
+--- !u!114 &1634549768
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1634549766}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.HorizontalLayoutGroup
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 0
+  m_Spacing: 100
+  m_ChildForceExpandWidth: 0
+  m_ChildForceExpandHeight: 0
+  m_ChildControlWidth: 0
+  m_ChildControlHeight: 0
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
 --- !u!1 &1658439829
 GameObject:
   m_ObjectHideFlags: 0
@@ -5293,6 +5298,11 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!224 &1704293826 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 7797763919445284783, guid: 06905c2bc94d64146b741a35caec5348, type: 3}
+  m_PrefabInstance: {fileID: 8825562748814655646}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1799299138
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6893,24 +6903,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &1568078802887446188
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4325707518605972368}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 87a2671241828a647ba035ae14711c13, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objectToPosition: {fileID: 7810146898459920479}
-  widthDivider: 2
-  heightDivider: 2
-  widthMultiplier: 1
-  heightMultiplier: 2
-  updatePosition: 0
 --- !u!222 &1601100716389495002
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -7002,24 +6994,6 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 2.5, y: 3.5}
   m_EdgeRadius: 0
---- !u!114 &2041768699755713286
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4804699578116984465}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 87a2671241828a647ba035ae14711c13, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objectToPosition: {fileID: 7810146898459920479}
-  widthDivider: 2
-  heightDivider: 2
-  widthMultiplier: 1
-  heightMultiplier: 0
-  updatePosition: 1
 --- !u!224 &2087846788276627608 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3915789154777207280, guid: 06905c2bc94d64146b741a35caec5348, type: 3}
@@ -7044,24 +7018,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 2.5, y: 3.5}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &2152962758567162049
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3673700100600785970}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 87a2671241828a647ba035ae14711c13, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objectToPosition: {fileID: 7810146898459920479}
-  widthDivider: 2
-  heightDivider: 2
-  widthMultiplier: 1
-  heightMultiplier: 2
-  updatePosition: 1
 --- !u!114 &2196368405912297641
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7657,8 +7613,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3682235734512675275}
-  - component: {fileID: 2152962758567162049}
-  - component: {fileID: 3682235734512675276}
   m_Layer: 5
   m_Name: PartnerPileRed
   m_TagString: Untagged
@@ -7682,23 +7636,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -38, y: -329}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchoredPosition: {x: -451, y: -417}
+  m_SizeDelta: {x: 103.32, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &3682235734512675276
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3673700100600785970}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 15b495662fbe0ec429d05d3d3f3605b7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UICardHandPosition
-  spacing: 100
-  updatePosition: 0
 --- !u!224 &3682602866991855068
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8043,7 +7983,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5031595366277285377}
-  - component: {fileID: 1568078802887446188}
   m_Layer: 5
   m_Name: SecurityRed
   m_TagString: Untagged
@@ -8288,8 +8227,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7810146898459920479}
-  - component: {fileID: 2041768699755713286}
-  - component: {fileID: 7810146898459920480}
   m_Layer: 5
   m_Name: HandRed
   m_TagString: Untagged
@@ -9222,23 +9159,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -38, y: -331}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchoredPosition: {x: -47, y: -461}
+  m_SizeDelta: {x: 101.56, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &7810146898459920480
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4804699578116984465}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 15b495662fbe0ec429d05d3d3f3605b7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UICardHandPosition
-  spacing: 100
-  updatePosition: 0
 --- !u!222 &7827998766684435241
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -9646,6 +9569,10 @@ PrefabInstance:
       propertyPath: evoZone
       value: 
       objectReference: {fileID: 18651586}
+    - target: {fileID: 1468722569071222427, guid: 06905c2bc94d64146b741a35caec5348, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1653428013537516751, guid: 06905c2bc94d64146b741a35caec5348, type: 3}
       propertyPath: revealGrid
       value: 
@@ -9734,6 +9661,18 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2527979026486407648, guid: 06905c2bc94d64146b741a35caec5348, type: 3}
+      propertyPath: widthDivider
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2527979026486407648, guid: 06905c2bc94d64146b741a35caec5348, type: 3}
+      propertyPath: heightDivider
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2527979026486407648, guid: 06905c2bc94d64146b741a35caec5348, type: 3}
+      propertyPath: heightMultiplier
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3690007577424699551, guid: 06905c2bc94d64146b741a35caec5348, type: 3}
       propertyPath: cardSpacing
       value: 20.13
@@ -9758,13 +9697,25 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerBlue
       objectReference: {fileID: 0}
+    - target: {fileID: 6149252315629097293, guid: 06905c2bc94d64146b741a35caec5348, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7797763919445284783, guid: 06905c2bc94d64146b741a35caec5348, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 98.045
+      objectReference: {fileID: 0}
     - target: {fileID: 7797763919445284783, guid: 06905c2bc94d64146b741a35caec5348, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -382
+      value: -379
       objectReference: {fileID: 0}
     - target: {fileID: 7797763919445284783, guid: 06905c2bc94d64146b741a35caec5348, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 76
+      value: 81
+      objectReference: {fileID: 0}
+    - target: {fileID: 8120086664873252155, guid: 06905c2bc94d64146b741a35caec5348, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 98.77
       objectReference: {fileID: 0}
     - target: {fileID: 8120086664873252155, guid: 06905c2bc94d64146b741a35caec5348, type: 3}
       propertyPath: m_LocalScale.x
@@ -9776,17 +9727,34 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8120086664873252155, guid: 06905c2bc94d64146b741a35caec5348, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -382
+      value: 44
       objectReference: {fileID: 0}
     - target: {fileID: 8120086664873252155, guid: 06905c2bc94d64146b741a35caec5348, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -372.67
+      value: -465
       objectReference: {fileID: 0}
     - target: {fileID: 9220644798047947537, guid: 06905c2bc94d64146b741a35caec5348, type: 3}
       propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9220644798047947537, guid: 06905c2bc94d64146b741a35caec5348, type: 3}
+      propertyPath: widthDivider
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9220644798047947537, guid: 06905c2bc94d64146b741a35caec5348, type: 3}
+      propertyPath: heightDivider
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9220644798047947537, guid: 06905c2bc94d64146b741a35caec5348, type: 3}
+      propertyPath: heightMultiplier
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 9220644798047947537, guid: 06905c2bc94d64146b741a35caec5348, type: 3}
+      propertyPath: objectToPosition
+      value: 
+      objectReference: {fileID: 1704293826}
+    m_RemovedComponents:
+    - {fileID: 6149252315629097293, guid: 06905c2bc94d64146b741a35caec5348, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 2501287714049503060, guid: 06905c2bc94d64146b741a35caec5348, type: 3}
@@ -9805,12 +9773,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3249197180871192980, guid: 06905c2bc94d64146b741a35caec5348, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1634549767}
-    - targetCorrespondingSourceObject: {fileID: 1414152483257998002, guid: 06905c2bc94d64146b741a35caec5348, type: 3}
+    - targetCorrespondingSourceObject: {fileID: 3249197180871192980, guid: 06905c2bc94d64146b741a35caec5348, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 151029384}
-    - targetCorrespondingSourceObject: {fileID: 7968702171355377589, guid: 06905c2bc94d64146b741a35caec5348, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 8825562748814655651}
+      addedObject: {fileID: 1634549768}
   m_SourcePrefab: {fileID: 100100000, guid: 06905c2bc94d64146b741a35caec5348, type: 3}
 --- !u!1 &8825562748814655647 stripped
 GameObject:
@@ -9850,37 +9815,6 @@ MonoBehaviour:
   cardRotationZ: 0
   cardSpacing: 30
   cardScale: 50
---- !u!1 &8825562748814655650 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7968702171355377589, guid: 06905c2bc94d64146b741a35caec5348, type: 3}
-  m_PrefabInstance: {fileID: 8825562748814655646}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &8825562748814655651
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8825562748814655650}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.VerticalLayoutGroup
-  m_Padding:
-    m_Left: 0
-    m_Right: 0
-    m_Top: 0
-    m_Bottom: 0
-  m_ChildAlignment: 4
-  m_Spacing: 0
-  m_ChildForceExpandWidth: 1
-  m_ChildForceExpandHeight: 1
-  m_ChildControlWidth: 0
-  m_ChildControlHeight: 0
-  m_ChildScaleWidth: 0
-  m_ChildScaleHeight: 0
-  m_ReverseArrangement: 0
 --- !u!1 &8914311469059123744
 GameObject:
   m_ObjectHideFlags: 0

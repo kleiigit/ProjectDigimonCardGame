@@ -23,7 +23,7 @@ MonoBehaviour:
   sprite: {fileID: 1346577058315383873, guid: 0d3ee1b15d1b684408c276f74ca6e588, type: 3}
   effects:
   - trigger: 0
-    promptEffect: EF,2,draw
+    promptEffect: Draw,2
     DescriptionEffect: Compre 2 cartas.
   skillTimeActivation: 0
   programSpritePosition: {x: 0, y: 0.69}

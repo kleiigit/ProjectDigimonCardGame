@@ -91,8 +91,9 @@ public class DiscardManager : MonoBehaviour, IPile
 
         // necessário configuração de posse para saber se o jogador pode ativar ou nao efeitos das cartas na lixeira
         displayListCards.isOwner = false;
+        LayerMask layerMask = 15;
 
-        displayListCards.ShowCardList(setup.listDiscardCards, listDescription, false);
+        displayListCards.ShowCardList(setup.listDiscardCards, layerMask, listDescription, false);
     }
 
 

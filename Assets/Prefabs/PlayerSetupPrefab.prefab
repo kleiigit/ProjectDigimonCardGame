@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7797763919445284783}
-  - component: {fileID: 9220644798047947537}
   m_Layer: 5
   m_Name: PartnerPileBlue
   m_TagString: Untagged
@@ -36,24 +35,6 @@ RectTransform:
   m_AnchoredPosition: {x: -394, y: 197}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &9220644798047947537
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1414152483257998002}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 87a2671241828a647ba035ae14711c13, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objectToPosition: {fileID: 8120086664873252155}
-  widthDivider: 2
-  heightDivider: 2
-  widthMultiplier: 1
-  heightMultiplier: 0
-  updatePosition: 1
 --- !u!1 &3249197180871192980
 GameObject:
   m_ObjectHideFlags: 0
@@ -172,19 +153,22 @@ MonoBehaviour:
   maxLevelPartner: 0
   maxMemory: 0
   currentMemory: 0
+  checkzone: {fileID: 0}
   allDigimon: []
   playerDeck: []
   listPartnerObj: []
   listHandObj: []
   listEvoObj: []
   listSecurityObj: []
-  playerDiscardPile: []
-  playerDataPile: []
+  listDiscardCards: []
+  listDataObj: []
   partnerPile: {fileID: 5285798661020957364}
   hand: {fileID: 7566139465667662650}
   evoPile: {fileID: 0}
   drawPile: {fileID: 0}
   securityPile: {fileID: 0}
+  discard: {fileID: 0}
+  dataPile: {fileID: 0}
 --- !u!114 &7566139465667662650
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -246,6 +230,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 718d29fa549daa7468d7bc02a6700e9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DrawPileManager
+  deckTransform: {fileID: 0}
 --- !u!114 &1653428013537516751
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -325,7 +310,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7620660416352281455}
-  - component: {fileID: 1468722569071222427}
   m_Layer: 5
   m_Name: PartnerEvo
   m_TagString: Untagged
@@ -352,24 +336,6 @@ RectTransform:
   m_AnchoredPosition: {x: -394, y: 197}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1468722569071222427
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7968702171355377589}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 87a2671241828a647ba035ae14711c13, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objectToPosition: {fileID: 8120086664873252155}
-  widthDivider: 2
-  heightDivider: 2
-  widthMultiplier: 1
-  heightMultiplier: 0
-  updatePosition: 1
 --- !u!1 &8525697831312289069
 GameObject:
   m_ObjectHideFlags: 0

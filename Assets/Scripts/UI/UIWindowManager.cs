@@ -4,6 +4,8 @@ using System.Collections;
 using System.Linq;
 using UnityEngine;
 using System;
+using NUnit.Framework;
+using System.Collections.Generic;
 
 public class UIWindowManager : MonoBehaviour
 {
@@ -23,11 +25,7 @@ public class UIWindowManager : MonoBehaviour
     }
 
     // Modal simples (OK / Confirm)
-    public void ShowModal(
-        RectTransform rect,
-        string title,
-        string message,
-        System.Action onConfirm)
+    public void ShowModal(RectTransform rect, string title, string message, Action onConfirm, List<GameObject> showCard)
     {
         if (rect == null)
         {
@@ -39,20 +37,34 @@ public class UIWindowManager : MonoBehaviour
             Instantiate(modalWindowPrefab, rect.transform);
 
         window.transform.SetAsLastSibling();
-        window.Setup(title, message, onConfirm);
+        window.Setup(title, message, onConfirm, showCard);
     }
 
     // Modal Yes / No com retorno bool
-    public ModalWindow ShowModalYesNo(
-    RectTransform rect,
-    string title,
-    string message)
+    public ModalWindow ShowModalYesNo(RectTransform rect, string title, string message, List<GameObject> showCard)
     {
         ModalWindow window = Instantiate(modalWindowPrefab, rect.transform);
         window.transform.SetAsLastSibling();
-        window.SetupYesNo(title, message);
+        window.SetupYesNo(title, message, showCard);
         return window;
     }
+    public ModalWindow ShowSelectionModal(RectTransform rect, string title, string message, int requiredAmount, Func<List<GameObject>> getSelectedObjects,
+    Action onConfirm)
+    {
+        ModalWindow window = Instantiate(modalWindowPrefab, rect.transform);
+        window.transform.SetAsLastSibling();
+
+        window.SetupSelectionModal(
+            title,
+            message,
+            requiredAmount,
+            getSelectedObjects,
+            onConfirm
+        );
+
+        return window;
+    }
+
 
     // temporário, preciso colocar em um manager. talvez effect manager?
     public void MoveToCheckZone(Card card, PlayerSetup setup, FieldPlace from)
@@ -76,11 +88,8 @@ public class UIWindowManager : MonoBehaviour
         if (from == FieldPlace.SecurityPile &&
             card.effects.Any(p => p.trigger == CardEffects.Trigger.Security))
         {
-            ModalWindow modal =
-                UIWindowManager.Instance.ShowModalYesNo(
-                    setup.GetComponent<RectTransform>(),
-                    card.cardName + " has security Effect!",
-                    "efeito da carta a ser implementado");
+            ModalWindow modal = Instance.ShowModalYesNo(setup.GetComponent<RectTransform>(), card.cardName + " has security Effect!", 
+                card.effects.First(p => p.trigger == CardEffects.Trigger.Security).DescriptionEffect, new() { newCard});
             // AGUARDA O JOGADOR
             yield return new WaitUntil(() => modal.HasResult);
             if (modal.Result) TriggerCardManager.TriggerSecurityEffect(card, setup);
@@ -101,9 +110,24 @@ public class UIWindowManager : MonoBehaviour
                     TriggerCardManager.TriggerActiveProgram(card, setup);
                     setup.discard.AddCard(card);
                     Destroy(newCard);
-                });
+                }, new() { newCard});
             yield break;
         }
+        // SKILL
+        if(from == FieldPlace.PartnerPile && card.cardType == CardType.Skill)
+        {
+            Instance.ShowModal(setup.GetComponent<RectTransform>(),
+                card.cardName + " effect activate!", card.effects.First(p => p.trigger == CardEffects.Trigger.NoTrigger).DescriptionEffect,
+                () =>
+                {
+                    TriggerCardManager.TriggerActiveSkill(card, setup);
+                    setup.discard.AddCard(card);
+                    Destroy(newCard);
+                }, new() { newCard });
+            yield break;
+        }
+
+
         setup.dataPile.AddCard(card);
         Destroy(newCard);
 

@@ -17,6 +17,7 @@ public class DigimonCard : Card
     public bool isProtection = false;
 
     public Vector2 digimonSpritePosition = new Vector2(0, 0.55f);
+    [Range(0f, 5f)]
     public float digimonSpriteScale = 1.6f;
 
     public bool CanDigimonPlayed(PlayerSetup setup)

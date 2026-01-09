@@ -1,26 +1,49 @@
 using ProjectScript.Enums;
 using ProjectScript.Selection;
+using SinuousProductions;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 public class SelectionDataManager : MonoBehaviour
 {
-    public static void CostCard(Dictionary<CardColor, int> colorCost)
+    static DisplayListCards displayCards;
+    private void Start()
     {
-        Debug.Log("Selection activated!");
-        if(colorCost.Values.Sum() == 0) return;
-        SelectionManager.Instance.StartSelection(
-            new SelectionRequest(colorCost.Values.Sum(), // quantidade de objetos a selecionar
-        selected => {
-            // ESTE bloco só executa após a seleção ser confirmada
-            foreach (var item in selected)
-            {
-                var go = ((MonoBehaviour)item).gameObject;
-                Debug.Log("Selecionado: " + go.name);
-            }
+        displayCards = FindFirstObjectByType<DisplayListCards>();
+    }
+    public static void CostCard(PlayerSetup setup, Dictionary<CardColor, int> colorCost, System.Action onCostPaid)
+    {
+        if (colorCost.Values.Sum() == 0)
+        {
+            Debug.Log("Custo 0, automaticamente concluido!");
+            onCostPaid?.Invoke();
+            return;
         }
-         )
+        setup.dataPile.ListDataCardsButton();
+        SelectionManager.Instance.StartSelection(new SelectionRequest(colorCost.Values.Sum(), 
+            new SelectionCriteria
+            { 
+                placeRequirements = FieldPlace.DataPile, 
+                colorRequirements = colorCost
+            },
+            
+            selected =>
+                {
+                    foreach (var item in selected)
+                    {
+                        GameObject go = ((MonoBehaviour)item).gameObject;
+                        Debug.Log("Selecionado: " + go.name);
+                        string dataID = go.GetComponent<CardDisplay>().cardData.cardID;
+                        GameObject cardDataObj = setup.listDataObj.First(p => p.GetComponent<CardDisplay>().cardData.cardID == dataID);
+                        setup.dataPile.DiscardData(cardDataObj);
+                    }
+                    displayCards.Hide();
+                    onCostPaid?.Invoke();
+                }
+            ),
+            setup.GetComponent<RectTransform>()
         );
     }
+
 }

@@ -143,7 +143,6 @@ public class EvoPileManager : MonoBehaviour, IPile
         DigimonCard digiPartner = partner as DigimonCard;
         if (setup.dataPile.HasSufficientDataToPlayCard(partner.GetColorCost()))
         {
-            SelectionDataManager.CostCard(partner.GetColorCost());
             if (activePartner == null)
             {
                 if (digiPartner.level > 0)
@@ -154,7 +153,6 @@ public class EvoPileManager : MonoBehaviour, IPile
 
                 else if (digiPartner.level == 0)
                 {
-                    Debug.Log("Partner inicial escolhido");
                     return true;
                 }
                 else
