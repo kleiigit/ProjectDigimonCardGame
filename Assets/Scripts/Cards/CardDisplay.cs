@@ -173,10 +173,10 @@ public class CardDisplay : MonoBehaviour
     //Digimon e Partner
     private void UpdateDigimonCardDisplay(DigimonCard digimonCard)
     {
-        cardLevelText.text = digimonCard.level.ToString();
-        cardAttributeText.text = digimonCard.attribute.ToString().ToUpper();
-        cardStageText.text = digimonCard.stage.ToString().ToUpper();
-        cardTypeText.text = digimonCard.type.ToString().ToUpper();
+        cardLevelText.text = digimonCard.Level.ToString();
+        cardAttributeText.text = digimonCard.Attribute.ToString().ToUpper();
+        cardStageText.text = digimonCard.Stage.ToString().ToUpper();
+        cardTypeText.text = digimonCard.Type.ToString().ToUpper();
 
         UpdateCardBackground();
         programIcon.gameObject.SetActive(false);
@@ -184,13 +184,13 @@ public class CardDisplay : MonoBehaviour
         if (cardData.cardType == CardType.Digimon) // Digimon Configuration
         {
             costBox.gameObject.SetActive(false);
-            cardPowerText.text = digimonCard.power.ToString();
+            cardPowerText.text = digimonCard.Power.ToString();
             cardPowerText.gameObject.SetActive(true);
             powerBackground.gameObject.SetActive(true);
             fieldImage.gameObject.SetActive(true);
             protectionBox.gameObject.SetActive(false);
             Sprite[] subs = Resources.LoadAll<Sprite>("Sprites/SpritesCard/IconResources");
-            switch (digimonCard.attribute)
+            switch (digimonCard.Attribute)
             {
                 
                 case DigimonAttribute.Data:
@@ -226,7 +226,7 @@ public class CardDisplay : MonoBehaviour
             }
             if ((int)cardData.cardType == 2) //Partner configuration
             {
-                cardLeaderMemoryText.text = digimonCard.leaderMemory.ToString();
+                cardLeaderMemoryText.text = digimonCard.Memory.ToString();
                 cardLeaderMemoryText.gameObject.SetActive(true);
                 cardBoxMemory.gameObject.SetActive(true);
                 
@@ -237,7 +237,7 @@ public class CardDisplay : MonoBehaviour
         else
         {
             cardBoxMemory.gameObject.SetActive(true);
-            cardLeaderMemoryText.text = digimonCard.leaderMemory.ToString();
+            cardLeaderMemoryText.text = digimonCard.Memory.ToString();
             cardLeaderMemoryText.gameObject.SetActive(true);    
         }
     }
@@ -281,7 +281,7 @@ public class CardDisplay : MonoBehaviour
         fieldSprite[7] = Resources.Load<Sprite>(sourceFieldPath + "WG_Emblem");
         fieldSprite[8] = Resources.Load<Sprite>(sourceFieldPath + "UK_Emblem");
 
-        switch (digimonField.fieldDigimon)
+        switch (digimonField.Field)
         {
             case DigimonField.DragonsRoar:
                 fieldBackground.sprite = backgroundSprite[0];

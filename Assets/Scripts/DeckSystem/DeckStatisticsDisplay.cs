@@ -73,7 +73,7 @@ namespace SinuousProductions
                 if (card.cardType != CardType.Digimon) continue;
                 if (card is DigimonCard digimonCard)
                 {
-                    int level = digimonCard.level;
+                    int level = digimonCard.Level;
                     if (!levelCounts.ContainsKey(level))
                         levelCounts[level] = 0;
                     levelCounts[level]++;

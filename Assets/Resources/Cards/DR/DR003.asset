@@ -29,13 +29,13 @@ MonoBehaviour:
   - trigger: 5
     promptEffect: TE,1;digi,300,less;opo,field;destroy
     DescriptionEffect: Destrua 1 Digimon no campo do seu oponente com 300 DP ou menos.
-  level: 3
-  power: 800
-  leaderMemory: 0
-  attribute: 1
-  stage: 3
-  type: 21
-  fieldDigimon: 8
+  Level: 3
+  Power: 800
+  Memory: 0
+  Attribute: 1
+  Stage: 3
+  Type: 21
+  Field: 8
   isProtection: 0
   digimonSpritePosition: {x: 0, y: 0}
   digimonSpriteScale: 3.5

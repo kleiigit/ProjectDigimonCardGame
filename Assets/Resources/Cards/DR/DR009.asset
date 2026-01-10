@@ -28,13 +28,13 @@ MonoBehaviour:
   - trigger: 5
     promptEffect: Draw,1
     DescriptionEffect: Compre 1 carta.
-  level: 3
-  power: 700
-  leaderMemory: 0
-  attribute: 2
-  stage: 3
-  type: 38
-  fieldDigimon: 8
+  Level: 3
+  Power: 700
+  Memory: 0
+  Attribute: 2
+  Stage: 3
+  Type: 38
+  Field: 8
   isProtection: 0
   digimonSpritePosition: {x: 0, y: -0.06}
   digimonSpriteScale: 3.5

@@ -30,13 +30,13 @@ MonoBehaviour:
       Down'
     DescriptionEffect: '<down> e descarte 1 Digimon <dr>: Destrua 1 Digimon no campo
       do seu oponente com 300 DP ou menos.'
-  level: 1
-  power: 200
-  leaderMemory: 0
-  attribute: 0
-  stage: 1
-  type: 1
-  fieldDigimon: 8
+  Level: 1
+  Power: 200
+  Memory: 0
+  Attribute: 0
+  Stage: 1
+  Type: 1
+  Field: 8
   isProtection: 0
   digimonSpritePosition: {x: 0, y: 0.12}
   digimonSpriteScale: 2.9

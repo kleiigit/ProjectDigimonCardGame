@@ -32,13 +32,13 @@ MonoBehaviour:
 '
     DescriptionEffect: '<red> e descarte 1 Digimon vermelho: Destrua 1 Digimon no
       campo do seu oponente com 1000 DP ou menos.'
-  level: 4
-  power: 500
-  leaderMemory: 11
-  attribute: 0
-  stage: 4
-  type: 4
-  fieldDigimon: 8
+  Level: 4
+  Power: 100
+  Memory: 11
+  Attribute: 0
+  Stage: 4
+  Type: 4
+  Field: 8
   isProtection: 0
-  digimonSpritePosition: {x: 0, y: 0}
-  digimonSpriteScale: 3
+  digimonSpritePosition: {x: 0, y: -0.35}
+  digimonSpriteScale: 4.55

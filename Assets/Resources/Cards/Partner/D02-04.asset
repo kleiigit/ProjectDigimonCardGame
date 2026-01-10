@@ -27,13 +27,13 @@ MonoBehaviour:
 
       CD,1,blue'
     DescriptionEffect: "<blue>: Seu oponente descarta 1 carta da m\xE4o dele."
-  level: 3
-  power: 500
-  leaderMemory: 7
-  attribute: 0
-  stage: 3
-  type: 6
-  fieldDigimon: 2
+  Level: 3
+  Power: 100
+  Memory: 7
+  Attribute: 0
+  Stage: 3
+  Type: 6
+  Field: 2
   isProtection: 0
   digimonSpritePosition: {x: 0, y: 0.35}
   digimonSpriteScale: 2.9

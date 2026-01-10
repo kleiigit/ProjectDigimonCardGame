@@ -5,6 +5,7 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEditor.Progress;
 
 public class MenuCardManager : MonoBehaviour
 {
@@ -147,7 +148,7 @@ public class MenuCardManager : MonoBehaviour
             foreach (CardEffects item in GetComponent<CardDisplay>().cardData.effects.
                 Where(p => p.trigger == CardEffects.Trigger.Action))
             {
-                if(EffectManager.CriteriaEffect(item, _cardData, setup))
+                if(EffectManager.ConditionEffect(item, GetComponent<CardDisplay>(), setup))
                 {
                     options.Add(new CardContextMenu.MenuOption(
                         "Activate Effect",
@@ -164,13 +165,10 @@ public class MenuCardManager : MonoBehaviour
             if (timing != Card.SkillActivation.MainPhase &&
                 timing != Card.SkillActivation.MainPhaseAndBattlePhase)
                 return;
-            if (setup.dataPile.HasSufficientDataToPlayCard(_cardData.GetColorCost()))
+            if (!setup.dataPile.HasSufficientDataToPlayCard(_cardData.GetColorCost())
+                || !EffectManager.ConditionEffect(GetComponent<CardDisplay>().cardData.effects.Where(p => p.trigger == CardEffects.Trigger.NoTrigger).First(),
+                GetComponent<CardDisplay>(), setup))
             {
-
-            }
-            else
-            {
-                Debug.Log("Data insuficiente");
                 return;
             }
         }
@@ -184,9 +182,10 @@ public class MenuCardManager : MonoBehaviour
         }
         else if (cardType == CardType.Program)
         {
-            if(!setup.dataPile.HasSufficientDataToPlayCard(_cardData.GetColorCost()))
+            if(!setup.dataPile.HasSufficientDataToPlayCard(_cardData.GetColorCost()) 
+                || !EffectManager.ConditionEffect(GetComponent<CardDisplay>().cardData.effects.Where(p => p.trigger == CardEffects.Trigger.NoTrigger).First(),
+                GetComponent<CardDisplay>(), setup))
             {
-                Debug.Log("Data insuficiente");
                 return;
             }
 
@@ -295,7 +294,7 @@ public class MenuCardManager : MonoBehaviour
     {
         if (_cardData.effects.Count > 0)
         {
-            TriggerCardManager.TriggerActivateAction(_cardData, setup);
+            TriggerCardManager.TriggerActivateAction(GetComponent<CardDisplay>(), setup);
         }
     }
     public void ButtonAttack()
@@ -349,7 +348,7 @@ public class MenuCardManager : MonoBehaviour
             int currentMemory = control.GetTotalLevel(handOwner);
             int topMemory = control.GetTopMemory(handOwner);
 
-            int levelCardToPlay = cardDigimon.level;
+            int levelCardToPlay = cardDigimon.Level;
             int sumWithNewCard = currentMemory + levelCardToPlay;
 
             if (levelCardToPlay <= topLevel && sumWithNewCard <= topMemory)
@@ -366,7 +365,7 @@ public class MenuCardManager : MonoBehaviour
                     if (setup.dataPile.HasSufficientDataToPlayCard(_cardData.GetColorCost()))
                     {
                         Debug.Log("Program card played.");
-                        UIWindowManager.Instance.MoveToCheckZone(_cardData, setup, FieldPlace.Hand);
+                        UIWindowManager.Instance.MoveToCheckZone(GetComponent<CardDisplay>(), setup, FieldPlace.Hand);
                         setup.hand.RemoveCard(this.gameObject);
                     }
                 }
@@ -376,7 +375,7 @@ public class MenuCardManager : MonoBehaviour
                     {
                         Debug.Log("Skill card played.");
                         setup.partnerPile.HidePartnerPile();
-                        UIWindowManager.Instance.MoveToCheckZone(_cardData, setup, FieldPlace.PartnerPile);
+                        UIWindowManager.Instance.MoveToCheckZone(GetComponent<CardDisplay>(), setup, FieldPlace.PartnerPile);
                         setup.partnerPile.RemoveCard(this.gameObject);
                     }
                 }

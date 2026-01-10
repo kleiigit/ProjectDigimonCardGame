@@ -145,13 +145,13 @@ public class EvoPileManager : MonoBehaviour, IPile
         {
             if (activePartner == null)
             {
-                if (digiPartner.level > 0)
+                if (digiPartner.Level > 0)
                 {
                     Debug.LogWarning("noButton active partner to evolve from.");
                     return false;
                 }
 
-                else if (digiPartner.level == 0)
+                else if (digiPartner.Level == 0)
                 {
                     return true;
                 }
@@ -165,7 +165,7 @@ public class EvoPileManager : MonoBehaviour, IPile
             {
                 if (BattlePhaseManager.phase == 0) return false;
 
-                if ((digiPartner.level -1 == (activePartner.GetComponent<CardDisplay>().cardData as DigimonCard).level))
+                if ((digiPartner.Level -1 == (activePartner.GetComponent<CardDisplay>().cardData as DigimonCard).Level))
                 {
                     return true;
                 }

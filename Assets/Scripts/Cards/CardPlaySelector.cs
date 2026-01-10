@@ -63,7 +63,7 @@ public class CardPlaySelector : MonoBehaviour
     {
         if (isAwaitingTarget) return;
 
-        Card card = cardDisplay.cardData;
+        CardDisplay card = cardDisplay;
 
         isAwaitingTarget = true;
         isPulsing = true; // Inicia o brilho pulsante
@@ -71,7 +71,7 @@ public class CardPlaySelector : MonoBehaviour
         gameManager.StartCoroutine(WaitForGridClick(card, menuCardManager.handOwner));
     }
     // joga a carta
-    private IEnumerator WaitForGridClick(Card card, PlayerSide playerSide)
+    private IEnumerator WaitForGridClick(CardDisplay card, PlayerSide playerSide)
     {
         while (isAwaitingTarget)
         {
@@ -92,7 +92,6 @@ public class CardPlaySelector : MonoBehaviour
                     if (gridManager.AddObjectToGrid(card, cell.gridIndex, playerSide))
                     {
                         GameSetupStart.GetPlayerSetup(menuCardManager.handOwner).hand.RemoveCard(this.gameObject);
-                        Debug.Log("Carta jogada: " + card.cardName.ToUpper());
                         isAwaitingTarget = false;
                         TriggerCardManager.TriggerWhenPlayed(card, GameSetupStart.GetPlayerSetup(menuCardManager.handOwner));
                         Destroy(gameObject);

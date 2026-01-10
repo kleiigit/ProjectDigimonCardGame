@@ -124,12 +124,12 @@ public class HoverCardManager : MonoBehaviour
             }
             else
             {
-                level.text = "level: " + digimonCard.level.ToString();
-                type.text = "type: " + CultureInfo.CurrentCulture.TextInfo.ToTitleCase(digimonCard.type.ToString().ToLower());
-                attribute.text = "Attrib. " + digimonCard.attribute.ToString();
-                stage.text = "Stage: " + digimonCard.stage.ToString();
-                field.text = "Field: " + digimonCard.fieldDigimon.ToString();
-                memory.text = "Memory: " + digimonCard.leaderMemory.ToString();
+                level.text = "Level: " + digimonCard.Level.ToString();
+                type.text = "Type: " + CultureInfo.CurrentCulture.TextInfo.ToTitleCase(digimonCard.Type.ToString().ToLower());
+                attribute.text = "Attrib. " + digimonCard.Attribute.ToString();
+                stage.text = "Stage: " + digimonCard.Stage.ToString();
+                field.text = "Field: " + digimonCard.Field.ToString();
+                memory.text = "Memory: " + digimonCard.Memory.ToString();
             }
         }
         else if (typeCard.text == "SKILL")

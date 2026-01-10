@@ -121,7 +121,7 @@ namespace SinuousProductions
                 }
 
                 // Field (apenas para Digimon)
-                bool matchField = fieldAll || (card is DigimonCard digimonField && digimonField.fieldDigimon == selectedField);
+                bool matchField = fieldAll || (card is DigimonCard digimonField && digimonField.Field == selectedField);
 
                 // Atributo e estágio (apenas para Digimon)
                 bool matchAttribute = true;
@@ -130,7 +130,7 @@ namespace SinuousProductions
                 if (!attributeAll)
                 {
                     if (card is DigimonCard digimonAttr)
-                        matchAttribute = digimonAttr.attribute == selectedAttribute;
+                        matchAttribute = digimonAttr.Attribute == selectedAttribute;
                     else
                         matchAttribute = false;
                 }
@@ -138,7 +138,7 @@ namespace SinuousProductions
                 if (!stageAll)
                 {
                     if (card is DigimonCard digimonStage)
-                        matchStage = digimonStage.stage == selectedStage;
+                        matchStage = digimonStage.Stage == selectedStage;
                     else
                         matchStage = false;
                 }
@@ -167,7 +167,7 @@ namespace SinuousProductions
                                  card.cardColor.Contains(selectedSecondColor);
                 }
 
-                // level e Power
+                // Level e Power
                 bool matchLevel = true;
                 bool matchPower = true;
 
@@ -175,17 +175,17 @@ namespace SinuousProductions
                 {
                     if (filterLevel)
                     {
-                        if (minLevel.HasValue && digimon.level < minLevel.Value)
+                        if (minLevel.HasValue && digimon.Level < minLevel.Value)
                             matchLevel = false;
-                        if (maxLevel.HasValue && digimon.level > maxLevel.Value)
+                        if (maxLevel.HasValue && digimon.Level > maxLevel.Value)
                             matchLevel = false;
                     }
 
                     if (filterPower)
                     {
-                        if (minPower.HasValue && digimon.power < minPower.Value)
+                        if (minPower.HasValue && digimon.Power < minPower.Value)
                             matchPower = false;
-                        if (maxPower.HasValue && digimon.power > maxPower.Value)
+                        if (maxPower.HasValue && digimon.Power > maxPower.Value)
                             matchPower = false;
                     }
                 }

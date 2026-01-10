@@ -6,14 +6,14 @@ using ProjectScript.Enums;
 public class DigimonCard : Card
 {
     [Header("Digimon Specificd Information:")]
-    public int level;
-    public int power = 100;
-    public int leaderMemory = 0;
+    public int Level;
+    public int Power = 100;
+    public int Memory = 0;
 
-    public DigimonAttribute attribute = DigimonAttribute.NoAttribute;
-    public DigimonStage stage;
-    public DigimonType type;
-    public DigimonField fieldDigimon = DigimonField.NoField;
+    public DigimonAttribute Attribute = DigimonAttribute.NoAttribute;
+    public DigimonStage Stage;
+    public DigimonType Type;
+    public DigimonField Field = DigimonField.NoField;
     public bool isProtection = false;
 
     public Vector2 digimonSpritePosition = new Vector2(0, 0.55f);
@@ -26,9 +26,9 @@ public class DigimonCard : Card
             return false;
 
         DigimonCard activePartner = setup.evoPile.GetActivePartner();
-        if (activePartner.level >= level)
+        if (activePartner.Level >= Level)
         {
-            if (setup.currentMemory + level <= activePartner.leaderMemory) return true;
+            if (setup.currentMemory + Level <= activePartner.Memory) return true;
         }
         return false;
     }

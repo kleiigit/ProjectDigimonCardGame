@@ -2,30 +2,30 @@ using ProjectScript.Enums;
 using SinuousProductions;
 using System;
 using System.Collections.Generic;
-using Unity.Collections;
+using System.ComponentModel;
 using UnityEngine;
 
-namespace Processor.EffectManager
+namespace ProjectScript.EffectManager
 {
     public class EffectPrompt
     {
-        public Card UserEffect {  get; }
-        //
-        public Keyword EffectType { get; set; }
-        public int Quantity { get; set; }
-        //
-        public CardType TypeTarget { get; set; } = CardType.Card;
-        public int PowerTarget { get; set; }
-        public DigimonField DigimonField { get; set; } = DigimonField.NoField;
-        public bool IsLesser { get; set; }
-        //
-        public bool OpponentSide { get; set; } = false;
-        public FieldPlace PlaceTarget { get; set; } = FieldPlace.BattleZone;
-        //
-        public Keyword Effect { get; set; }
-        //
-        public List<GameObject> SelectedTarget { get; set; }
-        private string PromptedEffect { get; set; }
+        public Card UserEffect { get; }
+        public Keyword EffectType { get; private set; }
+        public int Quantity { get; private set; }
+
+        public CardType TypeTarget { get; private set; } = CardType.Card;
+        public int PowerTarget { get; private set; }
+        public DigimonField DigimonField { get; private set; } = DigimonField.NoField;
+        public bool IsLesser { get; private set; }
+
+        public bool OpponentSide { get; private set; } = false;
+        public FieldPlace PlaceTarget { get; private set; } = FieldPlace.BattleZone;
+
+        public Keyword Effect { get; private set; } = Keyword.None;
+        public int EffectQuantity { get; private set; }
+
+        public List<GameObject> SelectedTarget { get; private set; } = new List<GameObject>();
+        private readonly string PromptedEffect;
 
         public EffectPrompt(Card user, string prompt)
         {
@@ -33,116 +33,214 @@ namespace Processor.EffectManager
             PromptedEffect = prompt;
             SplitPrompt();
         }
-
-        void SplitPrompt()
+        private void SplitPrompt()
         {
-            string[] commands = PromptedEffect.Split(';'); //Separa os comandos
+            string[] commands = PromptedEffect.Split(';', StringSplitOptions.RemoveEmptyEntries);
             if (commands.Length == 0)
-            {
-                Debug.LogWarning($"[ExecuteCardEffect] Malformed: \"{PromptedEffect}\"");
                 return;
+
+            int index = 0;
+
+            // 1 - Tipo de efeito (obrigatório)
+            ParseEffectType(commands[index++]);
+
+            // 2 - Tipo de carta alvo (opcional)
+            if (index < commands.Length)
+            {
+                string key = commands[index].Split(',')[0].ToLower();
+                if (IsTargetCommand(key))
+                {
+                    TargetFiltered(commands[index]);
+                    index++;
+                }
             }
 
-            // Comando de alvo e quantidade de alvos
-            string[] commandSplit = commands[0].Split(',');
-            EffectType = KeywordConvert(commandSplit[0]);
-                if (commandSplit.Length > 1) 
-                    Quantity = int.TryParse(commandSplit[1], out var q) ? q : 0;   
-            if (commands.Length > 1)
+            // 3 - Localização / lado (opcional)
+            if (index < commands.Length)
             {
-                // Comando de filtro de alvo
-                TargetFiltered(commands[1]);
+                string key = commands[index].Split(',')[0].ToLower();
+
+                bool isLocation =
+                    key == "play" ||
+                    key == "opo" ||
+                    Enum.TryParse<FieldPlace>(key, true, out _);
+
+                if (isLocation)
+                {
+                    ParseTargetLocation(commands[index]);
+                    index++;
+                }
             }
-            if(commands.Length > 2)
+
+            // 4 - Efeito aplicado (opcional)
+            if (index < commands.Length)
             {
-                // Comando de local do alvo
-                commandSplit = commands[2].Split(',');
-                OpponentSide = commandSplit[0] == "opo" ? true : false;
-                if (commandSplit.Length > 1)
-                    PlaceTarget = Enum.TryParse(commandSplit[1], true, out FieldPlace v) ? v : FieldPlace.BattleZone;
-            }
-            if (commands.Length > 3)
-            {
-                // Comando de Efeito realizado
-                commandSplit = commands[3].Split(",");
-                Effect = Enum.TryParse(commandSplit[0], true, out Keyword v) ? v : Keyword.Destroy;
+                string key = commands[index].Split(',')[0];
+                if (KeywordFromString(key) != Keyword.None)
+                {
+                    ParseEffectKeyword(commands[index]);
+                }
             }
         }
 
-        void TargetFiltered(string prompt)
+
+        #region Parsing
+        private bool IsTargetCommand(string command)
         {
-            string[] commandSplit = prompt.Split(',');
-            TypeTarget = CardTypeConvert(commandSplit[0], out CardType v) ? v : CardType.Card;
-            
-            if (commandSplit.Length > 1)
-                // digimon Field
-                if (FieldConvert(commandSplit[1], out DigimonField field))
+            // Comandos válidos de alvo: digimon, card, etc.
+            return command switch
+            {
+                "digi" => true,
+                "card" => true,
+                _ => false
+            };
+        }
+        private void ParseEffectType(string cmd)
+        {
+            var parts = cmd.Split(',');
+            EffectType = KeywordFromString(parts[0]);
+            Quantity = parts.Length > 1 && int.TryParse(parts[1], out var q) ? q : 0;
+        }
+        private void TargetFiltered(string cmd)
+        {
+            var parts = cmd.Split(',');
+
+            TypeTarget = CardTypeFromString(parts[0]);
+
+            if (parts.Length > 1)
+            {
+                if (!FieldFromString(parts[1], out var field))
                 {
-                    DigimonField = field;
-                    return;
-                }
-                // digimon Power
-                else if (int.TryParse(commandSplit[1], out var n))
-                { 
-                    PowerTarget = n;
-                    IsLesser = commandSplit[2] == "less" ? true : false;
-                    return; 
+                    PowerTarget = int.TryParse(parts[1], out var n) ? n : 0;
+                    IsLesser = parts.Length > 2 && parts[2].Equals("less", StringComparison.OrdinalIgnoreCase);
                 }
                 else
                 {
-                    Debug.Log("Error Convert: " + commandSplit[1]);
+                    DigimonField = field;
                 }
-        }
-        Keyword KeywordConvert(string keyString)
-        {
-            switch(keyString)
-            {
-                case "TE": return Keyword.Target;
-                case "CE": return Keyword.Condition;
-                case "Draw": return Keyword.Draw;
-                case "Cache": return Keyword.Cache;
-                case "Down": return Keyword.Down;
-                default:
-                    break;
             }
-            Debug.LogWarning("[EffectPrompt] Error ao Converter Keyword: "+ keyString);
-            return 0;
         }
-        bool FieldConvert(string fieldString, out DigimonField field)
+        private void ParseTargetLocation(string cmd)
         {
-            switch (fieldString)
+            var parts = cmd.Split(',');
+
+            // Define lado
+            if (parts[0].Equals("opo", StringComparison.OrdinalIgnoreCase))
             {
-                case "dr":
-                    field = DigimonField.DragonsRoar;
-                    return true;
-                default:
-                    break;
+                OpponentSide = true;
             }
-            field = default;
-            return false;
+            else if (parts[0].Equals("play", StringComparison.OrdinalIgnoreCase))
+            {
+                OpponentSide = false;
+            }
+            else if (Enum.TryParse(parts[0], true, out FieldPlace placeOnly))
+            {
+                // Apenas local, assume lado do jogador
+                OpponentSide = false;
+                PlaceTarget = placeOnly;
+                return;
+            }
+
+            // Define local (se existir)
+            if (parts.Length > 1 && Enum.TryParse(parts[1], true, out FieldPlace place))
+            {
+                PlaceTarget = place;
+            }
         }
-        bool CardTypeConvert(string cardTypeString, out CardType card)
+        private void ParseEffectKeyword(string cmd)
         {
-            switch (cardTypeString)
-            {
-                case "digi":
-                    card = CardType.Digimon;
-                    return true;
-                default:
-                    break;
-            }
-            Debug.LogWarning("[EffectPrompt] Error ao Converter CardType: " + cardTypeString);
-            card = default;
-            return false;
+            var parts = cmd.Split(',');
+            Effect = KeywordFromString(parts[0]);
+            if (Effect == Keyword.None)
+                Effect = Keyword.Draw;
+            EffectQuantity = parts.Length > 1 && int.TryParse(parts[1], out var q) ? q : 0;
         }
+        #endregion
+
+        #region Conversions
+        private Keyword KeywordFromString(string key) => key switch
+        {
+            "TE" => Keyword.Target,
+            "CE" => Keyword.Condition,
+            "Draw" => Keyword.Draw,
+            "Cache" => Keyword.Cache,
+            "Down" => Keyword.Down,
+            "discard" => Keyword.Discard,
+            "destroy" => Keyword.Destroy,
+            _ => Keyword.None
+        };
+        private bool FieldFromString(string str, out DigimonField field)
+        {
+            field = str switch
+            {
+                "dr" => DigimonField.DragonsRoar,
+                _ => default
+            };
+            return field != default;
+        }
+        private CardType CardTypeFromString(string str) => str switch
+        {
+            "digi" => CardType.Digimon,
+            "card" => CardType.Card,
+            _ => CardType.Card
+        };
+        #endregion
+
+        #region Smart Targeting
+
+        public bool TryAddTarget(List<GameObject> possibleTargets)
+        {
+            foreach (var target in possibleTargets)
+            {
+                if (IsValidTarget(target))
+                {
+                    SelectedTarget.Add(target);
+                    if (SelectedTarget.Count >= Quantity)
+                        break;
+                }
+            }
+            return SelectedTarget.Count > 0;
+        }
+
+        private bool IsValidTarget(GameObject target)
+        {
+            if (target == null) return false;
+            var cardDisplay = target.GetComponent<CardDisplay>();
+            if (cardDisplay?.cardData == null) return false;
+
+            var card = cardDisplay.cardData;
+            if (card.cardType != TypeTarget) return false;
+
+            if (card is DigimonCard digimon)
+            {
+                if (PowerTarget > 0)
+                {
+                    if (IsLesser && digimon.Power >= PowerTarget) return false;
+                    if (!IsLesser && digimon.Power != PowerTarget) return false;
+                }
+                if (DigimonField != DigimonField.NoField && digimon.Field != DigimonField) return false;
+            }
+
+            return true;
+        }
+
+        #endregion
 
         public override string ToString()
         {
-            return EffectType.ToString() + " " + Quantity +
-                " - (" + TypeTarget.ToString() + " " + 
-                PowerTarget + " " + DigimonField + " " + IsLesser + 
-                ") - (" + OpponentSide + " " + PlaceTarget + " " +
-                ") - " + EffectType.ToString();
+            string sidefield = OpponentSide == false ? "player" : "oponent";
+
+            string targetCard = TypeTarget.ToString();
+            if (PowerTarget > 0)
+            { 
+                targetCard += " " + PowerTarget + " power or "; 
+                targetCard += IsLesser ? "less" : "more";
+            }
+            if (DigimonField != DigimonField.NoField) targetCard += " " + DigimonField;
+
+            return $"{EffectType} {Quantity} - " +
+                $"({targetCard}) - " +
+                $"({sidefield} {PlaceTarget}) - {Effect} {EffectQuantity}";
         }
     }
 }

@@ -28,13 +28,13 @@ MonoBehaviour:
       CD,1,red'
     DescriptionEffect: '<red>: Destrua 1 Digimon no campo do seu oponente com 700
       DP ou menos.'
-  level: 3
-  power: 500
-  leaderMemory: 7
-  attribute: 0
-  stage: 3
-  type: 3
-  fieldDigimon: 8
+  Level: 3
+  Power: 100
+  Memory: 7
+  Attribute: 0
+  Stage: 3
+  Type: 3
+  Field: 8
   isProtection: 0
   digimonSpritePosition: {x: 0, y: 0.16}
   digimonSpriteScale: 3.3

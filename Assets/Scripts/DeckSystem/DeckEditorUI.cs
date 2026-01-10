@@ -795,9 +795,9 @@ namespace SinuousProductions
             {
                 SortMode.LevelAsc => "Lv >",
                 SortMode.LevelDesc => "Lv <",
-                SortMode.TypeMode1 => "type Mode 1",
-                SortMode.TypeMode2 => "type Mode 2",
-                SortMode.TypeMode3 => "type Mode 3",
+                SortMode.TypeMode1 => "Type Mode 1",
+                SortMode.TypeMode2 => "Type Mode 2",
+                SortMode.TypeMode3 => "Type Mode 3",
                 SortMode.NameAZ => "Name A-Z",
                 SortMode.NameZA => "Name Z-A",
                 SortMode.CostAsc => "Cost >",
@@ -812,7 +812,7 @@ namespace SinuousProductions
                 SortMode.CardIDAsc => "Number >",
                 SortMode.CardIDDesc => "Number <",
                 SortMode.Field => "Field",
-                SortMode.TypeDigimon => "type",
+                SortMode.TypeDigimon => "Type",
                 SortMode.Attribute => "Attribute",
                 _ => "Default",
             };

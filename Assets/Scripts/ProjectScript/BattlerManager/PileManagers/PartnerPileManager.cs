@@ -129,7 +129,7 @@ public class PartnerPileManager : MonoBehaviour, IPile
                 if (cardDisplay == null) return false;
 
                 DigimonCard digimon = cardDisplay.cardData as DigimonCard;
-                return digimon != null && digimon.level == levelFilter;
+                return digimon != null && digimon.Level == levelFilter;
             })
             .ToList();
 

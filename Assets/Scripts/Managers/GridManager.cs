@@ -9,8 +9,9 @@ public class GridManager : MonoBehaviour
     public List<GridCell> playerRedCells;
     public List<GridCell> playerBlueCells;
     private FieldCard fieldCardScript;
-    public bool AddObjectToGrid(Card cardData, int gridPosition, PlayerSide playerSide)
+    public bool AddObjectToGrid(CardDisplay card, int gridPosition, PlayerSide playerSide)
     {
+        Card cardData = card.cardData;
         GridCell targetCell = null;
         bool isRedOwnerCell = false;
 

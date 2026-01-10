@@ -30,13 +30,13 @@ MonoBehaviour:
     promptEffect: 
     DescriptionEffect: "(Descarte esta carta da sua m\xE3o: previna o dano de um
       ataque do Parceiro do seu oponente.)"
-  level: 2
-  power: 300
-  leaderMemory: 0
-  attribute: 2
-  stage: 2
-  type: 37
-  fieldDigimon: 4
+  Level: 2
+  Power: 300
+  Memory: 0
+  Attribute: 2
+  Stage: 2
+  Type: 37
+  Field: 4
   isProtection: 1
   digimonSpritePosition: {x: -0.15, y: 0}
-  digimonSpriteScale: 3.2
+  digimonSpriteScale: 2.97

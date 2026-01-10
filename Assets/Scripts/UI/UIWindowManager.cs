@@ -67,12 +67,13 @@ public class UIWindowManager : MonoBehaviour
 
 
     // temporário, preciso colocar em um manager. talvez effect manager?
-    public void MoveToCheckZone(Card card, PlayerSetup setup, FieldPlace from)
+    public void MoveToCheckZone(CardDisplay card, PlayerSetup setup, FieldPlace from)
     {
         StartCoroutine(MoveToCheckZoneCoroutine(card, setup, from));
     }
-    private IEnumerator MoveToCheckZoneCoroutine(Card card, PlayerSetup setup, FieldPlace from)
+    private IEnumerator MoveToCheckZoneCoroutine(CardDisplay cardDisplay, PlayerSetup setup, FieldPlace from)
     {
+        Card card = cardDisplay.cardData;
         GameObject newCard = Instantiate(GameManager.cardPrefab, setup.checkzone.transform.position,
             Quaternion.identity, setup.checkzone.transform);
         newCard.transform.localScale = new Vector3(0.55f, 0.55f, 1f);
@@ -86,13 +87,13 @@ public class UIWindowManager : MonoBehaviour
         HoverCardManager.Instance.ShowCard(newCardDisplay.cardData);
         // SECURITY PILE
         if (from == FieldPlace.SecurityPile &&
-            card.effects.Any(p => p.trigger == CardEffects.Trigger.Security))
+            card.effects.Any(p => p.trigger == CardEffects.Trigger.Security && EffectManager.ConditionEffect(p, cardDisplay, setup)))
         {
             ModalWindow modal = Instance.ShowModalYesNo(setup.GetComponent<RectTransform>(), card.cardName + " has security Effect!", 
                 card.effects.First(p => p.trigger == CardEffects.Trigger.Security).DescriptionEffect, new() { newCard});
             // AGUARDA O JOGADOR
             yield return new WaitUntil(() => modal.HasResult);
-            if (modal.Result) TriggerCardManager.TriggerSecurityEffect(card, setup);
+            if (modal.Result) TriggerCardManager.TriggerSecurityEffect(newCardDisplay, setup);
 
             setup.dataPile.AddCard(card);
             Destroy(newCard);
@@ -107,7 +108,7 @@ public class UIWindowManager : MonoBehaviour
                 card.cardName + " effect activate!", card.effects.First(p => p.trigger == CardEffects.Trigger.NoTrigger).DescriptionEffect,
                 () =>
                 {
-                    TriggerCardManager.TriggerActiveProgram(card, setup);
+                    TriggerCardManager.TriggerActiveProgram(newCardDisplay, setup);
                     setup.discard.AddCard(card);
                     Destroy(newCard);
                 }, new() { newCard});
@@ -120,7 +121,7 @@ public class UIWindowManager : MonoBehaviour
                 card.cardName + " effect activate!", card.effects.First(p => p.trigger == CardEffects.Trigger.NoTrigger).DescriptionEffect,
                 () =>
                 {
-                    TriggerCardManager.TriggerActiveSkill(card, setup);
+                    TriggerCardManager.TriggerActiveSkill(cardDisplay, setup);
                     setup.discard.AddCard(card);
                     Destroy(newCard);
                 }, new() { newCard });

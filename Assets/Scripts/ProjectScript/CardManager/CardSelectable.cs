@@ -41,7 +41,7 @@ public class CardSelectable : MonoBehaviour, ISelectable, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        Debug.Log("UI click detectado em: " + gameObject.name);
+        //Debug.Log("UI click detectado em: " + gameObject.name);
         if (eventData.button != PointerEventData.InputButton.Left)
             return;
 

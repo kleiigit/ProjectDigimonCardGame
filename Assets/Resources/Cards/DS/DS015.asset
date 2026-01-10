@@ -23,22 +23,7 @@ MonoBehaviour:
   sprite: {fileID: -7351659254895256204, guid: 7712679d570bdd8428ee4cf114985c07, type: 3}
   effects:
   - trigger: 0
-    restriction: 0
-    conditions:
-    - type: 3
-      condTrigger: 0
-      intCond: 1
-      localCond: 1
-      requiredCondition: []
-      side: 1
-    effects:
-    - targetEffect: 4
-      typeEffect: 3
-      especialCondition: 0
-      QuantityEffect: 1
-      requiredEffect: []
-      localEffect: 1
-      durationEffect: 0
+    promptEffect: TE,1;opo,Hand;discard
     DescriptionEffect: "Escolha 1 carta na m\xE3o do seu oponente sem olhar, descarte-a."
   skillTimeActivation: 0
   programSpritePosition: {x: -0.02, y: 0.69}

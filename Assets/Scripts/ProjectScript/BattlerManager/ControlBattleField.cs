@@ -39,10 +39,10 @@ public class ControlBattleField : MonoBehaviour
             setupRed = GameSetupStart.playerRed;
             Debug.Log("erro");
         }
-        topLevelTextBlue.text = $"level: {setupBlue.maxLevelPartner}";
+        topLevelTextBlue.text = $"Level: {setupBlue.maxLevelPartner}";
         topMemoryTextBlue.text = $"Memory: {setupBlue.currentMemory} / {setupBlue.maxMemory}";
 
-        topLevelTextRed.text = $"level: {setupRed.maxLevelPartner}";
+        topLevelTextRed.text = $"Level: {setupRed.maxLevelPartner}";
         topMemoryTextRed.text = $"Memory: {setupRed.currentMemory} / {setupRed.maxMemory}";
 
         UpdateCurrentMemoryFromField();

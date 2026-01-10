@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 93b231708be3a8d47951cfdfaf267acb, type: 3}
-  m_Name: NSP005
+  m_Name: DS016
   m_EditorClassIdentifier: 
   cardType: 0
   cardID: NSP005
@@ -33,13 +33,13 @@ MonoBehaviour:
     promptEffect: 
     DescriptionEffect: "Escolha 1 dos seguintes efeitos: 1- \"Compre 1 carta.\" 2-
       \"Escolha 1 carta da m\xE3o do oponente sem olhar e descarte.\""
-  level: 4
-  power: 1200
-  leaderMemory: 0
-  attribute: 1
-  stage: 4
-  type: 3
-  fieldDigimon: 4
+  Level: 4
+  Power: 1200
+  Memory: 0
+  Attribute: 1
+  Stage: 4
+  Type: 3
+  Field: 1
   isProtection: 0
   digimonSpritePosition: {x: 0, y: 0.37}
   digimonSpriteScale: 2.63

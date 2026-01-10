@@ -76,7 +76,7 @@ public class SecurityPileManager : MonoBehaviour, IPile
         GameObject topCard = setup.listSecurityObj[^1];
         var cardData = topCard.GetComponent<CardDisplay>().cardData;
         setup.securityPile.RemoveCard(setup.listSecurityObj[^1]);
-        UIWindowManager.Instance.MoveToCheckZone(topCard.GetComponent<CardDisplay>().cardData, setup, FieldPlace.SecurityPile);
+        UIWindowManager.Instance.MoveToCheckZone(topCard.GetComponent<CardDisplay>(), setup, FieldPlace.SecurityPile);
         UpdateVisuals();
     }
 

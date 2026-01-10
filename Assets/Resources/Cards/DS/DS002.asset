@@ -30,13 +30,13 @@ MonoBehaviour:
   - trigger: 5
     promptEffect: 
     DescriptionEffect: Vire 1 Digimon no campo do seu oponente.
-  level: 2
-  power: 400
-  leaderMemory: 0
-  attribute: 0
-  stage: 2
-  type: 12
-  fieldDigimon: 1
+  Level: 2
+  Power: 400
+  Memory: 0
+  Attribute: 0
+  Stage: 2
+  Type: 12
+  Field: 1
   isProtection: 0
   digimonSpritePosition: {x: 0.12, y: 0.34}
   digimonSpriteScale: 2.5

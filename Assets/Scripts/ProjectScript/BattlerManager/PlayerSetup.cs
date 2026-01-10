@@ -60,8 +60,8 @@ public class PlayerSetup : MonoBehaviour
         if (setPlayer == BattlePhaseManager.currentPlayer) isActivePlayer = true;
         if (listEvoObj.Count > 0)
         {
-            maxLevelPartner = evoPile.GetActivePartner()?.level ?? 0;
-            maxMemory = evoPile.GetActivePartner()?.leaderMemory ?? 0;
+            maxLevelPartner = evoPile.GetActivePartner()?.Level ?? 0;
+            maxMemory = evoPile.GetActivePartner()?.Memory ?? 0;
         }
     }
 

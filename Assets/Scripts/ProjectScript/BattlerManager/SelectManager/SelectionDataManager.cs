@@ -42,7 +42,7 @@ public class SelectionDataManager : MonoBehaviour
                     onCostPaid?.Invoke();
                 }
             ),
-            setup.GetComponent<RectTransform>()
+            setup.GetComponent<RectTransform>(), "Select cards to pay the cost", $"Select ({colorCost.Values.Sum()}) cards from your Data Pile to pay the cost."
         );
     }
 

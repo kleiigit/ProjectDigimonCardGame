@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardType: 0
   cardID: DS001
-  cardName: gomamon
+  cardName: Gomamon
   cardRarity: 1
   cardColor: 02000000
   costColor: 
@@ -23,18 +23,22 @@ MonoBehaviour:
   sprite: {fileID: 21300000, guid: d13b7af988113fe47a366fcbaba343ce, type: 3}
   effects:
   - trigger: 3
-    promptEffect: 
+    promptEffect: 'CE,1;play,Hand;discard
+
+      Down
+
+      TE;play,MainDeck;Draw,1'
     DescriptionEffect: "<down> e descarte 1 carta da sua m\xE3o: compre 1 carta."
   - trigger: 5
     promptEffect: Draw,1
     DescriptionEffect: Compre 1 carta.
-  level: 1
-  power: 100
-  leaderMemory: 0
-  attribute: 0
-  stage: 1
-  type: 12
-  fieldDigimon: 1
+  Level: 1
+  Power: 100
+  Memory: 0
+  Attribute: 0
+  Stage: 1
+  Type: 12
+  Field: 1
   isProtection: 0
   digimonSpritePosition: {x: 0, y: 0}
   digimonSpriteScale: 3

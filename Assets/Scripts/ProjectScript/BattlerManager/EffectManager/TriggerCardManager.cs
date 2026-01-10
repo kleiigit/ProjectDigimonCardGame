@@ -6,8 +6,9 @@ using UnityEngine;
 
 public class TriggerCardManager : MonoBehaviour
 {
-    public static void TriggerWhenPlayed(Card card, PlayerSetup side)
+    public static void TriggerWhenPlayed(CardDisplay cardDisplay, PlayerSetup side)
     {
+        Card card = cardDisplay.cardData;
         Debug.Log("[TRIGGER] Play Digimon Card: ");
         if (card.effects.Count == 0) return;
 
@@ -16,7 +17,7 @@ public class TriggerCardManager : MonoBehaviour
             if (card.effects[i].trigger == CardEffects.Trigger.OnPlay)
             {
                 //Execute the effect of the card when played
-                EffectManager.ExecuteCardEffect(card.effects[i], card, side);
+                EffectManager.ExecuteCardEffect(card.effects[i], cardDisplay, side);
             }
         }
     }
@@ -28,8 +29,9 @@ public class TriggerCardManager : MonoBehaviour
     {
         Debug.Log("[TRIGGER] Destroyed Security: ");
     }
-    public static void TriggerSecurityEffect(Card card, PlayerSetup side)
+    public static void TriggerSecurityEffect(CardDisplay cardDisplay, PlayerSetup side)
     {
+        Card card = cardDisplay.cardData;
         if (card.effects.Count == 0) return;
         Debug.Log("[TRIGGER] Security activate: " + card.cardName);
         for (int i = 0; i < card.effects.Count; i++)
@@ -37,7 +39,7 @@ public class TriggerCardManager : MonoBehaviour
             if (card.effects[i].trigger == CardEffects.Trigger.Security)
             {
                 // Execute the effect of the card when played
-                EffectManager.ExecuteCardEffect(card.effects[i], card, side);
+                EffectManager.ExecuteCardEffect(card.effects[i], cardDisplay, side);
             }
         }
     }
@@ -57,27 +59,27 @@ public class TriggerCardManager : MonoBehaviour
     {
         Debug.Log("[TRIGGER] Draw card: ");
     }
-    public static void TriggerActiveProgram(Card card, PlayerSetup side)
+    public static void TriggerActiveProgram(CardDisplay card, PlayerSetup side)
     {
         Debug.Log("[TRIGGER] Active Program: " + card.cardName);
-        if (card.effects.Count == 0 || card.cardType != CardType.Program) return;
-        foreach (var effect in card.effects.Where(p => p.trigger == CardEffects.Trigger.NoTrigger))
+        if (card.cardData.effects.Count == 0 || card.cardData.cardType != CardType.Program) return;
+        foreach (var effect in card.cardData.effects.Where(p => p.trigger == CardEffects.Trigger.NoTrigger))
         {
             EffectManager.ExecuteCardEffect(effect, card, side);
         }
     }
-    public static void TriggerActivateAction(Card card, PlayerSetup side)
+    public static void TriggerActivateAction(CardDisplay cardDisplay, PlayerSetup side)
     {
+        Card card = cardDisplay.cardData;
         Debug.Log("[TRIGGER] Active Action Effect: " + card.cardName);
-        if (card.effects.Count == 0 || 
-            (card.cardType != CardType.Digimon || card.cardType != CardType.Partner)) return;
+        if (card.effects.Count == 0) return;
 
         for (int i = 0; i < card.effects.Count; i++)
         {
             if (card.effects[i].trigger == CardEffects.Trigger.Action)
             {
                 //Execute the effect of the card when played
-                EffectManager.ExecuteCardEffect(card.effects[i], card, side);
+                EffectManager.ExecuteCardEffect(card.effects[i], cardDisplay, side);
             }
         }
     }
@@ -91,13 +93,14 @@ public class TriggerCardManager : MonoBehaviour
         Debug.Log("[TRIGGER] Cache effect: ");
     }
 
-    internal static void TriggerActiveSkill(Card card, PlayerSetup side)
+    internal static void TriggerActiveSkill(CardDisplay cardDisplay, PlayerSetup side)
     {
+        Card card = cardDisplay.cardData;
         Debug.Log("[TRIGGER] Active Skill: " + card.cardName);
         if (card.effects.Count == 0 || card.cardType != CardType.Skill) return;
         foreach (var effect in card.effects.Where(p => p.trigger == CardEffects.Trigger.NoTrigger))
         {
-            EffectManager.ExecuteCardEffect(effect, card, side);
+            EffectManager.ExecuteCardEffect(effect, cardDisplay, side);
         }
     }
 }

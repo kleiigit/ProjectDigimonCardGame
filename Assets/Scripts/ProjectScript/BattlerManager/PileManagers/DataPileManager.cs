@@ -131,32 +131,42 @@ public class DataPileManager : MonoBehaviour, IPile
     }
     public bool HasSufficientDataToPlayCard(Dictionary<CardColor, int> costColor)
     {
+        // nao remover comentário
+        // colorless é uma cor coringa que serve para pagar qualquer custo de cores
+        // custos colorless é um custo coringa, pode ser usada qualquer cor para pagar seu custo, também pode ser usado colorless para pagar seu custo.
         Dictionary<CardColor, int> tempCounts = new Dictionary<CardColor, int>(colorCounts);
 
-        int totalAvailable = tempCounts.Values.Sum();
-        int totalCost = costColor.Values.Sum();
-
-        if (totalAvailable < totalCost)
-            return false;
-
-        foreach (var pair in costColor)
+        foreach (var cost in costColor)
         {
-            if (pair.Key == CardColor.Colorless)
-                continue;
+            int required = cost.Value;
 
-            int available = tempCounts.GetValueOrDefault(pair.Key, 0);
+            // 1. Usa a própria cor, se existir
+            if (tempCounts.TryGetValue(cost.Key, out int sameColorAvailable))
+            {
+                int used = Mathf.Min(sameColorAvailable, required);
+                tempCounts[cost.Key] -= used;
+                required -= used;
+            }
 
-            if (available < pair.Value)
-                return false;
+            // 2. Completa com qualquer outra cor (incluindo Colorless)
+            if (required > 0)
+            {
+                int totalRemaining = tempCounts.Values.Sum();
 
-            tempCounts[pair.Key] -= pair.Value;
+                if (totalRemaining < required)
+                    return false;
+
+                foreach (var key in tempCounts.Keys.ToList())
+                {
+                    if (required == 0)
+                        break;
+
+                    int used = Mathf.Min(tempCounts[key], required);
+                    tempCounts[key] -= used;
+                    required -= used;
+                }
+            }
         }
-
-        int colorlessCost = costColor.GetValueOrDefault(CardColor.Colorless, 0);
-        int remainingResources = tempCounts.Values.Sum();
-
-        if (remainingResources < colorlessCost)
-            return false;
 
         return true;
     }

@@ -28,13 +28,13 @@ MonoBehaviour:
       CE,1;digi,blue;play,hand;discard'
     DescriptionEffect: "Descarte 1 Digimon azul da sua m\xE3o: Descarte 1 carta da
       m\xE3o do seu oponente sem olhar."
-  level: 4
-  power: 500
-  leaderMemory: 11
-  attribute: 0
-  stage: 4
-  type: 3
-  fieldDigimon: 0
+  Level: 4
+  Power: 100
+  Memory: 11
+  Attribute: 1
+  Stage: 4
+  Type: 3
+  Field: 0
   isProtection: 0
-  digimonSpritePosition: {x: 0, y: 0.15}
-  digimonSpriteScale: 3.6
+  digimonSpritePosition: {x: 0, y: -0.25}
+  digimonSpriteScale: 5

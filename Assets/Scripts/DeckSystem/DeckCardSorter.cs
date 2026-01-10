@@ -216,9 +216,9 @@ namespace SinuousProductions
                         // Ordem decrescente dentro do grupo
                         return groupA switch
                         {
-                            0 => ((b as DigimonCard)?.level ?? int.MinValue).CompareTo((a as DigimonCard)?.level ?? int.MinValue), // Partner decrescente por level
+                            0 => ((b as DigimonCard)?.Level ?? int.MinValue).CompareTo((a as DigimonCard)?.Level ?? int.MinValue), // Partner decrescente por Level
                             1 => GetCost(b).CompareTo(GetCost(a)),   // Skill decrescente por Cost
-                            2 => ((b as DigimonCard)?.level ?? int.MinValue).CompareTo((a as DigimonCard)?.level ?? int.MinValue), // Digimon decrescente por level
+                            2 => ((b as DigimonCard)?.Level ?? int.MinValue).CompareTo((a as DigimonCard)?.Level ?? int.MinValue), // Digimon decrescente por Level
                             3 => GetCost(b).CompareTo(GetCost(a)),   // Program decrescente por Cost
                             _ => 0,
                         };
@@ -246,11 +246,11 @@ namespace SinuousProductions
                         if (groupA != groupB)
                             return groupA.CompareTo(groupB);
 
-                        // Dentro do grupo 0 (Digimon/Partner), ordenar por type
+                        // Dentro do grupo 0 (Digimon/Partner), ordenar por Type
                         if (groupA == 0)
                         {
-                            DigimonType aType = (a as DigimonCard).type;
-                            DigimonType bType = (b as DigimonCard).type;
+                            DigimonType aType = (a as DigimonCard).Type;
+                            DigimonType bType = (b as DigimonCard).Type;
                             return aType.CompareTo(bType);
                         }
 
@@ -262,7 +262,7 @@ namespace SinuousProductions
                         int aLevel = GetLevel(a);
                         int bLevel = GetLevel(b);
 
-                        // Priorizar Digimon e Partner com nível (level > 0)
+                        // Priorizar Digimon e Partner com nível (Level > 0)
                         bool aHasLevel = aIsDigimonOrPartner && aLevel > 0;
                         bool bHasLevel = bIsDigimonOrPartner && bLevel > 0;
 
@@ -270,7 +270,7 @@ namespace SinuousProductions
                         if (!aHasLevel && bHasLevel) return 1;
                         if (aHasLevel && bHasLevel) return aLevel.CompareTo(bLevel);
 
-                        // Se nenhum dos dois tem level, mantém ordem natural
+                        // Se nenhum dos dois tem Level, mantém ordem natural
                         return 0;
                     }
                 case SortMode.LevelDesc:
@@ -392,16 +392,16 @@ namespace SinuousProductions
                         // Dentro Digimon/Partner, ordena por atributo
                         if (groupA == 0)
                         {
-                            bool aHasAttr = (a is DigimonCard digA) && digA.attribute != 0;
-                            bool bHasAttr = (b is DigimonCard digB) && digB.attribute != 0;
+                            bool aHasAttr = (a is DigimonCard digA) && digA.Attribute != 0;
+                            bool bHasAttr = (b is DigimonCard digB) && digB.Attribute != 0;
 
                             if (aHasAttr && !bHasAttr) return -1;
                             if (!aHasAttr && bHasAttr) return 1;
 
                             if (aHasAttr && bHasAttr)
                             {
-                                int attrA = (a as DigimonCard).attribute.GetHashCode();
-                                int attrB = (b as DigimonCard).attribute.GetHashCode();
+                                int attrA = (a as DigimonCard).Attribute.GetHashCode();
+                                int attrB = (b as DigimonCard).Attribute.GetHashCode();
                                 return attrA.CompareTo(attrB);
                             }
                         }
@@ -459,20 +459,20 @@ namespace SinuousProductions
         private static int GetPower(Card card)
         {
             if (card is DigimonCard digimon)
-                return digimon.power;
+                return digimon.Power;
 
             return 0;
         }
         private static int GetAttributeOrder(Card card)
         {
             if (card is DigimonCard digimon)
-                return (int)digimon.attribute; // Supondo que Attribute é um enum
+                return (int)digimon.Attribute; // Supondo que Attribute é um enum
             return -1; // Para cards sem atributo definido, ficam por último
         }
         private static DigimonField GetField(Card card)
         {
             if (card is DigimonCard digimon)
-                return digimon.fieldDigimon;
+                return digimon.Field;
 
             return DigimonField.NoField; // Assumindo que 'None' representa ausência de campo
         }
@@ -487,7 +487,7 @@ namespace SinuousProductions
         private static int GetLevel(Card card)
         {
             if (card is DigimonCard digimon)
-                return digimon.level;
+                return digimon.Level;
             if (card.cardType == CardType.Partner)
                 return 1000;
             return 0;
@@ -501,7 +501,7 @@ namespace SinuousProductions
         private static int GetStage(Card card)
         {
             if (card is DigimonCard digimon)
-                return (int)digimon.stage;
+                return (int)digimon.Stage;
             return 0;
         }
 
@@ -555,8 +555,8 @@ namespace SinuousProductions
                 int secondaryComparison = 0;
                 if (a.cardType == CardType.Digimon || a.cardType == CardType.Partner)
                 {
-                    int levelA = (a is DigimonCard digA) ? digA.level : 0;
-                    int levelB = (b is DigimonCard digB) ? digB.level : 0;
+                    int levelA = (a is DigimonCard digA) ? digA.Level : 0;
+                    int levelB = (b is DigimonCard digB) ? digB.Level : 0;
                     secondaryComparison = levelB.CompareTo(levelA);
                 }
                 else if (a.cardType == CardType.Program || a.cardType == CardType.Skill)

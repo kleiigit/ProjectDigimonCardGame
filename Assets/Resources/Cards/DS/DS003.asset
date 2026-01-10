@@ -30,13 +30,13 @@ MonoBehaviour:
     promptEffect: Cache
     DescriptionEffect: <sprite=11>(Envie 1 carta do topo do seu baralho para a pilha
       de Data.)
-  level: 3
-  power: 800
-  leaderMemory: 0
-  attribute: 0
-  stage: 3
-  type: 12
-  fieldDigimon: 1
+  Level: 3
+  Power: 800
+  Memory: 0
+  Attribute: 0
+  Stage: 3
+  Type: 12
+  Field: 1
   isProtection: 0
   digimonSpritePosition: {x: 0, y: 0.71}
   digimonSpriteScale: 2.36

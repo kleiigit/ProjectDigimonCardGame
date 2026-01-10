@@ -39,5 +39,6 @@ namespace ProjectScript.Enums
         Down,
         Freeze,
         Cache,
+        None,
     }
 }

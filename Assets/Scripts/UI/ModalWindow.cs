@@ -85,6 +85,7 @@ public class ModalWindow : MonoBehaviour
 
         requiredSelectionAmount = requiredAmount;
 
+        GetComponent<Image>().enabled = false;
         confirmButton.gameObject.SetActive(true);
         confirmButton.interactable = false;
         yesButton.gameObject.SetActive(false);

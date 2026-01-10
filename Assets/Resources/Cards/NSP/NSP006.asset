@@ -22,13 +22,13 @@ MonoBehaviour:
   limitDeck: 
   sprite: {fileID: 5574962031856793205, guid: 80685803895d2bf41acc3ae8709b8ed3, type: 3}
   effects: []
-  level: 1
-  power: 300
-  leaderMemory: 0
-  attribute: 2
-  stage: 1
-  type: 32
-  fieldDigimon: 0
+  Level: 1
+  Power: 300
+  Memory: 0
+  Attribute: 2
+  Stage: 1
+  Type: 32
+  Field: 0
   isProtection: 0
   digimonSpritePosition: {x: 0, y: 0.61}
   digimonSpriteScale: 1.36

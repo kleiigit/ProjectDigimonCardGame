@@ -5,6 +5,7 @@ using ProjectScript.Enums;
 public class DigimonDisplay : MonoBehaviour
 {
     public static List<DigimonDisplay> AllDigimons { get; } = new List<DigimonDisplay>();
+
     public DigimonCard digimonCardStartData;
     public CardType cardType;
     public string cardName;
@@ -31,13 +32,13 @@ public class DigimonDisplay : MonoBehaviour
     private void SetStartStats()
     {
         cardName = digimonCardStartData.cardName.ToUpper();
-        level = digimonCardStartData.level;
-        power = digimonCardStartData.power;
-        memory = digimonCardStartData.leaderMemory;
-        attribute = digimonCardStartData.attribute;
-        stage = digimonCardStartData.stage;
-        type = digimonCardStartData.type;
-        field = digimonCardStartData.fieldDigimon;
+        level = digimonCardStartData.Level;
+        power = digimonCardStartData.Power;
+        memory = digimonCardStartData.Memory;
+        attribute = digimonCardStartData.Attribute;
+        stage = digimonCardStartData.Stage;
+        type = digimonCardStartData.Type;
+        field = digimonCardStartData.Field;
         cardType = digimonCardStartData.cardType;
         statsStet = true;
     }

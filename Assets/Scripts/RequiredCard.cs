@@ -14,7 +14,7 @@ namespace ProjectScript.BattlerManager
         public DigimonField fieldDigimon = DigimonField.NoField;
         public DigimonAttribute attriDigimon = DigimonAttribute.NoAttribute;
 
-        [Header("Filtro por nome, tipo, level, poder e ID")]
+        [Header("Filtro por nome, tipo, Level, poder e ID")]
         public string nameCard = string.Empty;
         public DigimonType typeDigimon = DigimonType.Lesser;
         public int levelDigimon = 0;

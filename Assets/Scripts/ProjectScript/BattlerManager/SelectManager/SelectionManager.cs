@@ -26,15 +26,15 @@ public class SelectionManager : MonoBehaviour
         Instance = this;
     }
 
-    public void StartSelection(SelectionRequest request, RectTransform canvas)
+    public void StartSelection(SelectionRequest request, RectTransform canvas, string title, string description)
     {
         currentRequest = request;
         ClearSelection();
 
         UIWindowManager.Instance.ShowSelectionModal(
             canvas,
-            "Pagamento de custo",
-            "Selecione as cartas necessárias",
+            title,
+            description,
             request.amount,
             () => selected
                 .Select(s => ((MonoBehaviour)s).gameObject)
@@ -49,6 +49,7 @@ public class SelectionManager : MonoBehaviour
 
     public void TrySelect(ISelectable selectable)
     {
+        Debug.Log("Tentando selecionar: " + ((MonoBehaviour)selectable).gameObject.name);
         if (currentRequest == null || selectable == null)
             return;
 
@@ -101,24 +102,35 @@ public class SelectionManager : MonoBehaviour
 
         DigimonCard digimonCard = card.cardData as DigimonCard;
         if (criteria.fieldRequirements.HasValue &&
-            digimonCard.fieldDigimon != criteria.fieldRequirements.Value)
+            digimonCard.Field != criteria.fieldRequirements.Value)
             return false;
 
         return true;
     }
-    bool PlaceRequirements(FieldPlace? fieldPlace, CardDisplay card)
+    private bool PlaceRequirements(FieldPlace? requiredPlace, CardDisplay card)
     {
-        int layerMask = fieldPlace switch
-        {
-            FieldPlace.Hand => 10,
-            FieldPlace.DataPile => 12,
-            FieldPlace.BattleZone => 7,
-            FieldPlace.SecurityPile => 13,
-            FieldPlace.TrashPile => 15,
-            _ => card.gameObject.layer
-        };
+        if (!requiredPlace.HasValue) return true;
 
-        return card.gameObject.layer == layerMask;
+        int cardLayer = card.gameObject.layer; // Layer do GameObject da carta
+        int requiredLayer = LayerFromFieldPlace(requiredPlace.Value);
+
+        return cardLayer == requiredLayer;
+    }
+
+    private int LayerFromFieldPlace(FieldPlace place)
+    {
+        // Aqui você mapeia cada FieldPlace para o Layer correspondente
+        return place switch
+        {
+            FieldPlace.Hand => LayerMask.NameToLayer("Hand"),
+            FieldPlace.BattleZone => LayerMask.NameToLayer("Digimon"),
+            FieldPlace.MainDeck => LayerMask.NameToLayer("MainDeck"),
+            FieldPlace.TrashPile => LayerMask.NameToLayer("Trash"),
+            FieldPlace.PartnerPile => LayerMask.NameToLayer("PartnerPile"),
+            FieldPlace.SecurityPile => LayerMask.NameToLayer("Security"),
+            FieldPlace.DataPile => LayerMask.NameToLayer("Data"),
+            _ => -1
+        };
     }
     bool ColorRequirements(CardColor color, SelectionCriteria criteria, Dictionary<CardColor, int> current)
     {

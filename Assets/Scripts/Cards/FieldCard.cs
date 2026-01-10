@@ -134,6 +134,7 @@ public class FieldCard : MonoBehaviour
             GameSetupStart.playerRed.dataPile.AddCard(cardDisplay.cardData);
         }
         TriggerCardManager.TriggerDigimonDestroyed();
+        DigimonDisplay.AllDigimons.Remove(this.digimonDisplay);
         Destroy(gameObject);
     }
     public void DiscardFieldCard()
@@ -147,7 +148,7 @@ public class FieldCard : MonoBehaviour
         GameManager.Instance.cardsInFieldBlue.Remove(gameObject);
         GameManager.Instance.cardsInFieldRed.Remove(gameObject);
         parentCell.cellFull = false;
-
+        DigimonDisplay.AllDigimons.Remove(this.digimonDisplay);
         if (menuCardManager.handOwner == PlayerSide.PlayerBlue)
         {
             GameSetupStart.playerBlue.discard.AddCard(cardDisplay.cardData);
