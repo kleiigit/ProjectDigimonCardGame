@@ -33,7 +33,6 @@ public class CardContextMenu : MonoBehaviour
 
     public void ShowMenu(GameObject card, List<MenuOption> options, Vector2? customOffset = null)
     {
-
         if (menuPrefab == null || buttonPrefab == null || card == null)
         {
             Debug.LogError("Menu, botão ou carta não atribuídos!");
@@ -42,22 +41,52 @@ public class CardContextMenu : MonoBehaviour
 
         HideMenu();
 
-        // Procura o filho "CardCanvas" dentro da carta
-        Transform cardCanvas = card.transform.Find("CardCanvas");
-        if (cardCanvas == null)
-        {
-            Debug.LogError("[CardContextMenu] A carta não possui um filho chamado 'CardCanvas'.");
-            return;
-        }
-        // Instancia o menu dentro do CardCanvas
-        activeMenu = Instantiate(menuPrefab, cardCanvas, false);
+        // Raycast 2D a partir da posição da carta
+        RaycastHit2D hit = Physics2D.Raycast(card.transform.position, Vector2.down);
+
+        // Instancia o menu dentro do Canvas
+        activeMenu = Instantiate(menuPrefab, transform, false);
         RectTransform menuRect = activeMenu.GetComponent<RectTransform>();
+        activeMenu.GetComponent<Transform>().localScale = new Vector3(100f, 100f, 100f);
 
-        // Offset configurável (ou customizado)
         Vector2 finalOffset = customOffset ?? menuOffset;
-        menuRect.anchoredPosition = finalOffset;
 
-        // Cria os botões
+        if (hit.collider != null)
+        {
+            Canvas canvas = GetComponentInParent<Canvas>();
+            Camera cam = canvas.renderMode == RenderMode.ScreenSpaceOverlay
+                ? null
+                : canvas.worldCamera;
+
+            RectTransform parentRect = menuRect.parent as RectTransform;
+
+            Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(cam, hit.point);
+
+            if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                parentRect,
+                screenPoint,
+                cam,
+                out Vector2 localPoint))
+            {
+                float angleZ = card.transform.eulerAngles.z;
+                Quaternion rotation = Quaternion.Euler(0f, 0f, angleZ);
+
+                // 1. Rotaciona o menu
+                menuRect.localRotation = rotation;
+
+                // 2. Rotaciona o offset no mesmo espaço
+                Vector2 rotatedOffset = rotation * finalOffset;
+
+                // 3. Aplica posição final
+                menuRect.anchoredPosition = localPoint + rotatedOffset;
+            }
+        }
+        else
+        {
+            // fallback seguro
+            menuRect.anchoredPosition = finalOffset;
+        }
+        // Criação dos botões
         foreach (var option in options)
         {
             GameObject btn = Instantiate(buttonPrefab, menuRect);
@@ -71,11 +100,10 @@ public class CardContextMenu : MonoBehaviour
             });
         }
 
-        // Garante que o menu fique na frente de outros elementos
         menuRect.SetAsLastSibling();
-
         Instance = this;
     }
+
 
     public void HideMenu()
     {

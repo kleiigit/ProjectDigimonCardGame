@@ -1,4 +1,3 @@
-using NUnit.Framework;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -111,13 +110,16 @@ public class ModalWindow : MonoBehaviour
 
             foreach (var card in selectedObjects)
             {
-                GameObject currentCard = Instantiate(card, transformCardDisplay);
+                GameObject currentCard = Instantiate(GameManager.cardPrefab, transformCardDisplay);
+                currentCard.GetComponent<CardDisplay>().cardData = card.GetComponent<CardDisplay>().cardData;
+                currentCard.GetComponent<CardDisplay>().UpdateCardDisplay();
+
                 SetupShowCard(currentCard);
             }
 
             transformWindow.sizeDelta =
                 selectedObjects.Count > 0
-                    ? new Vector2(transformWindow.sizeDelta.x, 700f)
+                    ? new Vector2(transformWindow.sizeDelta.x, 600f)
                     : new Vector2(transformWindow.sizeDelta.x, 500f);
 
             confirmButton.interactable =

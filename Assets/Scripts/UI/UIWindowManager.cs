@@ -10,6 +10,7 @@ using System.Collections.Generic;
 public class UIWindowManager : MonoBehaviour
 {
     public static UIWindowManager Instance;
+    private RectTransform windowRect;
 
     [SerializeField] private ModalWindow modalWindowPrefab;
 
@@ -22,36 +23,37 @@ public class UIWindowManager : MonoBehaviour
         }
 
         Instance = this;
+        windowRect = GetComponent<RectTransform>();
     }
 
     // Modal simples (OK / Confirm)
-    public void ShowModal(RectTransform rect, string title, string message, Action onConfirm, List<GameObject> showCard)
+    public void ShowModal(string title, string message, Action onConfirm, List<GameObject> showCard)
     {
-        if (rect == null)
+        if (windowRect == null)
         {
             Debug.LogError("Canvas não informado para a janela modal.");
             return;
         }
 
         ModalWindow window =
-            Instantiate(modalWindowPrefab, rect.transform);
+            Instantiate(modalWindowPrefab, windowRect.transform);
 
         window.transform.SetAsLastSibling();
         window.Setup(title, message, onConfirm, showCard);
     }
 
     // Modal Yes / No com retorno bool
-    public ModalWindow ShowModalYesNo(RectTransform rect, string title, string message, List<GameObject> showCard)
+    public ModalWindow ShowModalYesNo(string title, string message, List<GameObject> showCard)
     {
-        ModalWindow window = Instantiate(modalWindowPrefab, rect.transform);
+        ModalWindow window = Instantiate(modalWindowPrefab, windowRect.transform);
         window.transform.SetAsLastSibling();
         window.SetupYesNo(title, message, showCard);
         return window;
     }
-    public ModalWindow ShowSelectionModal(RectTransform rect, string title, string message, int requiredAmount, Func<List<GameObject>> getSelectedObjects,
+    public ModalWindow ShowSelectionModal(string title, string message, int requiredAmount, Func<List<GameObject>> getSelectedObjects,
     Action onConfirm)
     {
-        ModalWindow window = Instantiate(modalWindowPrefab, rect.transform);
+        ModalWindow window = Instantiate(modalWindowPrefab, windowRect.transform);
         window.transform.SetAsLastSibling();
 
         window.SetupSelectionModal(
@@ -89,7 +91,7 @@ public class UIWindowManager : MonoBehaviour
         if (from == FieldPlace.SecurityPile &&
             card.effects.Any(p => p.trigger == CardEffects.Trigger.Security && EffectManager.ConditionEffect(p, cardDisplay, setup)))
         {
-            ModalWindow modal = Instance.ShowModalYesNo(setup.GetComponent<RectTransform>(), card.cardName + " has security Effect!", 
+            ModalWindow modal = Instance.ShowModalYesNo(card.cardName + " has security Effect!", 
                 card.effects.First(p => p.trigger == CardEffects.Trigger.Security).DescriptionEffect, new() { newCard});
             // AGUARDA O JOGADOR
             yield return new WaitUntil(() => modal.HasResult);
@@ -104,8 +106,8 @@ public class UIWindowManager : MonoBehaviour
         // HAND
         if (from == FieldPlace.Hand && card.cardType == CardType.Program)
         {
-            Instance.ShowModal(setup.GetComponent<RectTransform>(),
-                card.cardName + " effect activate!", card.effects.First(p => p.trigger == CardEffects.Trigger.NoTrigger).DescriptionEffect,
+            Instance.ShowModal(card.cardName + " effect activate!", card.
+                effects.First(p => p.trigger == CardEffects.Trigger.NoTrigger).DescriptionEffect,
                 () =>
                 {
                     TriggerCardManager.TriggerActiveProgram(newCardDisplay, setup);
@@ -117,8 +119,8 @@ public class UIWindowManager : MonoBehaviour
         // SKILL
         if(from == FieldPlace.PartnerPile && card.cardType == CardType.Skill)
         {
-            Instance.ShowModal(setup.GetComponent<RectTransform>(),
-                card.cardName + " effect activate!", card.effects.First(p => p.trigger == CardEffects.Trigger.NoTrigger).DescriptionEffect,
+            Instance.ShowModal(card.cardName + " effect activate!", 
+                card.effects.First(p => p.trigger == CardEffects.Trigger.NoTrigger).DescriptionEffect,
                 () =>
                 {
                     TriggerCardManager.TriggerActiveSkill(cardDisplay, setup);

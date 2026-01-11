@@ -58,5 +58,15 @@ namespace SinuousProductions
             }
             return cardCostColor;
         }
+        public static string GetCostString(Dictionary<CardColor, int> costColor)
+        {
+            List<string> costStrings = new List<string>();
+            foreach (var cost in costColor)
+            {
+                int value = cost.Value > 0 ? cost.Value : 0;
+                if(value > 0) costStrings.Add($"{cost.Key} {value}");
+            }
+            return string.Join(", ", costStrings);
+        }
     }
 }

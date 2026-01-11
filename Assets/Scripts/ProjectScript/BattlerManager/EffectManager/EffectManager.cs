@@ -3,18 +3,32 @@ using ProjectScript.Enums;
 using ProjectScript.Selection;
 using SinuousProductions;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static SinuousProductions.CardEffects;
 
 public class EffectManager : MonoBehaviour
 {
     #region Setup
     static DisplayListCards displayListCards;
     static GameManager manager;
+    public static EffectManager Instance { get; private set; }
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this.gameObject);
+            return;
+        }
+        Instance = this;
+    }
+
     private void Start()
     {
         displayListCards = FindFirstObjectByType<DisplayListCards>();
@@ -76,48 +90,96 @@ public class EffectManager : MonoBehaviour
 
         if (criteria.Count == 0)
         {
-            ExecuteEffect(effectPrompts, card, owner);
+            Instance.StartCoroutine(Instance.ExecuteEffectSequence(effectPrompts, card, owner));
             return;
         }
 
-        int pending = criteria.Count;
-        bool allSuccess = true;
-
-        foreach (EffectPrompt prompt in criteria)
-        {
-            SelectCardEffect(prompt, TargetSideEffect(owner, prompt.OpponentSide), success =>
-            {
-                allSuccess &= success;
-                pending--;
-
-                if (pending == 0 && allSuccess)
-                    ExecuteEffect(effectPrompts, card, owner);
-            });
-        }
+        // PROCESSAMENTO SEQUENCIAL DOS CRITÉRIOS
+        Instance.StartCoroutine(Instance.ProcessCriteriaSequentially(criteria, effectPrompts, card, owner));
     }
-    private static void ExecuteEffect(List<EffectPrompt> prompts,CardDisplay card, PlayerSetup owner)
+    private IEnumerator ExecuteEffectSequence(List<EffectPrompt> prompts, CardDisplay card, PlayerSetup owner)
     {
         foreach (EffectPrompt prompt in prompts)
         {
             if (prompt.EffectType != Keyword.Target)
                 continue;
-            // Card
-            switch (prompt.Effect)
+
+            PlayerSetup sideToSelect = prompt.OpponentSide
+                ? (owner.setPlayer == PlayerSide.PlayerBlue ? GameSetupStart.playerRed : GameSetupStart.playerBlue)
+                : owner;
+
+            if (prompt.Effect == Keyword.Draw)
             {
-                case Keyword.Draw:
-                    DrawEffect(prompt.EffectQuantity, TargetSideEffect(owner, prompt.OpponentSide));
-                    break;
+                DrawEffect(prompt.Quantity, sideToSelect);
+                Debug.Log($"[ExecuteEffectSequence] DrawEffect aplicado para {sideToSelect.setPlayer}");
+                continue;
             }
-            // Field Effect
-            if(prompt.PlaceTarget == FieldPlace.BattleZone)
-            {
-                SelectCardEffect(prompt, owner, success =>
-                {
-                    Debug.Log("Effect resolved");
-                });
-            }
+
+            Debug.Log($"[ExecuteEffectSequence] Aguardando seleção de {prompt.Quantity} carta(s) do lado {(prompt.OpponentSide ? "oponente" : "player")} em {prompt.PlaceTarget}");
+
+            yield return WaitForTargetSelection(prompt, owner);
+
+            Debug.Log($"[ExecuteEffectSequence] Seleção finalizada para {prompt.Quantity} carta(s) do lado {(prompt.OpponentSide ? "oponente" : "player")} em {prompt.PlaceTarget}");
         }
     }
+
+    private IEnumerator WaitForTargetSelection(EffectPrompt prompt, PlayerSetup owner)
+    {
+        bool completed = false;
+
+        PlayerSetup sideToSelect = prompt.OpponentSide
+                ? (owner.setPlayer == PlayerSide.PlayerBlue ? GameSetupStart.playerRed : GameSetupStart.playerBlue)
+                : owner;
+
+        Debug.Log($"[WaitForTargetSelection] Criando SelectionRequest para {prompt.Quantity} carta(s) de {sideToSelect.setPlayer}");
+
+        // Chama StartSelection **antes do yield**, garantindo que IsSelecting = true
+        SelectionManager.Instance.StartSelection(
+            new SelectionRequest(
+                prompt.Quantity == 0 ? 1 : prompt.Quantity,
+                new SelectionCriteria
+                {
+                    sideRequirements = sideToSelect.setPlayer,
+                    placeRequirements = prompt.PlaceTarget,
+                    typeRequirements = prompt.TypeTarget != CardType.Card ? prompt.TypeTarget : null,
+                    fieldRequirements = prompt.DigimonField != DigimonField.NoField ? prompt.DigimonField : null
+                },
+                selected =>
+                {
+                    Debug.Log($"[WaitForTargetSelection] Jogador finalizou seleção de {selected.Count} carta(s) para {sideToSelect.setPlayer}");
+                    foreach (var item in selected)
+                    {
+                        MonoBehaviour cardSelected = (MonoBehaviour)item;
+
+                        if (prompt.PlaceTarget == FieldPlace.BattleZone &&
+                            cardSelected.TryGetComponent<FieldCard>(out var fieldCard))
+                        {
+                            TargetFieldCard(prompt.Effect, fieldCard);
+                        }
+                        else if (prompt.PlaceTarget == FieldPlace.Hand)
+                        {
+                            DiscardEffect(cardSelected.gameObject, sideToSelect);
+                        }
+                    }
+
+                    displayListCards.Hide();
+                    completed = true; // sinaliza que a seleção terminou
+                }
+            ),
+            owner.GetComponent<RectTransform>(),
+            "Select target",
+            $"Select ({prompt.Quantity}) card(s) from {(prompt.OpponentSide ? "opponent" : "player")} {prompt.PlaceTarget}."
+        );
+
+        // ---- Espera até que o jogador termine ----
+        while (!completed)
+        {
+            // Apenas log de debug por frame
+            yield return null;
+        }
+    }
+
+
 
     // Effects Implementation
     private static void DrawEffect(int quantity, PlayerSetup target)
@@ -144,7 +206,26 @@ public class EffectManager : MonoBehaviour
     }
 
     // Criteria Selection
-    private static void SelectCardEffect(EffectPrompt criteriaEffect, PlayerSetup owner, Action<bool> onCompleted)
+    private IEnumerator ProcessCriteriaSequentially(List<EffectPrompt> criteria, List<EffectPrompt> effectPrompts, CardDisplay card, PlayerSetup owner)
+    {
+        foreach (EffectPrompt prompt in criteria)
+        {
+            bool completed = false;
+
+            CriteriaSelection(prompt, TargetSideEffect(owner, prompt.OpponentSide), success =>
+            {
+                completed = true; // sinaliza que a seleção terminou
+            });
+
+            // espera até que o jogador finalize a seleção
+            while (!completed)
+                yield return null;
+        }
+
+        // depois que todos os critérios forem processados, executa os efeitos restantes
+        yield return ExecuteEffectSequence(effectPrompts, card, owner);
+    }
+    private static void CriteriaSelection(EffectPrompt criteriaEffect, PlayerSetup owner, Action<bool> onCompleted)
     {
         Debug.Log(criteriaEffect.ToString());
         SelectionManager.Instance.StartSelection(new SelectionRequest(criteriaEffect.Quantity,
@@ -169,23 +250,10 @@ public class EffectManager : MonoBehaviour
                         GameObject cardSelected =
                             SelectedCardPlace(criteriaEffect.PlaceTarget, owner, cardIDselected);
 
-                        // Condition Effect
-                        if (criteriaEffect.EffectType == Keyword.Condition)
+                        if (criteriaEffect.Effect == Keyword.Discard)
                         {
-                            if (criteriaEffect.Effect == Keyword.Discard)
-                            {
-                                DiscardEffect(cardSelected, owner);
-                                executed = true;
-                            }
-                        }
-
-                        // Target Effect
-                        if(criteriaEffect.EffectType == Keyword.Target)
-                        {
-                            if(criteriaEffect.PlaceTarget == FieldPlace.BattleZone)
-                            {
-                                TargetFieldCard(criteriaEffect.Effect, go.GetComponent<FieldCard>());
-                            }
+                            DiscardEffect(cardSelected, owner);
+                            executed = true;
                         }
                     }
 
@@ -249,7 +317,6 @@ public class EffectManager : MonoBehaviour
     public static bool ConditionEffect(CardEffects effectSelected, CardDisplay card, PlayerSetup owner)
     {
         List<EffectPrompt> effectPrompts = PromptSetup(effectSelected, card.cardData);
-        Debug.Log($"[ConditionEffect] Checking conditions for card: {card.cardData.cardName}");
         //Condition
         foreach (var criteriaCondition in effectPrompts.Where(p => p.EffectType == Keyword.Condition))
         {

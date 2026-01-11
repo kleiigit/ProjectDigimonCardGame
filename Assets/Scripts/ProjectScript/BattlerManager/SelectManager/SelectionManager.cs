@@ -30,15 +30,9 @@ public class SelectionManager : MonoBehaviour
     {
         currentRequest = request;
         ClearSelection();
-
-        UIWindowManager.Instance.ShowSelectionModal(
-            canvas,
-            title,
-            description,
-            request.amount,
-            () => selected
-                .Select(s => ((MonoBehaviour)s).gameObject)
-                .ToList(),
+        Debug.Log("Iniciando seleção de " + request.amount + " itens.");
+        UIWindowManager.Instance.ShowSelectionModal(title, description, request.amount,
+            () => selected.Select(s => ((MonoBehaviour)s).gameObject).ToList(),
             () =>
             {
                 ConfirmSelection();
@@ -49,7 +43,6 @@ public class SelectionManager : MonoBehaviour
 
     public void TrySelect(ISelectable selectable)
     {
-        Debug.Log("Tentando selecionar: " + ((MonoBehaviour)selectable).gameObject.name);
         if (currentRequest == null || selectable == null)
             return;
 
@@ -60,7 +53,8 @@ public class SelectionManager : MonoBehaviour
             selectable.OnDeselected();
             return;
         }
-
+        if (!IsSideValid(selectable, currentRequest.criteria))
+            return;
         // Validação só para novas seleções
         if (!IsValidSelectable(selectable, currentRequest.criteria))
             return;
@@ -106,6 +100,19 @@ public class SelectionManager : MonoBehaviour
             return false;
 
         return true;
+    }
+    private bool IsSideValid(ISelectable selectable, SelectionCriteria criteria)
+    {
+        if (criteria?.sideRequirements == null)
+            return true;
+
+        if (selectable is not MonoBehaviour mono)
+            return false;
+
+        if (!mono.TryGetComponent<MenuCardManager>(out var owner))
+            return false;
+
+        return owner.handOwner == criteria.sideRequirements.Value;
     }
     private bool PlaceRequirements(FieldPlace? requiredPlace, CardDisplay card)
     {
@@ -200,6 +207,9 @@ public class SelectionManager : MonoBehaviour
     {
         if (currentRequest == null)
             return;
+        //
+        if (selected.Count < currentRequest.amount)
+            return; // impede finalização precoce
 
         currentRequest.onComplete?.Invoke(new List<ISelectable>(selected));
 
